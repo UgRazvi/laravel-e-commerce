@@ -20,7 +20,6 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        //
         $products = Product::latest()->with('product_images');
 
         if ($keyword = $request->get("keyword")) {
