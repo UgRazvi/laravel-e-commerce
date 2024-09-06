@@ -28,8 +28,7 @@
                         </div>
                         <div class="card-tools">
                             <div class="input-group input-group" style="width: 250px;">
-                                <input type="text" name="keyword" class="form-control float-right"
-                                    placeholder="Search">
+                                <input type="text" name="keyword" class="form-control float-right" placeholder="Search">
 
                                 <div class="input-group-append">
                                     <button type="submit" class="btn btn-default">
@@ -103,7 +102,7 @@
                                                     </path>
                                                 </svg>
                                             </a>
-                                            <a href="{{ route('products.destroy', $product->id) }}"
+                                            <a href="" onclick="deleteProduct({{ $product->id }})"
                                                 class="text-danger w-4 h-4 mr-1">
                                                 <svg wire:loading.remove.delay="" wire:target=""
                                                     class="filament-link-icon w-4 h-4 mr-1"
@@ -138,14 +137,14 @@
 
 @section('customJs')
     <script>
-        function deleteBrand(id) {
-            var url = '{{ route('brands.delete', 'ID') }}';
+        function deleteProduct(id) {
+            var url = '{{ route('products.destroy', 'ID') }}';
             // alert(url);
             var newUrl = url.replace("ID", id);
             // alert(newUrl);
             // return false;
 
-            if (confirm("Do You Really Wanna Delete This Brand ?")) {
+            if (confirm("Do You Really Wanna Delete This Product ?")) {
                 $.ajax({
                     url: newUrl, // JS variable - It Contains Delete Route and category Id.
                     type: 'delete',
@@ -155,15 +154,16 @@
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(response) {
-                        if (response["status"]) {
+                        if (response["status"] == true) {
                             // Show a response message before redirecting
-                            alert(response["message"] || "Brand deleted successfully!");
+                            alert(response["message"] || "Product deleted successfully!");
 
                             // Redirect to the categories index page
-                            window.location.href = "{{ route('brands.index') }}";
+                            window.location.href = "{{ route('products.index') }}";
                         } else {
                             // Show an error message if the deletion failed
                             alert(response["message"] || "An error occurred. Please try again.");
+                            window.location.href = "{{ route('products.index') }}";
                         }
                     },
                     error: function(jqXHR) {

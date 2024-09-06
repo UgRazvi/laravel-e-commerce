@@ -14,14 +14,19 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\admin\ProductImageController;
 use App\Http\Controllers\admin\ProductSubCategoryController;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\admin\TempImagesController;
+use App\Http\Controllers\FrontController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+// Route For - Home Page
+Route::get('/', [FrontController::class, 'index'])->name('front.home'); 
 
 Route::group(['prefix' => 'admin'], function () {
     Route::group(['middleware' => ['admin.guest']], function () {
@@ -29,25 +34,30 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('/authenticate', [AdminLoginController::class, 'authenticate'])->name('admin.authenticate');
     });
     Route::group(['middleware' => ['admin.auth']], function () {
+
+        Route::post('/product-images/update', [ProductImageController::class, 'update'])->name('product-images.update');
+        Route::delete('/product-images/', [ProductImageController::class, 'destroy'])->name('product-images.destroy');
+
         Route::get('/dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
         Route::get('/logout', [HomeController::class, 'logout'])->name('admin.logout');
 
+        // Products Routes
+        // To Save Product Images Permanently.
+        Route::resource('/products', ProductController::class);
+        
         // Products Sub Category Routes
         Route::resource('/product-subcategories', ProductSubCategoryController::class);
-        
-        // Products Routes
-        Route::resource('/products', ProductController::class);
 
         // Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 
-        // Route::get('/products/create', [ProductsController::class, 'create'])->name('products.create');
-        // Route::post('/products', [ProductsController::class, 'store'])->name('products.store');
+        // Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+        // Route::post('/products', [ProductController::class, 'store'])->name('products.store');
 
-        
-        // Route::get('/products/{product}/edit/', [ProductsController::class, 'edit'])->name('products.edit');
-        // Route::put('/products/{product}', [ProductsController::class, 'update'])->name('products.update');
 
-        // Route::delete('/products/{product}', [ProductsController::class, 'destroy'])->name('products.delete');
+        // Route::get('/products/{product}/edit/', [ProductController::class, 'edit'])->name('products.edit');
+        // Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
+
+        // Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.delete');
 
 
         // Brands Routes
@@ -56,7 +66,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/brands/create', [BrandsController::class, 'create'])->name('brands.create');
         Route::post('/brands', [BrandsController::class, 'store'])->name('brands.store');
 
-        
+
         Route::get('/brands/{brand}/edit/', [BrandsController::class, 'edit'])->name('brands.edit');
         Route::put('/brands/{brand}', [BrandsController::class, 'update'])->name('brands.update');
 
@@ -64,7 +74,7 @@ Route::group(['prefix' => 'admin'], function () {
 
         // Sub Category Routes
         Route::get('/subcategories', [SubCategoryController::class, 'index'])->name('subcategories.index');
-        
+
         Route::get('/subcategories/create', [SubCategoryController::class, 'create'])->name('subcategories.create');
         Route::post('/subcategories', [SubCategoryController::class, 'store'])->name('subcategories.store');
 
