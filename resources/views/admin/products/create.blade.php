@@ -157,13 +157,82 @@
                         </div>
                         <div class="card">
                             <div class="card-body">
-                                <h2 class="h4  mb-3">Product Category</h2>
+                                <h2 class="h4  mb-3">Product Section</h2>
+
                                 <div class="mb-3">
-                                    <label for="category">Product</label>
+                                    <label for="section">Section</label>
+                                    <select name="section" id="section" class="form-control">
+                                        <option value="">Select The Section</option>
+                                        @if (!empty($sections))
+                                            @foreach ($sections as $section)
+                                                <option value="{{ $section->id }}"
+                                                    {{ old('section') == $section->id ? 'selected' : '' }}>
+                                                    {{ $section->name }}
+                                                </option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                    <p class="error"></p>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="category">Category</label>
+                                    <select name="category" id="category" class="form-control">
+                                        <option value="">Select The Category</option>
+                                        @if (!empty($categories))
+                                            @foreach ($categories as $category)
+                                                <option value="{{ $category->id }}"
+                                                    {{ old('category') == $category->id ? 'selected' : '' }}>
+                                                    {{ $category->name }}
+                                                </option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                    <p class="error"></p>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="sub_category">Sub Category</label>
+                                    <select name="sub_category" id="sub_category" class="form-control">
+                                        <option value="">Select The Sub Category</option>
+                                        @if (!empty($subcategories))
+                                            @foreach ($subcategories as $subProduct)
+                                                <option value="{{ $subProduct->id }}"
+                                                    {{ old('sub_category') == $subProduct->id ? 'selected' : '' }}>
+                                                    {{ $subProduct->name }}
+                                                </option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+
+
+
+                                {{-- <div class="mb-3">
+                                    <label for="section">Section</label>
+                                    <select name="section" id="section" class="form-control"
+                                        value="{{ old('section') }}">
+                                        <option value="">Select
+                                            The Section</option>
+                                        @if (!empty($sections))
+                                            @foreach ($sections as $section)
+                                                <option value="{{ $section->id }}">
+                                                    {{ $section->name }}
+                                                </option>
+                                           
+                                            @endforeach
+                                        @endif
+
+                                    </select>
+                                    <p class="error"></p>
+
+                                </div>
+                                <div class="mb-3">
+                                    <label for="category">Category</label>
                                     <select name="category" id="category" class="form-control"
                                         value="{{ old('category') }}">
                                         <option value="">Select
-                                            The Product</option>
+                                            The Category</option>
                                         @if (!empty($categories))
                                             @foreach ($categories as $category)
                                                 <option value=" {{ $category->id }} ">
@@ -176,11 +245,10 @@
 
                                 </div>
                                 <div class="mb-3">
-                                    <label for="sub_category">Sub Product</label>
+                                    <label for="sub_category">Sub Category</label>
                                     <select name="sub_category" id="sub_category" class="form-control"
                                         value="{{ old('sub_category') }}">
-                                        <option value="">Select
-                                            The Sub Product</option>
+                                        <option value="">Select The Sub Category</option>
                                         @if (!empty($subcategories))
                                             @foreach ($subcategories as $subProduct)
                                                 <option value=" {{ $subProduct->id }} ">
@@ -191,7 +259,7 @@
 
                                     </select>
 
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                         <div class="card mb-3">
@@ -210,7 +278,6 @@
                                         @endif
 
                                     </select>
-
 
                                 </div>
                             </div>
@@ -289,18 +356,49 @@
             });
         });
 
-        // To Get Sub-Categories Dynamically according to their respective Categories. 
-        $("#category").change(function() {
-            var category_id = $(this).val(); // To Get Selected Category.
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        // To Get Categories Dynamically according to their respective Sections. 
+        $("#section").change(function() {
+            var section_id = $(this).val();
             $.ajax({
-                url: "{{ route('product-subcategories.index') }}",
-                type: "get",
+                url: "{{ route('product-categories.index') }}",
+                type: "GET",
                 data: {
-                    category_id: category_id
-                }, // Pass Selected Category Bt It's ID
+                    section_id: section_id
+                },
                 dataType: "json",
                 success: function(response) {
-                    console.log(response); // For Debugging Purpose Only
+                    console.log(response);
+                    $("#category").find("option").not(":first").remove();
+                    $.each(response["categories"], function(key, item) {
+                        $("#category").append(
+                            `<option value='${item.id}'>${item.name}</option>`);
+                    });
+                },
+                error: function(jqXHR, exception) {
+                    alert("An error occurred while loading categories");
+                }
+            });
+        });
+
+        // To Get Sub-Categories Dynamically according to their respective Categories. 
+        $("#category").change(function() {
+            var category_id = $(this).val();
+            $.ajax({
+                url: "{{ route('product-subcategories.index') }}",
+                type: "GET",
+                data: {
+                    category_id: category_id
+                },
+                dataType: "json",
+                success: function(response) {
+                    console.log(response);
                     $("#sub_category").find("option").not(":first").remove();
                     $.each(response["SubCategories"], function(key, item) {
                         $("#sub_category").append(
@@ -308,11 +406,61 @@
                     });
                 },
                 error: function(jqXHR, exception) {
-                    // console.log("CSRF Token Error Is Working"); // For Debugging Purpose.
-                    // console.log("Something Went Wrong");
+                    alert("An error occurred while loading subcategories");
                 }
             });
         });
+
+
+        // // To Get Categories Dynamically according to their respective Sections. 
+        // $("#section").change(function() {
+        //     var section_id = $(this).val(); // To Get Selected Category.
+        //     $.ajax({
+        //         url: "{{ route('product-categories.index') }}",
+        //         type: "get",
+        //         data: {
+        //             section_id: section_id
+        //         }, // Pass Selected Category Bt It's ID
+        //         dataType: "json",
+        //         success: function(response) {
+        //             console.log(response); // For Debugging Purpose Only
+        //             $("#category").find("option").not(":first").remove();
+        //             $.each(response["categories"], function(key, item) {
+        //                 $("#category").append(
+        //                     `<option value='${item.id}'>${item.name}</option>`);
+        //             });
+        //         },
+        //         error: function(jqXHR, exception) {
+        //             // console.log("CSRF Token Error Is Working"); // For Debugging Purpose.
+        //             // console.log("Something Went Wrong");
+        //         }
+        //     });
+        // });
+
+        // // To Get Sub-Categories Dynamically according to their respective Categories. 
+        // $("#category").change(function() {
+        //     var category_id = $(this).val(); // To Get Selected Category.
+        //     $.ajax({
+        //         url: "{{ route('product-subcategories.index') }}",
+        //         type: "get",
+        //         data: {
+        //             category_id: category_id
+        //         }, // Pass Selected Category Bt It's ID
+        //         dataType: "json",
+        //         success: function(response) {
+        //             console.log(response); // For Debugging Purpose Only
+        //             $("#sub_category").find("option").not(":first").remove();
+        //             $.each(response["SubCategories"], function(key, item) {
+        //                 $("#sub_category").append(
+        //                     `<option value='${item.id}'>${item.name}</option>`);
+        //             });
+        //         },
+        //         error: function(jqXHR, exception) {
+        //             // console.log("CSRF Token Error Is Working"); // For Debugging Purpose.
+        //             // console.log("Something Went Wrong");
+        //         }
+        //     });
+        // });
 
         $("#title").change(function() {
             var element = $(this);
@@ -369,13 +517,13 @@
 
                 $("#product-gallery").append(html);
             },
-            complete: function(file){
+            complete: function(file) {
                 this.removeFile(file);
             }
         });
 
-        function deleteImage(id){
-            $("#image-row-"+id).remove();
+        function deleteImage(id) {
+            $("#image-row-" + id).remove();
         }
     </script>
 @endsection

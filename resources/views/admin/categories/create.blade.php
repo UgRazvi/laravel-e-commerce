@@ -55,10 +55,31 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
+                                    <label for="section">Section</label>
+                                    <select name="section" id="section" class="form-control">
+                                        <option value="">Select a Section</option>
+                                        @if (!empty($sections))
+                                            @foreach ($sections as $section)
+                                                <option value="{{ $section->id }}">{{ $section->name }}</option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                    <p></p>
+                                </div>
+
+                                <div class="mb-3">
                                     <label for="status">Status</label>
                                     <select name="status" id="status" class="form-control">
                                         <option value="1">Active</option>
                                         <option value="0">Block</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="showhome">Show on Home</label>
+                                    <select name="showhome" id="showhome" class="form-control">
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
                                     </select>
                                 </div>
                             </div>

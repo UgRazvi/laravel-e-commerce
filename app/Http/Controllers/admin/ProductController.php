@@ -10,6 +10,7 @@ use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use App\Models\ProductImages;
 use App\Http\Controllers\Controller;
+use App\Models\Section;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -46,10 +47,11 @@ class ProductController extends Controller
     public function create()
     {
         //
-        $categories = Category::orderBy("name", "asc")->get();
+        $sections = Section::orderBy("name", "asc")->get(); // To Show Sections In Dropdown.
+        $categories = Category::orderBy("name", "asc")->get(); // To Show Sub Categories In Dropdown.
         // $subcategories = SubCategory::orderBy("name","asc")->get();
-        $brands = Brand::orderBy("name", "asc")->get();
-        return view("admin.products.create", compact("categories", "brands"));
+        $brands = Brand::orderBy("name", "asc")->get(); // To Show Brands In Dropdown.
+        return view("admin.products.create", compact("sections", "categories", "brands"));
     }
 
     /**
@@ -68,6 +70,8 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'sku' => 'required|unique:products',
             'track_qty' => 'required|in:Yes,No',
+            'qty' => 'required|numeric',
+            'section' => 'required|numeric',
             'category' => 'required|numeric',
             'is_featured' => 'required|in:Yes,No',
 
@@ -75,10 +79,10 @@ class ProductController extends Controller
         ];
 
 
-        // Dynamically adding 'qty' rule based on track_qty value
-        if (!empty($request->track_qty) && $request->track_qty == 'Yes') {
-            $rules['qty'] = 'required|numeric';
-        }
+        // // Dynamically adding 'qty' rule based on track_qty value
+        // if (!empty($request->track_qty) && $request->track_qty == 'Yes') {
+        //     $rules['qty'] = 'required|numeric';
+        // }
 
         $validator = Validator::make($request->all(), $rules);
 
@@ -89,16 +93,18 @@ class ProductController extends Controller
             $product->description = $request->description;
             $product->price = $request->price;
             $product->compare_price = $request->compare_price;
-            $product->sku = $request->sku;
-            $product->barcode = $request->barcode;
-            $product->track_qty = $request->track_qty;
-            $product->track_qty = $request->track_qty;
-            $product->track_qty = $request->track_qty;
-            $product->status = $request->status;
+
+            $product->section_id = $request->section;
             $product->category_id = $request->category;
             $product->sub_category_id = $request->sub_category;
             $product->brand_id = $request->brand;
+
             $product->is_featured = $request->is_featured;
+            $product->sku = $request->sku;
+            $product->barcode = $request->barcode;
+            $product->track_qty = $request->track_qty;
+            $product->qty = $request->qty;
+            $product->status = $request->status;
             // $product->is_downloadable = $request->is_downloadable;
             $product->save();
             // Product::create($request->only[""]); // optional Method.
@@ -166,13 +172,14 @@ class ProductController extends Controller
         $productImages = ProductImages::where('product_id', $product->id)->get();
 
         // echo $productId; // Testing Purpose
+        $sections = Section::orderBy("name", "asc")->get();
         $categories = Category::orderBy("name", "asc")->get();
         $subcategories = SubCategory::where("category_id", $product->category_id)->get();
         // dd($subcategories);
         $brands = Brand::orderBy("name", "asc")->get();
         $product = Product::find($productId);
 
-        return view('admin.products.edit', compact('product', 'brands', 'categories', 'subcategories', 'productImages'));
+        return view('admin.products.edit', compact('product', 'brands', 'subcategories', 'categories', 'sections', 'productImages'));
     }
 
     /**
@@ -191,6 +198,8 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'sku' => 'required|unique:products,sku,' . $product->id . ',id',
             'track_qty' => 'required|in:Yes,No',
+            'qty' => 'required|numeric',
+            'section' => 'required|numeric',
             'category' => 'required|numeric',
             'is_featured' => 'required|in:Yes,No',
 
@@ -199,9 +208,9 @@ class ProductController extends Controller
 
 
         // Dynamically adding 'qty' rule based on track_qty value
-        if (!empty($request->track_qty) && $request->track_qty == 'Yes') {
-            $rules['qty'] = 'required|numeric';
-        }
+        // if (!empty($request->track_qty) && $request->track_qty == 'Yes') {
+        //     $rules['qty'] = 'required|numeric';
+        // }
 
         $validator = Validator::make($request->all(), $rules);
 
@@ -212,16 +221,19 @@ class ProductController extends Controller
             $product->description = $request->description;
             $product->price = $request->price;
             $product->compare_price = $request->compare_price;
-            $product->sku = $request->sku;
-            $product->barcode = $request->barcode;
-            $product->track_qty = $request->track_qty;
-            $product->track_qty = $request->track_qty;
-            $product->track_qty = $request->track_qty;
-            $product->status = $request->status;
+
+            $product->section_id = $request->section;
             $product->category_id = $request->category;
             $product->sub_category_id = $request->sub_category;
             $product->brand_id = $request->brand;
+
             $product->is_featured = $request->is_featured;
+            $product->sku = $request->sku;
+            $product->barcode = $request->barcode;
+            $product->track_qty = $request->track_qty;
+            $product->qty = $request->qty;
+            $product->status = $request->status;
+            
             // $product->is_downloadable = $request->is_downloadable;
             $product->save();
 
@@ -328,7 +340,7 @@ class ProductController extends Controller
     //     }
 
     //     $productImages = ProductImages::where("product_id", $productId)->get();
-        
+
     //     if (!empty($productImages)) {
     //         foreach ($productImages as $productImage) {
     //             File::delete(public_path("/uploads/Products/$product->image"));

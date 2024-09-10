@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Category;
+use App\Models\Section;
 use App\Models\TempImage;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
+
 
 class CategoryController extends Controller
 {
@@ -17,16 +20,31 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
+        
 
-        $categories = Category::latest();
+        // using Table Join (LeftJoin) To Get Combined Data From Multiple tables. 
+        $categories = Category::select('categories.*', 'sections.name as sectionName')
+            ->latest('categories.id')->leftJoin('sections', 'sections.id', 'categories.section_id');
 
         if (!empty($request->get("keyword"))) {
-            $categories = $categories->where("name", "like", "%" . $request->get("keyword") . "%");
+            $categories = $categories
+                ->where("categories.name", "like", "%" . $request->get("keyword") . "%")
+                ->orWhere("sections.name", "like", "%" . $request->get("keyword") . "%");
         }
         $categories = $categories->paginate(10);
 
         // dd($categories); // For Debugging Purpose Only (-  #Removable-Content )
         return view("admin.categories.list", compact("categories")); // Sending Data To View Using "compact()" function.
+
+        // $categories = Category::latest();
+
+        // if (!empty($request->get("keyword"))) {
+        //     $categories = $categories->where("name", "like", "%" . $request->get("keyword") . "%");
+        // }
+        // $categories = $categories->paginate(10);
+
+        // // dd($categories); // For Debugging Purpose Only (-  #Removable-Content )
+        // return view("admin.categories.list", compact("categories")); // Sending Data To View Using "compact()" function.
     }
 
     /**
@@ -35,7 +53,9 @@ class CategoryController extends Controller
     public function create()
     {
         // echo "<h1> Category Create Page </h1>";
-        return view("admin.categories.create"); // Form To Add Categories
+        $sections = Section::orderBy("name", "asc")->get();
+        return view("admin.categories.create", compact("sections"));
+        // return view("admin.categories.create"); // Form To Add Categories
     }
 
     /**
@@ -46,6 +66,7 @@ class CategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'slug' => 'required|unique:categories',
+            'section' => 'required',
             'status' => 'required|in:0,1', // Ensure status is either 0 or 1
         ]);
 
@@ -53,7 +74,9 @@ class CategoryController extends Controller
             $category = new Category(); // Making a new Instance of Category Model.
             $category->name = $request->name; // Getting Name (Values) From The Form Using Request Method
             $category->slug = $request->slug;
+            $category->section_id = $request->section;
             $category->status = $request->status;
+            $category->showhome = $request->showhome;
             $category->save();
             // Save Temporary Image Permanently In Dtabase Here.
             if (!empty($request->image_id)) {
@@ -69,7 +92,7 @@ class CategoryController extends Controller
                 $category->image = $newImageName;
                 $category->save();
             }
-            $request->session()->flash('success', 'Category Has Been Added Successfully');
+            Session::flash('success', 'Category Has Been Added Successfully');
 
             return response()->json([
                 'status' => true,
@@ -97,12 +120,15 @@ class CategoryController extends Controller
      */
     public function edit($categoryId, Request $request)
     {
+
         // echo $categoryId; // Testing Purpose
         $category = Category::find($categoryId);
         if (empty($category)) {
+            session::flash('error', 'Record Not Found !!!');
             return redirect()->route('categories.index');
         }
-        return view('admin.categories.edit', compact('category'));
+        $sections = Section::orderBy('name', 'ASC')->get();
+        return view('admin.categories.edit', compact('category', 'sections'));
     }
 
     /**
@@ -112,6 +138,7 @@ class CategoryController extends Controller
     {
         $category = Category::find($categoryId);
         if (empty($category)) {
+            session::flash('error', 'Record Not Found !!!');
             return response()->json([
                 'status' => false,
                 'notFound' => true,
@@ -121,15 +148,19 @@ class CategoryController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'slug' => 'required|unique:categories,slug,' . $category->id . ',id',
+            'section' => 'required',
+            'status' => 'required',
         ]);
         if ($validator->passes()) {
             $category->name = $request->name; // Getting Name (Values) From The Form Using Request Method
             $category->slug = $request->slug;
+            $category->section_id = $request->section;
             $category->status = $request->status;
+            $category->showhome = $request->showhome;
             $category->save();
 
             $oldImage = $category->image;
-            
+
             if (!empty($request->image_id)) {
                 $tempImage = TempImage::find($request->image_id);
                 $extArray = explode('.', $tempImage->name);
@@ -153,17 +184,18 @@ class CategoryController extends Controller
 
             // return redirect()->route('categories.index');
 
-            $request->session()->flash('success', 'Category Has Been Updated Successfully');
+            Session::flash('success', 'Category Has Been Updated Successfully');
 
             return response()->json([
                 'status' => true,
                 'message' => 'Category Has Been Updated Successfully'
             ]);
-            
         } else {
             return response()->json([
                 'status' => false,
-                'message' => 'Sorry. The Category Could Not Be Updated.'
+                'message' => 'Sorry. The Category Could Not Be Updated.',
+                'errors' => $validator->errors(), // Include validation errors
+
             ]);
         }
     }
@@ -177,7 +209,7 @@ class CategoryController extends Controller
         if (empty($category)) {
             // return redirect()->route('categories.index');
 
-            $request->session()->flash("error", "Category Could Not Be Found.");
+            Session::flash("error", "Category Could Not Be Found.");
 
             return response()->json([
                 "status" => false,
@@ -191,7 +223,7 @@ class CategoryController extends Controller
         $category->delete();
 
 
-        $request->session()->flash("success", "Category Has Been Successfully Deleted.");
+        Session::flash("success", "Category Has Been Successfully Deleted.");
 
         return response()->json([
             "status" => true,

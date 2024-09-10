@@ -37,8 +37,8 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="slug">Slug</label>
-                                    <input type="text" value="{{ $category->slug }}" readonly name="slug"
-                                        id="slug" class="form-control" placeholder="Slug">
+                                    <input type="text" value="{{ $category->slug }}" name="slug" id="slug"
+                                        class="form-control" placeholder="Slug">
                                 </div>
                             </div>
                         </div>
@@ -72,6 +72,33 @@
                                         </option>
                                         {{-- Using Ternary Operator (if-true) ? 'suucess' : 'fail' --}}
                                         <option {{ $category->status == 0 ? 'selected' : '' }} value="0">Block</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="status">Show On Home</label>
+                                    {{-- @php --}}
+                                    {{-- echo "$category->status"; // Testing Purpose  --}}
+                                    {{-- @endphp --}}
+                                    <select name="showhome" id="showhome" class="form-control">
+                                        <option {{ $category->showhome == 'Yes' ? 'selected' : '' }} value="Yes">Yes
+                                        </option>
+                                        {{-- Using Ternary Operator (if-true) ? 'suucess' : 'fail' --}}
+                                        <option {{ $category->showhome == 'No' ? 'selected' : '' }} value="No">No
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="section">Section</label>
+                                    <select name="section" id="section" class="form-control">
+                                        <option value="">Select a Section</option>
+                                        @if (!empty($sections))
+                                            @foreach ($sections as $section)
+                                                <option value="{{ $section->id }}"
+                                                    @if ($section->id == $category->section_id) selected @endif>
+                                                    {{ $section->name }}
+                                                </option>
+                                            @endforeach
+                                        @endif
                                     </select>
                                 </div>
                             </div>
@@ -129,7 +156,8 @@
                         var errors = response['errors'];
                         if (errors['name']) {
                             // console.log("Name Error Is Working"); // For Debugging Purpose.
-                            $('#name').addClass('is-invalid').siblingss('p').addClass('invalid-feedback')
+                            $('#name').addClass('is-invalid').siblingss('p').addClass(
+                                    'invalid-feedback')
                                 .html(errors['name']);
                         } else {
                             $('#name').removeClass('is-invalid').siblingss('p').removeClass(
@@ -137,7 +165,8 @@
                         }
                         if (errors['slug']) {
                             // console.log("Slug Error Is Working"); // For Debugging Purpose.
-                            $('#slug').addClass('is-invalid').siblingss('p').addClass('invalid-feedback')
+                            $('#slug').addClass('is-invalid').siblingss('p').addClass(
+                                    'invalid-feedback')
                                 .html(errors['slug']);
                         } else {
                             $('#slug').removeClass('is-invalid').siblingss('p').removeClass(

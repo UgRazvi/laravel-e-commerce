@@ -13,6 +13,7 @@ use Intervention\Image\Interfaces\ImageInterface;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\admin\HomeController;
+use App\Http\Controllers\admin\ProductCategoryController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\admin\ProductImageController;
 use App\Http\Controllers\admin\ProductSubCategoryController;
@@ -20,13 +21,14 @@ use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\admin\TempImagesController;
 use App\Http\Controllers\FrontController;
+use App\Http\Controllers\SectionController;
 
 // Route::get('/', function () {
 //     return view('welcome');
 // });
 
 // Route For - Home Page
-Route::get('/', [FrontController::class, 'index'])->name('front.home'); 
+Route::get('/', [FrontController::class, 'index'])->name('front.home');
 
 Route::group(['prefix' => 'admin'], function () {
     Route::group(['middleware' => ['admin.guest']], function () {
@@ -44,9 +46,13 @@ Route::group(['prefix' => 'admin'], function () {
         // Products Routes
         // To Save Product Images Permanently.
         Route::resource('/products', ProductController::class);
-        
+
         // Products Sub Category Routes
         Route::resource('/product-subcategories', ProductSubCategoryController::class);
+        Route::resource('/product-categories', ProductCategoryController::class);
+
+        //Sections
+        Route::resource('/sections', SectionController::class);
 
         // Route::get('/products', [ProductController::class, 'index'])->name('products.index');
 

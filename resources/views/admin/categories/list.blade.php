@@ -48,6 +48,7 @@
                             <tr>
                                 <th width="60">ID</th>
                                 <th>Name</th>
+                                <th>Section</th>
                                 <th>Slug</th>
                                 <th width="100">Status</th>
                                 <th width="100">Action</th>
@@ -60,6 +61,7 @@
                                     <tr>
                                         <td>{{ $category->id }}</td>
                                         <td>{{ $category->name }}</td>
+                                        <td>{{ $category->sectionName }}</td>
                                         <td>{{ $category->slug }}</td>
                                         <td>
                                             @if ($category->status == 1)
@@ -126,41 +128,41 @@
 @endsection
 
 @section('customJs')
-<script>
-    function deleteCategory(id) {
-        var url = '{{ route('categories.delete', 'ID') }}';
-        // alert(url);
-        var newUrl = url.replace("ID", id);
-        // alert(newUrl);
-        // return false;
+    <script>
+        function deleteCategory(id) {
+            var url = '{{ route('categories.delete', 'ID') }}';
+            // alert(url);
+            var newUrl = url.replace("ID", id);
+            // alert(newUrl);
+            // return false;
 
-        if (confirm("Do You Really Wanna Delete This Category ?")) {
-            $.ajax({
-                url: newUrl, // JS variable - It Contains Delete Route and category Id.
-                type: 'delete',
-                data: {},
-                dataType: 'json',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    if (response["status"]) {
-                        // Show a response message before redirecting
-                        alert(response["message"] || "Category deleted successfully!");
+            if (confirm("Do You Really Wanna Delete This Category ?")) {
+                $.ajax({
+                    url: newUrl, // JS variable - It Contains Delete Route and category Id.
+                    type: 'delete',
+                    data: {},
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response["status"]) {
+                            // Show a response message before redirecting
+                            alert(response["message"] || "Category deleted successfully!");
 
-                        // Redirect to the categories index page
-                        window.location.href = "{{ route('categories.index') }}";
-                    } else {
-                        // Show an error message if the deletion failed
-                        alert(response["message"] || "An error occurred. Please try again.");
+                            // Redirect to the categories index page
+                            window.location.href = "{{ route('categories.index') }}";
+                        } else {
+                            // Show an error message if the deletion failed
+                            alert(response["message"] || "An error occurred. Please try again.");
+                        }
+                    },
+                    error: function(jqXHR) {
+                        // Handle any unexpected errors
+                        alert("An unexpected error occurred.");
                     }
-                }, error: function(jqXHR) {
-            // Handle any unexpected errors
-            alert("An unexpected error occurred.");
+                });
+            }
         }
-            });
-        }
-    }
-   
-</script>
+    </script>
 @endsection

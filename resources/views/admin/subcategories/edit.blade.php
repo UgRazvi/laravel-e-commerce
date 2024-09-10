@@ -49,14 +49,6 @@
                                     </select>
                                 </div>
                             </div>
-
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="slug">Slug</label>
-                                    <input type="text" value="{{ $subcategory->slug }}" readonly name="slug"
-                                        id="slug" class="form-control" placeholder="Slug">
-                                </div>
-                            </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <input type="hidden" name="image_id" value="" id="image_id">
@@ -67,13 +59,20 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if (!empty($category->image))
-                                    <div class="show-img-if-present">
-                                        <img src="{{ asset('uploads/category/' . $category->image) }}" alt="Your Image">
+                                @if (!empty($subcategory->image))
+                                    <div class="show-img-if-present mt-5 ">
+                                        <img src="{{ asset('uploads/subcategory/' . $subcategory->image) }}"
+                                            alt="Your Image">
                                     </div>
                                 @endif
                             </div>
+
                             <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="slug">Slug</label>
+                                    <input type="text" value="{{ $subcategory->slug }}" readonly name="slug"
+                                        id="slug" class="form-control" placeholder="Slug">
+                                </div>
                                 <div class="mb-3">
                                     <label for="status">Status</label>
                                     <select name="status" id="status" class="form-control">
@@ -83,7 +82,20 @@
                                         </option>
                                     </select>
                                 </div>
+                                <div class="mb-3">
+                                    <label for="showhome">showhome</label>
+                                    <select name="showhome" id="showhome" class="form-control">
+                                        <option {{ $subcategory->showhome == 'Yes' ? 'selected' : '' }} value="Yes">Yes
+                                        </option>
+                                        <option {{ $subcategory->showhome == 'No' ? 'selected' : '' }} value="No">No
+                                        </option>
+                                    </select>
+                                </div>
                             </div>
+
+                            {{-- <div class="col-md-6">
+                               
+                            </div> --}}
                         </div>
                     </div>
                 </div>

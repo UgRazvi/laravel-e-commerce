@@ -25,7 +25,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="mb-3">
-                                    <label for="name">Category</label>
+                                    <label for="category">Category</label>
                                     <select name="category" id="category" class="form-control">
                                         <option value="">Select a Category</option>
                                         @if (!empty($categories))
@@ -48,7 +48,7 @@
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="slug">Slug</label>
-                                    <input type="text" readonly name="slug" id="slug" class="form-control"
+                                    <input type="text"  name="slug" id="slug" class="form-control"
                                         placeholder="Slug">
                                     <p></p>
                                 </div>
@@ -73,6 +73,13 @@
                                         <option value="0">Block</option>
                                     </select>
                                     <p></p>
+                                </div>
+                                 <div class="mb-3">
+                                    <label for="showhome">Show on Home</label>
+                                    <select name="showhome" id="showhome" class="form-control">
+                                        <option value="Yes">Yes</option>
+                                        <option value="No">No</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>

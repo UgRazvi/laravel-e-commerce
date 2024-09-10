@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\admin;
 
+// use session;
 use App\Models\Category;
 use App\Models\TempImage;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
 class SubCategoryController extends Controller
@@ -59,6 +61,7 @@ class SubCategoryController extends Controller
             $subCategory->name = $request->name; // Getting Name (Values) From The Form Using Request Method
             $subCategory->slug = $request->slug;
             $subCategory->status = $request->status;
+            $subCategory->showhome = $request->showhome;
             $subCategory->category_id = $request->category;
             $subCategory->save();
 
@@ -77,7 +80,7 @@ class SubCategoryController extends Controller
                 $subCategory->save();
             }
 
-            $request->session()->flash('success', 'Sub Category Has Been Successfully Added ');
+            session::flash('success', 'Sub Category Has Been Successfully Added ');
             return response()->json([
                 'status' => true,
                 'message' => 'The Sub Category Has Been Successfully Added.'
@@ -106,7 +109,7 @@ class SubCategoryController extends Controller
     {
         $subcategory = SubCategory::find($id);
         if (empty($subcategory)) {
-            $request->session()->flash('error', 'Record Not Found !!!');
+            session::flash('error', 'Record Not Found !!!');
             return redirect()->route('subcategories.index');
         }
         $categories = Category::orderBy('name', 'ASC')->get();
@@ -121,7 +124,7 @@ class SubCategoryController extends Controller
     {
         $subcategory = SubCategory::find($id);
         if (empty($subcategory)) {
-            $request->session()->flash('error', 'Record Not Found !!!');
+            session::flash('error', 'Record Not Found !!!');
             return response()->json([
                 'status' => false,
                 'notFound' => true,
@@ -138,6 +141,7 @@ class SubCategoryController extends Controller
             $subcategory->name = $request->name; // Getting Name (Values) From The Form Using Request Method
             $subcategory->slug = $request->slug;
             $subcategory->status = $request->status;
+            $subcategory->showhome = $request->showhome;
             $subcategory->category_id = $request->category;
             $subcategory->save();
 
@@ -164,13 +168,12 @@ class SubCategoryController extends Controller
                 File::delete(public_path("/uploads/subcategory/$oldImage"));
             }
 
-            $request->session()->flash('success', 'Sub Category Has Been Updated Successfully');
+            session::flash('success', 'Sub Category Has Been Updated Successfully');
 
             return response()->json([
                 'status' => true,
                 'message' => 'Sub Category Has Been Updated Successfully'
             ]);
-             
         } else {
             return response()->json([
                 'status' => false,
@@ -189,7 +192,7 @@ class SubCategoryController extends Controller
         if (empty($subcategory)) {
             // return redirect()->route('categories.index');
 
-            $request->session()->flash("error", "Sub Category Could Not Be Found.");
+            session::flash("error", "Sub Category Could Not Be Found.");
 
             return response()->json([
                 "status" => false,
@@ -203,7 +206,7 @@ class SubCategoryController extends Controller
         $subcategory->delete();
 
 
-        $request->session()->flash("success", "Sub Category Has Been Successfully Deleted.");
+        session::flash("success", "Sub Category Has Been Successfully Deleted.");
 
         return response()->json([
             "status" => true,

@@ -73,7 +73,7 @@
                                     @foreach ($productImages as $image)
                                         <div class="col-md-3" id="image-row-{{ $image->id }}">
                                             <div class="card">
-                                        
+
 
                                                 {{-- <input type="hidden" name="image_array[]" value="{{ $image->id }}"> --}}
                                                 <img src="{{ asset('uploads/Products/' . $image->image) }}"
@@ -174,10 +174,26 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h2 class="h4 mb-3">Product Category</h2>
+
                                     <div class="mb-3">
-                                        <label for="category">Product</label>
+                                        <label for="section">Section</label>
+                                        <select name="section" id="section" class="form-control">
+                                            <option value="">Select The Product Section</option>
+                                            @if (!empty($sections))
+                                                @foreach ($sections as $section)
+                                                    <option {{ $product->section_id == $section->id ? 'selected' : '' }}
+                                                        value="{{ $section->id }}">{{ $section->name }}
+                                                    </option>
+                                                @endforeach
+                                            @endif
+                                        </select>
+                                        <p class="error"></p>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="category">Category</label>
                                         <select name="category" id="category" class="form-control">
-                                            <option value="">Select The Product</option>
+                                            <option value="">Select The Product Category</option>
                                             @if (!empty($categories))
                                                 @foreach ($categories as $category)
                                                     <option {{ $product->category_id == $category->id ? 'selected' : '' }}
@@ -188,10 +204,11 @@
                                         </select>
                                         <p class="error"></p>
                                     </div>
+
                                     <div class="mb-3">
-                                        <label for="sub_category">Sub Product</label>
+                                        <label for="sub_category">Sub Category</label>
                                         <select name="sub_category" id="sub_category" class="form-control">
-                                            <option value="">Select The Sub Product</option>
+                                            <option value="">Select The Product Sub Category</option>
                                             @if (!empty($subcategories))
                                                 @foreach ($subcategories as $subcategory)
                                                     <option
@@ -282,6 +299,29 @@
                                 'invalid-feedback').html(value);
                         });
                     }
+                },
+                error: function(jqXHR, exception) {
+                    console.log("Something went wrong");
+                }
+            });
+        });
+
+        // Fetch Categories dynamically
+        $("#section").change(function() {
+            var section_id = $(this).val();
+            $.ajax({
+                url: "{{ route('product-categories.index') }}",
+                type: "GET",
+                data: {
+                    section_id: section_id
+                },
+                dataType: "json",
+                success: function(response) {
+                    $("#category").find("option").not(":first").remove();
+                    $.each(response.SubCategories, function(key, item) {
+                        $("#category").append(
+                            `<option value='${item.id}'>${item.name}</option>`);
+                    });
                 },
                 error: function(jqXHR, exception) {
                     console.log("Something went wrong");

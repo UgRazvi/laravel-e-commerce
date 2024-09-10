@@ -11,8 +11,12 @@ class FrontController extends Controller
      */
     public function index()
     {
+        return view("front.index-code");
+        // return view("front.index");
+        // return view("front.test-index");
+        // return view("front.swiggy");
         //  return view("front.home");
-        return view("front.index");
+        // return view("front.index-myntra");
     }
 
     /**
