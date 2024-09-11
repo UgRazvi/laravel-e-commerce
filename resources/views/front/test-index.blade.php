@@ -1,5 +1,32 @@
 @if (!empty(getSections()))
     @foreach (getSections() as $section)
+        
+                {{ $section->name }}
+                @if ($section->categories->isNotEmpty())
+                    
+                        @foreach ($section->categories as $category)
+                    
+                                {{ $category->name }}
+                                @if ($category->subcategories->isNotEmpty())
+                         
+                                        @foreach ($category->subcategories as $subcategory)
+                                            <li>{{ $subcategory->name }}</li>
+                                        @endforeach
+                                    
+                                @endif
+                            
+                        @endforeach
+                    
+                @endif
+      
+    @endforeach
+@endif
+
+
+
+
+{{-- @if (!empty(getSections()))
+    @foreach (getSections() as $section)
         <ul>
             <li>
                 {{ $section->name }}
@@ -22,4 +49,4 @@
             </li>
         </ul>
     @endforeach
-@endif
+@endif --}}

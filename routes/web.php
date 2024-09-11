@@ -21,6 +21,7 @@ use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\admin\TempImagesController;
 use App\Http\Controllers\FrontController;
+use App\Http\Controllers\PageController;
 use App\Http\Controllers\SectionController;
 
 // Route::get('/', function () {
@@ -29,6 +30,7 @@ use App\Http\Controllers\SectionController;
 
 // Route For - Home Page
 Route::get('/', [FrontController::class, 'index'])->name('front.home');
+Route::get('/pages/bag', [PageController::class, 'index'])->name('front.pages.bag');
 
 Route::group(['prefix' => 'admin'], function () {
     Route::group(['middleware' => ['admin.guest']], function () {

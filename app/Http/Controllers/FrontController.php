@@ -11,12 +11,18 @@ class FrontController extends Controller
      */
     public function index()
     {
-        return view("front.index-code");
-        // return view("front.index");
-        // return view("front.test-index");
-        // return view("front.swiggy");
-        //  return view("front.home");
-        // return view("front.index-myntra");
+
+        // return view("front.clone_x.index"); // Already Cloned.
+        //  return view("front.clone_y.index"); // Basic Design.
+     
+        return view("front.Ytb_home"); // To Follow The Proccess
+        
+        // return view("front.index"); // My Clone
+
+        // return view("front.clone-index"); // Pre Clone  
+        
+        // return view("front.myntra-code"); // To Analyze Structure
+        // return view("front.test-index"); // To Test Data
     }
 
     /**
