@@ -64,7 +64,7 @@
                                         <td>
                                             @if (!empty($productImage->image))
                                                 <img src="{{ asset('uploads/Products/' . $productImage->image) }}"
-                                                    class="img-thumbnail" width="50"alt="Product Image">
+                                                    class="img-thumbnail" width="50" alt="Product Image">
                                             @else
                                                 <img src="{{ asset('uploads/Products/DummyImage.png') }}"
                                                     class="img-thumbnail" width="50"alt="Product Image">

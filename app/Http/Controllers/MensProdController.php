@@ -2,29 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
 use Illuminate\Http\Request;
 
-class FrontController extends Controller
+class MensProdController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-
-        $featured_products = Product::where("is_featured", "yes")
-            ->orderBy('id', 'Desc')
-            ->take(8)
-            ->where('status', 1)
-            ->get();
-        $latest_products = Product::orderBy('id', 'Desc')
-            ->where('status', 1)
-            ->take(8)
-            ->get();
-
-
-        return view("front.Ytb_home", compact("featured_products", "latest_products")); // To Follow 
+        // return view("front.prods.mensprod");
+        return view("front.mens-prod");
     }
 
     /**

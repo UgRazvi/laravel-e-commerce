@@ -35,9 +35,11 @@ class ProductController extends Controller
             );
         }
         $products = $products->paginate(10);
+        // Pass the brands to the view
+        $brands = Brand::orderBy('name', 'asc')->get();
 
         // dd($products); // For Debugging Purpose Only (-  #Removable-Content )
-        return view("admin.products.list", compact("products")); // Sending Data To View Using "compact()" function.
+        return view("admin.products.list", compact("products", "brands")); // Sending Data To View Using "compact()" function.
         // return view("admin.products.list");
     }
 

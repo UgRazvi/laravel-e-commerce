@@ -49,6 +49,7 @@
                                 <th width="60">ID</th>
                                 <th>Sub Cat Name</th>
                                 <th>Category Name</th>
+                                {{-- <th>Section Name</th> --}}
                                 <th>Slug</th>
                                 <th width="100">Status</th>
                                 <th width="100">Action</th>
@@ -62,6 +63,7 @@
                                         <td>{{ $subcategory->id }}</td>
                                         <td>{{ $subcategory->name }}</td>
                                         <td>{{ $subcategory->categoryName }}</td>
+                                        {{-- <td>{{ $subcategory->sectionName }}</td> --}}
                                         <td>{{ $subcategory->slug }}</td>
                                         <td>
                                             @if ($subcategory->status == 1)

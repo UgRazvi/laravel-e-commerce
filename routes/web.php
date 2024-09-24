@@ -21,8 +21,10 @@ use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\admin\TempImagesController;
 use App\Http\Controllers\FrontController;
+use App\Http\Controllers\MensProdController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\SectionController;
+use App\Http\Controllers\ShopController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -30,7 +32,13 @@ use App\Http\Controllers\SectionController;
 
 // Route For - Home Page
 Route::get('/', [FrontController::class, 'index'])->name('front.home');
-Route::get('/pages/bag', [PageController::class, 'index'])->name('front.pages.bag');
+// Route::get('/clone-mens-prod', [MensProdController::class, 'index'])->name('front.prods.mensprod'); // Clone
+Route::get('/shop/{categorySlug?}/{subCategorySlug?}', [ShopController::class, 'index'])->name('front.shop');
+Route::get('/product/{slug}', [ShopController::class, 'product'])->name('front.product');
+
+Route::get('/mens-prod', [MensProdController::class, 'index'])->name('front.mensprod');
+Route::view('login','login');
+Route::view('contactus','contactus');
 
 Route::group(['prefix' => 'admin'], function () {
     Route::group(['middleware' => ['admin.guest']], function () {

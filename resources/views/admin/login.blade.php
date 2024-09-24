@@ -21,13 +21,15 @@
 
         {{-- Including Admin Message File yo Show Error/Success Logs --}}
         @include('admin.message')
-		
+
         <div class="card card-outline card-primary">
+            <img src="{{ asset('front-assets/images/Login.jpg') }}" alt="Login Image">
             <div class="card-header text-center">
                 <a href="" class="h3">Admin Panel</a>
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Please Sign In To Start Your Session</p>
+
                 <form action="{{ route('admin.authenticate') }}" method="post">
                     @csrf
                     <div class="input-group mb-3">
