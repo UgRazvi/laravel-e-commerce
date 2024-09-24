@@ -1,6 +1,7 @@
 @charset "UTF-8";
 .container {
-    max-width: 1400px;
+    /* max-width: 1400px; */
+    max-width: 100%;
 }
 :root {
     --bs-white: #fff;
