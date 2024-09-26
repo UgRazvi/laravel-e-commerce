@@ -36,9 +36,10 @@ Route::get('/', [FrontController::class, 'index'])->name('front.home');
 Route::get('/shop/{categorySlug?}/{subCategorySlug?}', [ShopController::class, 'index'])->name('front.shop');
 Route::get('/product/{slug}', [ShopController::class, 'product'])->name('front.product');
 
+
 Route::get('/mens-prod', [MensProdController::class, 'index'])->name('front.mensprod');
-Route::view('login','login');
-Route::view('contactus','contactus');
+Route::view('login', 'login');
+Route::view('contactus', 'contactus');
 
 Route::group(['prefix' => 'admin'], function () {
     Route::group(['middleware' => ['admin.guest']], function () {
@@ -54,6 +55,7 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/logout', [HomeController::class, 'logout'])->name('admin.logout');
 
         // Products Routes
+        Route::get('/get-products', [ProductController::class, 'getProducts'])->name('products.getProducts');
         // To Save Product Images Permanently.
         Route::resource('/products', ProductController::class);
 

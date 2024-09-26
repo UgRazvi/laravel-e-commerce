@@ -46,16 +46,17 @@
                     <!-- Breadcrumb for Home / Shop -->
                     <ol class="breadcrumb primary-color mb-0 d-flex justify-content-between align-items-center flex-wrap">
                         <li class="breadcrumb-item">
-                            <a class="white-text" href="#">Home</a> /
+                            <a class="white-text" href="{{ route('front.home') }}">Home</a> /
                             <span class="breadcrumb-item active">Shop</span>
                         </li>
 
                         <!-- Sorting Dropdown for large screens -->
                         <div class="dropdown d-none d-md-block">
                             <select name="sort" id="sort" class="form-control form-control-sm">
-                                <option value="latest" {{($sort == 'latest') ? 'selected' : ''}}>Latest</option>
-                                <option value="price_desc"  {{($sort == 'price_desc') ? 'selected' : ''}}>Price Low</option>
-                                <option value="price_asc"  {{($sort == 'price_asc') ? 'selected' : ''}}>Price High</option>
+                                <option value="latest" {{ $sort == 'latest' ? 'selected' : '' }}>Latest</option>
+                                <option value="price_desc" {{ $sort == 'price_desc' ? 'selected' : '' }}>Price Low
+                                </option>
+                                <option value="price_asc" {{ $sort == 'price_asc' ? 'selected' : '' }}>Price High</option>
                             </select>
                         </div>
                     </ol>
@@ -183,13 +184,15 @@
                                 $productImage = $product->product_images->first();
                             @endphp
                             <div class="col-md-6 col-lg-3 col-sm-6 col-12 mb-3">
-                                <div class="card h-100">
-                                    @if ($productImage && $productImage->image != '')
-                                        <img src="{{ asset('uploads/Products/' . $productImage->image) }}"
-                                            class="card-img-top cardImages"
-                                            style="height: 300px; object-fit: cover; padding: 5px;"
-                                            alt="Product Image {{ $product->id }}">
-                                    @endif
+                                {{-- <div class="card h-100">
+                                    <a href="{{ route('front.product', $product->slug) }}" class="product-img">
+                                        @if ($productImage && $productImage->image != '')
+                                            <img src="{{ asset('uploads/Products/' . $productImage->image) }}"
+                                                class="card-img-top cardImages"
+                                                style="height: 300px; object-fit: cover; padding: 5px;"
+                                                alt="Product Image {{ $product->id }}">
+                                        @endif
+                                    </a>
                                     <div class="card-body">
                                         <h5 class="card-title">{{ $product->title }}</h5>
                                     </div>
@@ -197,6 +200,58 @@
                                         <li class="list-group-item">{{ $product->title }}</li>
                                         <li class="list-group-item">{{ $product->price }}</li>
                                     </ul>
+                                </div> --}}
+                                <div class="card product-card">
+
+                                    <div class="product-image position-relative">
+                                        <a href="{{ route('front.product', $product->slug) }}" class="product-img">
+                                            @if ($productImage && $productImage->image != '')
+                                                <img src="{{ asset('uploads/Products/' . $productImage->image) }}"
+                                                    class="card-img-top cardImages"
+                                                    style="height: 300px; object-fit: cover; padding: 5px;"
+                                                    alt="Product Image {{ $product->id }}">
+                                            @endif
+                                        </a>
+
+                                        <!-- Rating Box -->
+                                        <div class="rating-box position-absolute bg-white p-2 rounded"
+                                            style="bottom: 10px; left: 10px;">
+                                            <span>4.0</span>
+                                            <i class="fa fa-star"></i>
+                                        </div>
+
+                                        <!-- Wishlist Icon -->
+                                        <a class="wishlist position-absolute" href="222"
+                                            style="top: 10px; right: 10px;">
+                                            <i class="far fa-heart"></i>
+                                        </a>
+                                    </div>
+
+                                    <div class="card-body text-center mt-3">
+
+                                        <!-- Product Name -->
+                                        <p class="product-item-title mb-2">{{ $product->title }}</p>
+
+                                        <!-- Brand -->
+                                        <p class="product-item-brand mb-1"><strong>{!! $product->short_description !!}</strong></p>
+
+                                        <!-- Pricing Section -->
+                                        <div class="product-item-pricing">
+
+                                            <!-- Current Price -->
+                                            <span class=" product-item-selling-price h5">
+                                                <strong> Rs. {{ $product->price }} </strong>
+                                            </span>
+
+                                            <s class="product-item-mrp h6 text-muted">
+                                                <!-- Original Price (Compare price) -->
+                                                {{ $product->compare_price }}
+                                            </s>
+
+                                            <!-- Discount -->
+                                            <span class="product-item-discount text-success">(60% OFF)</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         @endforeach
@@ -214,74 +269,74 @@
 @endsection
 
 @section('customJS')
-<script>
-    // Initialize the range slider
-    var rangeSlider = $(".js-range-slider").ionRangeSlider({
-        type: "double",
-        min: 0,
-        max: 10000,
-        from: {{ $price_min }},
-        step: 10,
-        to: {{ $price_max }},
-        skin: "round",
-        max_postfix: "+",
-        prefix: "₹",
-        onFinish: function(data) {
-            apply_filters(data);
-        }
-    });
-
-    var slider = $(".js-range-slider").data("ionRangeSlider");
-
-    // Change event for brand checkboxes
-    $(".brand-label").change(function() {
-        apply_filters();
-    });
-
-    // Change event for sorting
-    $("#sort").change(function() {
-        apply_filters();
-    });
-
-    // Function to apply filters and update URL
-    function apply_filters(data = null) {
-        var brands = [];
-        $(".brand-label:checked").each(function() {
-            brands.push($(this).val());
+    <script>
+        // Initialize the range slider
+        var rangeSlider = $(".js-range-slider").ionRangeSlider({
+            type: "double",
+            min: 0,
+            max: 10000,
+            from: {{ $price_min }},
+            step: 10,
+            to: {{ $price_max }},
+            skin: "round",
+            max_postfix: "+",
+            prefix: "₹",
+            onFinish: function(data) {
+                apply_filters(data);
+            }
         });
 
-        // Start building the URL
-        var url = "{{ url()->current() }}?";
+        var slider = $(".js-range-slider").data("ionRangeSlider");
 
-        // Use data from slider if provided; otherwise, use current slider state
-        var from = data ? data.from : slider.result.from;
-        var to = data ? data.to : slider.result.to;
+        // Change event for brand checkboxes
+        $(".brand-label").change(function() {
+            apply_filters();
+        });
 
-        // Append brands to URL if selected
-        if (brands.length > 0) {
-            url += '&brand=' + brands.join(','); // Join brands with a comma
+        // Change event for sorting
+        $("#sort").change(function() {
+            apply_filters();
+        });
+
+        // Function to apply filters and update URL
+        function apply_filters(data = null) {
+            var brands = [];
+            $(".brand-label:checked").each(function() {
+                brands.push($(this).val());
+            });
+
+            // Start building the URL
+            var url = "{{ url()->current() }}?";
+
+            // Use data from slider if provided; otherwise, use current slider state
+            var from = data ? data.from : slider.result.from;
+            var to = data ? data.to : slider.result.to;
+
+            // Append brands to URL if selected
+            if (brands.length > 0) {
+                url += '&brand=' + brands.join(','); // Join brands with a comma
+            }
+
+            // Append price range to URL
+            url += '&price_min=' + from + '&price_max=' + to;
+
+            // Append sorting option to URL
+            if ($("#sort").val()) {
+                url += '&sort=' + $("#sort").val();
+            }
+
+            // Redirect to the new URL, refreshing the page
+            window.location.href = url;
         }
 
-        // Append price range to URL
-        url += '&price_min=' + from + '&price_max=' + to;
+        // Listen for slider changes directly
+        $(".js-range-slider").on("change", function() {
+            var result = slider.result;
+            apply_filters(result);
+        });
+    </script>
 
-        // Append sorting option to URL
-        if ($("#sort").val()) {
-            url += '&sort=' + $("#sort").val();
-        }
-
-        // Redirect to the new URL, refreshing the page
-        window.location.href = url;
-    }
-
-    // Listen for slider changes directly
-    $(".js-range-slider").on("change", function() {
-        var result = slider.result;
-        apply_filters(result);
-    });
-</script>
-
-{{-- <script>
+    {{-- <script>
         // Initialize the range slider
         var rangeSlider = $(".js-range-slider").ionRangeSlider({
             type: "double",

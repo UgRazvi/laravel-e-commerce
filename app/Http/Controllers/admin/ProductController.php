@@ -92,7 +92,11 @@ class ProductController extends Controller
             $product = new Product;
             $product->title = $request->title;
             $product->slug = $request->slug;
+
+            $product->short_description = $request->short_description;
             $product->description = $request->description;
+            $product->shipping_returns = $request->shipping_returns;
+
             $product->price = $request->price;
             $product->compare_price = $request->compare_price;
 
@@ -100,6 +104,8 @@ class ProductController extends Controller
             $product->category_id = $request->category;
             $product->sub_category_id = $request->sub_category;
             $product->brand_id = $request->brand;
+
+            $product->related_products = (!empty($request->related_products)) ? implode(',', $request->related_products) : '';
 
             $product->is_featured = $request->is_featured;
             $product->sku = $request->sku;
@@ -170,6 +176,13 @@ class ProductController extends Controller
         if (empty($product)) {
             return redirect()->route('products.index')->with('error', 'Product not found....!!!');
         }
+
+        // Fetch Related Products
+        $relatedProducts = [];
+        if ($product->related_products != '') {
+            $productArray = explode(',', $product->related_products);
+            $relatedProducts = Product::whereIn('id', $productArray)->with('product_images')->get();
+        }
         // Fetch Product Images
         $productImages = ProductImages::where('product_id', $product->id)->get();
 
@@ -181,7 +194,7 @@ class ProductController extends Controller
         $brands = Brand::orderBy("name", "asc")->get();
         $product = Product::find($productId);
 
-        return view('admin.products.edit', compact('product', 'brands', 'subcategories', 'categories', 'sections', 'productImages'));
+        return view('admin.products.edit', compact('product', 'brands', 'subcategories', 'categories', 'sections', 'productImages', 'relatedProducts'));
     }
 
     /**
@@ -220,7 +233,11 @@ class ProductController extends Controller
             // $product = new Product; // Already present 
             $product->title = $request->title;
             $product->slug = $request->slug;
+
+            $product->short_description = $request->short_description;
             $product->description = $request->description;
+            $product->shipping_returns = $request->shipping_returns;
+
             $product->price = $request->price;
             $product->compare_price = $request->compare_price;
 
@@ -229,13 +246,15 @@ class ProductController extends Controller
             $product->sub_category_id = $request->sub_category;
             $product->brand_id = $request->brand;
 
+            $product->related_products = (!empty($request->related_products)) ? implode(',', $request->related_products) : '';
+
             $product->is_featured = $request->is_featured;
             $product->sku = $request->sku;
             $product->barcode = $request->barcode;
             $product->track_qty = $request->track_qty;
             $product->qty = $request->qty;
             $product->status = $request->status;
-            
+
             // $product->is_downloadable = $request->is_downloadable;
             $product->save();
 
@@ -326,39 +345,21 @@ class ProductController extends Controller
         ]);
     }
 
-    // public function destroy($productId, Request $request)
-    // {
-    //     $product = Product::find($productId); // TO Find Product By Using ID
-    //     if (empty($product)) {
-    //         // return redirect()->route('categories.index');
-
-    //         session()->flash("error", "Product Could Not Be Found.");
-
-    //         return response()->json([
-    //             "status" => false,
-    //             "notFound" => true,
-    //             "message" => "Product Could Not Be Deleted Successfully."
-    //         ]);
-    //     }
-
-    //     $productImages = ProductImages::where("product_id", $productId)->get();
-
-    //     if (!empty($productImages)) {
-    //         foreach ($productImages as $productImage) {
-    //             File::delete(public_path("/uploads/Products/$product->image"));
-    //         }
-    //         ProductImages::where("product_id", $productId)->delete();
-    //     }
-    //     // File::delete(public_path("/tempImgs/$product->image"));
-
-    //     $product->delete();
-
-
-    //     session()->flash("success", "Product Has Been Successfully Deleted.");
-
-    //     return response()->json([
-    //         "status" => true,
-    //         "message" => "Product Has Been Deleted Successfully !",
-    //     ]);
-    // }
+    public function getProducts(Request $request)
+    {
+        $tempProducts = [];
+        if ($request->term != "") {
+            $products = Product::where("title", "like", "%" . $request->term . "%")->get();
+            if ($products != null) {
+                foreach ($products as $product) {
+                    $tempProducts[] = array('id' => $product->id, 'text' => $product->title);
+                }
+            }
+        }
+        // print_r($tempProducts);
+        return response()->json([
+            'tags' => $tempProducts,
+            'status' => true,
+        ]);
+    }
 }

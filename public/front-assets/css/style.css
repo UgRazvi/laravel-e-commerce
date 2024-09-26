@@ -58,6 +58,8 @@ body {
     background-color: var(--bs-body-bg);
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    overflow-x: hidden;
+    width: -webkit-fill-available;
 }
 hr {
     margin: 1rem 0;
@@ -104,7 +106,7 @@ h4,
 }
 h5,
 .h5 {
-    font-size: 1.25rem;
+    font-size: 1rem;
 }
 h6,
 .h6 {
@@ -2664,7 +2666,6 @@ fieldset:disabled .btn {
     display: block;
 }
 .navbar {
-
     position: relative;
     display: flex;
     flex-wrap: wrap;
