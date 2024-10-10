@@ -4,6 +4,7 @@
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\CustomerAddress;
 use App\Models\Product;
 use App\Models\Section;
 use App\Models\SubCategory;
@@ -50,4 +51,8 @@ function getProducts()
 function getBrands()
 {
     return Brand::orderBy('name', 'asc')->get();  // Fetch all brands ordered by name
+}
+
+function getCustomerAddresses(){
+    return CustomerAddress::get();
 }

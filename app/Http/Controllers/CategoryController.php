@@ -92,7 +92,7 @@ class CategoryController extends Controller
                 $category->image = $newImageName;
                 $category->save();
             }
-            Session::flash('success', 'Category Has Been Added Successfully');
+            session()->flash('success', 'Category Has Been Added Successfully');
 
             return response()->json([
                 'status' => true,
@@ -124,7 +124,7 @@ class CategoryController extends Controller
         // echo $categoryId; // Testing Purpose
         $category = Category::find($categoryId);
         if (empty($category)) {
-            session::flash('error', 'Record Not Found !!!');
+            session()->flash('error', 'Record Not Found !!!');
             return redirect()->route('categories.index');
         }
         $sections = Section::orderBy('name', 'ASC')->get();
@@ -138,7 +138,7 @@ class CategoryController extends Controller
     {
         $category = Category::find($categoryId);
         if (empty($category)) {
-            session::flash('error', 'Record Not Found !!!');
+            session()->flash('error', 'Record Not Found !!!');
             return response()->json([
                 'status' => false,
                 'notFound' => true,
@@ -184,7 +184,7 @@ class CategoryController extends Controller
 
             // return redirect()->route('categories.index');
 
-            Session::flash('success', 'Category Has Been Updated Successfully');
+            session()->flash('success', 'Category Has Been Updated Successfully');
 
             return response()->json([
                 'status' => true,
@@ -209,7 +209,7 @@ class CategoryController extends Controller
         if (empty($category)) {
             // return redirect()->route('categories.index');
 
-            Session::flash("error", "Category Could Not Be Found.");
+            session()->flash("error", "Category Could Not Be Found.");
 
             return response()->json([
                 "status" => false,
@@ -223,7 +223,7 @@ class CategoryController extends Controller
         $category->delete();
 
 
-        Session::flash("success", "Category Has Been Successfully Deleted.");
+        session()->flash("success", "Category Has Been Successfully Deleted.");
 
         return response()->json([
             "status" => true,

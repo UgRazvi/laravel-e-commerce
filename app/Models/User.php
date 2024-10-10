@@ -12,6 +12,8 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
+    protected $guard = ["id"];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -21,6 +23,14 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'mobile_no',
+        'pincode',
+        'address',
+        'locality_town',
+        'city',
+        'state',
+        'type', // Home or work
+        'default_address',
     ];
 
     /**
@@ -41,4 +51,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function customerAddresses()
+    {
+        return $this->hasMany(CustomerAddress::class, 'user_id');
+    }
+
+    //mutator and accessor 
 }

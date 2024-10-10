@@ -3,6 +3,8 @@
 // use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\admin\BrandsController;
+use App\Http\Controllers\admin\CustomerAddressController;
+use App\Http\Controllers\admin\DiscountCodeController;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 // use Intervention\Image\Image;
@@ -20,6 +22,8 @@ use App\Http\Controllers\admin\ProductSubCategoryController;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\AdminLoginController;
 use App\Http\Controllers\admin\TempImagesController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\MensProdController;
 use App\Http\Controllers\PageController;
@@ -32,13 +36,52 @@ use App\Http\Controllers\ShopController;
 
 // Route For - Home Page
 Route::get('/', [FrontController::class, 'index'])->name('front.home');
+
+Route::get('/payment', [CartController::class, 'payment'])->name('front.payment');
+
+
+
+Route::get('/checkout', [CartController::class, 'checkout'])->name('front.checkout');
 // Route::get('/clone-mens-prod', [MensProdController::class, 'index'])->name('front.prods.mensprod'); // Clone
 Route::get('/shop/{categorySlug?}/{subCategorySlug?}', [ShopController::class, 'index'])->name('front.shop');
 Route::get('/product/{slug}', [ShopController::class, 'product'])->name('front.product');
+Route::get('/cart', [CartController::class, 'cart'])->name('front.cart');
+Route::post('/add-to-cart', [CartController::class, 'addToCart'])->name('front.addToCart');
+Route::post('/update-cart', [CartController::class, 'updateCart'])->name('front.updateCart');
+Route::post('/delete-item', [CartController::class, 'deleteItem'])->name('front.deleteItem.cart');
+// Route::post('/delete-multiple-items.', [CartController::class, 'deleteMultipleItems'])->name('front.deleteMultipleItems.cart');
+Route::post('/cart/delete-multiple-items', [CartController::class, 'deleteMultipleItems'])->name('front.deleteMultipleItems.cart');
 
+
+Route::get('/thank/{orderId}', [CartController::class, 'thank'])->name('front.thank');
+
+Route::post('/get-order-summary', [CartController::class, 'getOrderSummary'])->name('front.getOrderSummary');
+Route::post('/apply-discount', [CartController::class, 'applyDiscount'])->name('front.applyDiscount');
+
+Route::post('/remove-coupon', [CartController::class, 'removeCoupon'])->name('front.removeCoupon');
+
+Route::group(['prefix' => 'account'], function () {
+    Route::group(['middleware' => "guest"], function () {
+        Route::get('/register', [AuthController::class, 'register'])->name('account.register');
+        Route::post('/process-register', [AuthController::class, 'processRegister'])->name('account.processRegister');
+
+        Route::get('/login', [AuthController::class, 'login'])->name('account.login');
+        Route::post('/login', [AuthController::class, 'authenticate'])->name('account.authenticate');
+
+    });
+    Route::group(['middleware' => "auth"], function () {
+        Route::get('/profile', [AuthController::class, 'profile'])->name("account.profile");
+        Route::get('/logout', [AuthController::class, 'logout'])->name('account.logout');
+
+        Route::post('/process-checkout', [CartController::class, 'processCheckout'])->name('front.processCheckout');
+        Route::post('/process-payment', [CartController::class, 'processPayment'])->name('front.processPayment');
+
+        Route::put('/address/{id}', [CustomerAddressController::class, 'update'])->name('address.update');
+        Route::delete('/address/{id}', [CustomerAddressController::class, 'destroy'])->name('address.destroy');
+    });
+});
 
 Route::get('/mens-prod', [MensProdController::class, 'index'])->name('front.mensprod');
-Route::view('login', 'login');
 Route::view('contactus', 'contactus');
 
 Route::group(['prefix' => 'admin'], function () {
@@ -58,6 +101,9 @@ Route::group(['prefix' => 'admin'], function () {
         Route::get('/get-products', [ProductController::class, 'getProducts'])->name('products.getProducts');
         // To Save Product Images Permanently.
         Route::resource('/products', ProductController::class);
+
+        // Coupons Route.
+        Route::resource('/coupon', DiscountCodeController::class);
 
         // Products Sub Category Routes
         Route::resource('/product-subcategories', ProductSubCategoryController::class);

@@ -81,7 +81,6 @@
             .btn-outline-secondary {
                 border-radius: 20px;
                 padding: 5px 15px;
-
             }
 
             .action-buttons {
@@ -153,7 +152,6 @@
                 margin-top: 5px;
                 /* Space between lines */
             }
-
 
             .carousel-inner img {
                 border-radius: 8px;
@@ -372,7 +370,6 @@
                     margin-top: 5px;
                     /* Space between lines */
                 }
-
             }
         </style>
 
@@ -434,6 +431,7 @@
                         <p class="text-muted">Inclusive of all taxes</p>
                         {{-- Short Description :  --}}
                         {!! $product->short_description !!}
+
                     </div>
 
                     <!-- Size Selection -->
@@ -461,26 +459,24 @@
                         </div>
                     </div>
 
-
-                    <!-- Action Buttons -->
                     <!-- Action Buttons -->
                     <div class="action-buttons mb-3 d-flex">
-                        <a href="#" class="btn btn-pink w-100 mb-2 btn-add-to-bag me-2">
+                        <a href="javascript:void(0);" onclick="addToCart({{ $product->id }})"
+                            class="btn btn-pink w-100 mb-2 btn-add-to-bag me-2">
                             <div class="btn-content text-center">
-                                <span class="big-text">ADD TO BAG</span>
+
+                                <span class="big-text"> ADD TO BAG </span>
                                 <span class="small-text">BUY WITH EARLY ACCESS</span>
                             </div>
                         </a>
 
-                        <a href="#" class="btn btns-outline-secondary w-100 mb-2 pt-4 btn-wishlist">
+                        <a href="javascript:void(0);" onclick="addToWishlist()"
+                            class="btn btns-outline-secondary w-100 mb-2 pt-4 btn-wishlist">
                             <div class="btn-content">
                                 <span class="big-text">WISHLIST</span>
                             </div>
                         </a>
                     </div>
-
-
-
 
                     <!-- Delivery Options -->
                     <div class="delivery-options mb-3">
@@ -686,15 +682,24 @@
                                         @endif
                                     </a>
 
+
                                     <!-- Rating Box -->
                                     <div class="rating-box position-absolute bg-white p-2 rounded"
-                                        style="bottom: 10px; left: 10px;">
+                                        style="bottom: 25px; left: 10px; z-index:100;">
                                         <span>4.0</span>
                                         <i class="fa fa-star"></i>
                                     </div>
 
+                                    <!-- Add To Cart Icon -->
+                                    <a class="wishlist position-absolute" href="javascript:void(0);"
+                                        onclick="addToCart({{ $relatedProduct->id }})"
+                                        style="top: 10px; left: 10px; z-index: 100;">
+                                        <i class="fa fa-shopping-cart"></i>
+                                    </a>
+
                                     <!-- Wishlist Icon -->
-                                    <a class="wishlist position-absolute" href="222" style="top: 10px; right: 10px;">
+                                    <a class="wishlist position-absolute" href="222"
+                                        style="top: 10px; right: 10px; z-index: 100;">
                                         <i class="far fa-heart"></i>
                                     </a>
                                 </div>
@@ -720,11 +725,10 @@
                                             Rs. {{ $relatedProduct->compare_price }}
                                         </s>
 
-
-
                                         <!-- Discount -->
                                         <span class="product-item-discount text-success">(60% OFF)</span>
                                     </div>
+
                                 </div>
 
                             </div>
@@ -737,4 +741,5 @@
 @endsection
 
 @section('customJS')
+    <script></script>
 @endsection

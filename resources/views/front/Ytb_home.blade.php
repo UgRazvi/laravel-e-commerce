@@ -17,7 +17,7 @@
      {{-- First Image : Discount Coupons --}}
      <img src="{{ asset('front-assets/images/DiscountCoupon.jpg') }}" alt="Discount Coupon">
      {{-- Second Image : Hero Image --}}
-     <img src="{{ asset('front-assets/images/heroImage.png') }}" alt="Hero Image">
+     <img src="{{ asset('front-assets/images/home.png') }}" alt="Hero Image">
      {{-- Third Image : Coupon Corner --}}
      <img src="{{ asset('front-assets/images/CouponCorner.jpg') }}" alt="Coupon Corner">
      {{-- Fourth Image : Coupons --}}
@@ -51,6 +51,13 @@
                                          <span>4.0</span>
                                          <i class="fa fa-star"></i>
                                      </div>
+
+                                     <!-- Add To Cart Icon -->
+                                     <a class="wishlist position-absolute" href="javascript:void(0);"
+                                         onclick="addToCart({{ $product->id }})"
+                                         style="top: 10px; left: 10px; z-index: 100;">
+                                         <i class="fa fa-shopping-cart"></i>
+                                     </a>
 
                                      <!-- Wishlist Icon -->
                                      <a class="wishlist position-absolute" href="222" style="top: 10px; right: 10px;">

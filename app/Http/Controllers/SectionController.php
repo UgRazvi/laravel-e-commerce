@@ -72,7 +72,7 @@ class SectionController extends Controller
                 $sections->image = $newImageName;
                 $sections->save();
             }
-            Session::flash('success', 'Section Has Been Added Successfully');
+            session()->flash('success', 'Section Has Been Added Successfully');
 
             return response()->json([
                 'status' => true,
@@ -156,7 +156,7 @@ class SectionController extends Controller
 
             // return redirect()->route('categories.index');
 
-            Session::flash('success', 'Section Has Been Updated Successfully');
+            session()->flash('success', 'Section Has Been Updated Successfully');
 
             return response()->json([
                 'status' => true,
@@ -179,7 +179,7 @@ class SectionController extends Controller
         if (empty($section)) {
             // return redirect()->route('categories.index');
 
-            Session::flash("error", "Section Could Not Be Found.");
+            session()->flash("error", "Section Could Not Be Found.");
 
             return response()->json([
                 "status" => false,
@@ -193,7 +193,7 @@ class SectionController extends Controller
         $section->delete();
 
 
-        Session::flash("success", "Section Has Been Successfully Deleted.");
+        session()->flash("success", "Section Has Been Successfully Deleted.");
 
         return response()->json([
             "status" => true,

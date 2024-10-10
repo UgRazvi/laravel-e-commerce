@@ -30,6 +30,7 @@
                                     <label for="name">Name</label>
                                     <input type="text" name="name" id="name" class="form-control"
                                         placeholder="Name">
+                                        <p></p>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -37,6 +38,7 @@
                                     <label for="slug">Slug</label>
                                     <input type="text" readonly name="slug" id="slug" class="form-control"
                                         placeholder="Slug">
+                                        <p></p>
                                 </div>
                             </div>
                         </div>
