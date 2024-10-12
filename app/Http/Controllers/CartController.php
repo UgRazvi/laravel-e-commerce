@@ -258,7 +258,8 @@ class CartController extends Controller
             $subTotal = Cart::subtotal(2, '.', '');
 
             $shipping = 0;
-            // $coupon_code = "";
+            $couponCode = null;
+            $couponCodeId = null;
             $discount = 0;
             $grandTotal = $subTotal = Cart::subtotal(2, '.', '');
 
@@ -334,11 +335,11 @@ class CartController extends Controller
         $cartContent = Cart::content();
 
         $discount = 0;
-        $customerAddress = CustomerAddress::where('user_id', $user->id)->first();
+        // $customerAddress = CustomerAddress::where('user_id', $user->id)->first();
         $grandTotal = Cart::subtotal(2, '.', '');
 
         // dd($cartContent);
-        return view("front.cart", compact('cartContent', "discount", "customerAddress", "grandTotal"));
+        return view("front.cart", compact('cartContent', "discount", "grandTotal"));
     }
     public function checkout()
     {

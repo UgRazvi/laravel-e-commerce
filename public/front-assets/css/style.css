@@ -9772,7 +9772,8 @@ body {
     height: 100%;
     width: 100%;
     padding: 0;
-    font-family: "Poppins";
+    /* font-family: "Poppins"; */
+    font-family: "Assistant";
     color: #001d3d;
     background-color: #f1f1f1;
 }
@@ -9853,7 +9854,8 @@ a.link:hover {
     border-color: #f7ca0d;
 }
 .logo a span {
-    font-family: "Roboto";
+    /* font-family: "Roboto"; */
+    font-family: "Assistant";
     font-weight: bold;
 }
 .top-header form .input-group span {
@@ -9862,7 +9864,8 @@ a.link:hover {
 header .navbar .nav-link {
     color: #000;
     padding: 10px 15px 10px 15px !important;
-    font-family: "Roboto";
+    /* font-family: "Roboto"; */
+    font-family: "Assistant";
 }
 header .navbar .nav-link:hover {
     color: #f7ca0d;
@@ -9921,7 +9924,8 @@ main {
 }
 .section-title h2 {
     font-size: 32px;
-    font-family: "Roboto";
+    /* font-family: "Roboto"; */
+    font-family: "Assistant";
     text-transform: uppercase;
     font-weight: bold;
     color: #3d464d;
@@ -9944,7 +9948,8 @@ main {
 }
 .sub-title h2 {
     font-size: 22px;
-    font-family: "Roboto";
+    /* font-family: "Roboto"; */
+    font-family: "Assistant";
     text-transform: uppercase;
     font-weight: bold;
     color: #3d464d;
@@ -9968,7 +9973,8 @@ main {
     background: rgba(61, 70, 77, 0.5);
 }
 .section-1 .carousel .carousel-inner .carousel-caption h1 {
-    font-family: "Roboto";
+    /* font-family: "Roboto"; */
+    font-family: "Assistant";
     font-weight: 700;
 }
 .section-1 .carousel .carousel-inner .carousel-caption div {
@@ -9982,7 +9988,8 @@ footer .copyright-area {
     background-color: #a08310;
 }
 footer h3 {
-    font-weight: "Poppins";
+    /* font-weight: "Poppins"; */
+    font-weight: "Assistant";
     padding-bottom: 20px;
     margin-bottom: 20px;
     padding-top: 25px;
@@ -10012,7 +10019,8 @@ footer a:hover {
 }
 .section-2 .box {
     background-color: #fff;
-    font-family: "Poppins";
+    /* font-family: "Poppins"; */
+    font-family: "Assistant";
     display: flex;
     align-items: center;
     padding: 1.5em 1em;
@@ -10190,19 +10198,22 @@ footer a:hover {
     padding-left: 50px;
 }
 .section-7 h1 {
-    font-family: "Roboto";
+    /* font-family: "Roboto"; */
+    font-family: "Assistant";
     font-size: 32px;
     font-weight: 700;
     margin-bottom: 10px;
 }
 .section-7 .price {
     font-size: 28px;
-    font-family: "Roboto";
+    /* font-family: "Roboto"; */
+    font-family: "Assistant";
     font-weight: 700;
     margin-bottom: 10px;
 }
 .section-7 p {
-    font-family: "Poppins";
+    /* font-family: "Poppins"; */
+    font-family: "Assistant";
     line-height: 1.5;
 }
 .section-7 .nav-link {

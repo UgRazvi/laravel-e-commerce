@@ -38,9 +38,11 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
+
+    use Notifiable;
+    protected $casts = [
+        'birthday' => 'date', // This will cast the birthday attribute to a Carbon instance
+        'email_verified_at' => 'datetime',
     ];
 
     /**
@@ -48,9 +50,6 @@ class User extends Authenticatable
      *
      * @var array<string, string>
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
 
     public function customerAddresses()
     {

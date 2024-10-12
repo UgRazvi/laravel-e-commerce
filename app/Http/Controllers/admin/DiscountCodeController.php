@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DiscountCoupon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class DiscountCodeController extends Controller
@@ -31,7 +32,6 @@ class DiscountCodeController extends Controller
 
         return view("admin.coupon.list", compact("discountCoupon"));
     }
-
 
     /**
      * Show the form for creating a new resource.
@@ -107,7 +107,6 @@ class DiscountCodeController extends Controller
             ]);
         }
     }
-
 
     /**
      * Display the specified resource.
@@ -215,4 +214,6 @@ class DiscountCodeController extends Controller
             "message" => "Category Has Been Deleted Successfully !",
         ]);
     }
+
+   
 }

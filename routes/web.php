@@ -70,7 +70,7 @@ Route::group(['prefix' => 'account'], function () {
 
     });
     Route::group(['middleware' => "auth"], function () {
-        Route::get('/profile', [AuthController::class, 'profile'])->name("account.profile");
+        // Route::get('/profile', [AuthController::class, 'profile'])->name("account.profile");
         Route::get('/logout', [AuthController::class, 'logout'])->name('account.logout');
 
         Route::post('/process-checkout', [CartController::class, 'processCheckout'])->name('front.processCheckout');
@@ -78,6 +78,27 @@ Route::group(['prefix' => 'account'], function () {
 
         Route::put('/address/{id}', [CustomerAddressController::class, 'update'])->name('address.update');
         Route::delete('/address/{id}', [CustomerAddressController::class, 'destroy'])->name('address.destroy');
+
+        Route::get('/my-orders', [AuthController::class, 'myOrders'])->name("account.myOrders");
+        Route::view("/dashboard", "front.account.dashboard")->name("account.myDashboard");
+
+
+        Route::get('/profile', [AuthController::class, 'profile'])->name("account.profile");
+        Route::get('/profile/edit/', [AuthController::class, 'profileEdit'])->name("account.profileEdit");
+        Route::put('/profile/update/', [AuthController::class, 'profileUpdate'])->name("account.profileUpdate");
+
+        // Don't Use Views Directly.
+        Route::view("/myn-insider", "front.account.myn-insider")->name("account.myn-insider");
+
+        Route::view("/my-address", "front.account.myAddress")->name("account.myAddress");
+        Route::view("/myn-cash", "front.account.mynCash")->name("account.mynCash");
+        Route::view("/myn-credit", "front.account.mynCredit")->name("account.mynCredit");
+        Route::view("/myn-coupon", "front.account.mynCoupon")->name("account.mynCoupon");
+        Route::view("/delete-account", "front.account.deleteAccount")->name("account.deleteAccount");
+        Route::post("/delete-account-suggestion", [AuthController::class, "deleteAccountSuggestion"])->name("account.deleteAccountSuggestion");
+
+        Route::view("/terms-conditions", "front.account.termsCondition")->name("account.terms");
+        Route::view("/privacy-policy", "front.account.privacyPolicy")->name("account.policy");
     });
 });
 

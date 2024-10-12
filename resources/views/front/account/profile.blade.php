@@ -1,69 +1,54 @@
-@extends('front.layouts.app')
-@section('content')
-    <section class="section-5 pb-3 mb-3 bg-white">
-        <div class="container">
-            <div class="light-font">
-                <ol class="breadcrumb primary-color mb-0">
-                    <li class="breadcrumb-item"><a class="white-text" href="#">My Account</a></li>
-                    <li class="breadcrumb-item">Settings</li>
-                </ol>
-            </div>
+@extends('front.account.profileLayout')
+@section('profile-content')
+    @php
+        $user = Auth::user();
+    @endphp
+    <div class="card">
+
+        <div class="head-portion mx-5 px-5 pt-5">
+            <h2 class=""><strong>Profile Details</strong></h2>
+            <hr>
         </div>
-    </section>
-    <section class=" section-11 ">
-        <div class="container  mt-5">
 
-            <div class="messages">
-                @if (Session::has('success'))
-                    <div class="alert alert-success mb-3"> {!! Session::get('success') !!} </div>
-                @endif
-                @if (Session::has('error'))
-                    <div class="alert alert-danger mb-3"> {{ Session::get('error') }} </div>
-                @endif
-            </div>
+        <div class="body-portion text-center">
 
-            <div class="row">
-                <div class="col-md-3">
-
-                    @include('front.account.common.sidebar')
-                </div>
-                <div class="col-md-9">
-                    <div class="card">
-                        <div class="card-header">
-                            <h2 class="h5 mb-0 pt-2 pb-2">Personal Information</h2>
-                        </div>
-                        <div class="card-body p-4">
-                            <div class="row">
-                                <div class="mb-3">
-                                    <label for="name">Name</label>
-                                    <input type="text" name="name" id="name" placeholder="Enter Your Name"
-                                        class="form-control">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="email">Email</label>
-                                    <input type="text" name="email" id="email" placeholder="Enter Your Email"
-                                        class="form-control">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="phone">Phone</label>
-                                    <input type="text" name="phone" id="phone" placeholder="Enter Your Phone"
-                                        class="form-control">
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="phone">Address</label>
-                                    <textarea name="address" id="address" class="form-control" cols="30" rows="5"
-                                        placeholder="Enter Your Address"></textarea>
-                                </div>
-
-                                <div class="d-flex">
-                                    <button class="btn btn-dark">Update</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <table class="table d-flex justify-content-center  mt-3">
+                <tr>
+                    <td>Full Name</td>
+                    <td>{{ $user->name }}</td>
+                </tr>
+                <tr>
+                    <td>Mobile Number</td>
+                    <td>{{ $user->mobile_no }}</td>
+                </tr>
+                <tr>
+                    <td>Email ID</td>
+                    <td>{{ $user->email ?? '- not added -' }}</td>
+                </tr>
+                <tr>
+                    <td>Gender</td>
+                    <td>{{ $user->gender ?? '- not added -' }}</td>
+                </tr>
+                <tr>
+                    <td>Date of Birth</td>
+                    <td>{{ $user->dob ?? '- not added -' }}</td>
+                </tr>
+                <tr>
+                    <td>Location</td>
+                    <td>{{ $user->location ?? '- not added -' }}</td>
+                </tr>
+                <tr>
+                    <td>Alternate Mobile</td>
+                    <td>{{ $user->alternate_mobile ?? '- not added -' }}</td>
+                </tr>
+                <tr>
+                    <td>Hint Name</td>
+                    <td>{{ $user->hint_name ?? '- not added -' }}</td>
+                </tr>
+            </table>
+            <a href="{{route('account.profileEdit')}}">
+                <button class="btn-danger w-25 mb-5">EDIT</button>
+            </a>
         </div>
-    </section>
+    </div>
 @endsection
