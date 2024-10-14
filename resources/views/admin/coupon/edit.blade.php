@@ -108,14 +108,32 @@
                                 <div class="mb-3">
                                     <label for="type">Coupon Type</label>
                                     <select name="type" id="type" class="form-control">
-                                        <option {{ $coupon->type == 'fixed' ? 'selected' : '' }} value="Fixed">Fixed
+                                        <option {{ $coupon->type == 'fixed' ? 'selected' : '' }} value="fixed">Fixed
                                         </option>
-                                        <option {{ $coupon->type == 'percent' ? 'selected' : '' }} value="Percent">Percent
+                                        <option {{ $coupon->type == 'percent' ? 'selected' : '' }} value="percent">Percent
                                         </option>
                                     </select>
                                 </div>
                             </div>
+
                             <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="categories">Categories</label>
+                                    <select name="categories[]" id="categories" class="form-control select2" multiple>
+                                        @if (!empty($categories))
+                                            @foreach ($categories as $category)
+                                                <option value="{{ $category->id }}"
+                                                    {{ in_array($category->id, $coupon->categories->pluck('id')->toArray()) ? 'selected' : '' }}>
+                                                    {{ $category->name }}
+                                                </option>
+                                            @endforeach
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="status">Status</label>
                                     <select name="status" id="status" class="form-control">
@@ -154,6 +172,14 @@
                 format: 'Y-m-d H:i:s',
             });
         });
+
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "Select categories",
+                allowClear: true
+            });
+        });
+
         // console.log("Script Is Working"); // For Debugging Purpose.
 
         // $("#couponForm").submit(function(event) {

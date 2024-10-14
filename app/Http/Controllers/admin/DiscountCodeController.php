@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\DiscountCoupon;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -11,9 +13,7 @@ use Illuminate\Support\Facades\Validator;
 
 class DiscountCodeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
     public function index(Request $request)
     {
         // Start with the query builder for DiscountCoupon
@@ -33,163 +33,145 @@ class DiscountCodeController extends Controller
         return view("admin.coupon.list", compact("discountCoupon"));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        return view("admin.coupon.create");
+        $categories = Category::all();
+        // return view('coupons.create', compact('categories'));
+        return view("admin.coupon.create", compact("categories"));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
+        $request->validate([
+            'code' => 'required|string',
+            'name' => 'nullable|string',
+            'description' => 'nullable|string',
+            'max_usage' => 'nullable|integer',
+            'max_usage_user' => 'nullable|integer',
+            'type' => 'required|in:percent,fixed',
+            'discount_amount' => 'nullable|numeric',
+            'min_amount' => 'nullable|numeric',
+            'categories' => 'array|exists:categories,id',
+            'starts_at' => 'nullable|date',
+            'expires_at' => 'nullable|date',
+        ]);
+
+        $coupon = DiscountCoupon::create($request->only([
+            'code',
+            'name',
+            'description',
+            'max_usage',
+            'max_usage_user',
+            'type',
+            'discount_amount',
+            'min_amount',
+            'status',
+            'starts_at',
+            'expires_at'
+        ]));
+
+        // Attach selected categories
+        $coupon->categories()->sync($request->categories);
+
+        return redirect()->route('coupon.index');
+    }
+
+    public function update($couponId, Request $request)
+    {
+        // Find the coupon by ID
+        $coupon = DiscountCoupon::find($couponId);
+
+        // If coupon is not found, return a JSON response with error
+        if (empty($coupon)) {
+            session()->flash('error', 'Coupon Not Found!');
+            return response()->json([
+                'status' => false,
+                'notFound' => true,
+                'message' => 'Coupon Not Found'
+            ]);
+        }
+
+        // Validate the input data
         $validator = Validator::make($request->all(), [
             'code' => 'required',
             'name' => 'required',
-            'type' => 'required|in:Fixed,Percent',
+            'description' => 'nullable',
+            'max_usage' => 'nullable|integer',
+            'max_usage_user' => 'nullable|integer',
+            'type' => 'required|in:fixed,percent',
             'discount_amount' => 'required|numeric',
-            'status' => 'required',
+            'min_amount' => 'nullable|numeric',
+            'status' => 'required|integer',
+            'starts_at' => 'nullable|date',
+            'expires_at' => 'nullable|date',
+            'categories' => 'array|exists:categories,id', // Validating the categories array
         ]);
 
-        if ($validator->passes()) {
-
-            if (!empty($request->starts_at) && !empty($request->expires_at)) {
-                $now = Carbon::now();
-                $startAt = Carbon::createFromFormat('Y-m-d H:i:s', $request->starts_at);
-                $endAt = Carbon::createFromFormat('Y-m-d H:i:s', $request->expires_at);
-
-                if ($startAt->lt($now)) { // Check if 'starts_at' is less than the current time
-                    return response()->json([
-                        'status' => false,
-                        'errors' => ["starts_at" => "Start Date ($startAt) Can't Be Less Than Current Time ($now)."],
-                    ]);
-                } else if ($endAt->lt($now)) { // Check if 'starts_at' is less than the current time
-                    return response()->json([
-                        'status' => false,
-                        'errors' => ["expires_at" => "End Date ($endAt) Can't Be Less Than Current Time ($now)."],
-                    ]);
-                } else if ($endAt->lt($startAt)) { // Check if 'starts_at' is less than the current time
-                    return response()->json([
-                        'status' => false,
-                        'errors' => ["expires_at" => "End Date ($startAt) Can't Be Less Than Start Date ($startAt)."],
-                    ]);
-                }
-            }
-
-            $discountCoupon = new DiscountCoupon();
-
-            $discountCoupon->code = $request->code;
-            $discountCoupon->name = $request->name;
-            $discountCoupon->description = $request->description;
-            $discountCoupon->max_usage = $request->max_usage;
-            $discountCoupon->max_usage_user = $request->max_usage_user;
-            $discountCoupon->type = $request->type;
-            $discountCoupon->discount_amount = $request->discount_amount;
-            $discountCoupon->min_amount = $request->min_amount;
-            $discountCoupon->starts_at = $request->starts_at;
-            $discountCoupon->expires_at = $request->expires_at;
-            $discountCoupon->status = $request->status;
-            $discountCoupon->save();
-
-            $message = 'Discount Coupon Has Been Added Successfully!!!';
-            session()->flash("success", $message);
-            return response()->json([
-                'status' => true,
-                'message' => $message,
-            ]);
-        } else {
+        // If validation fails, return JSON response with errors
+        if ($validator->fails()) {
+            // dd($request->all());
             return response()->json([
                 'status' => false,
+                'message' => 'Validation Failed',
                 'errors' => $validator->errors(),
             ]);
         }
+
+        // Update the coupon fields
+        $coupon->code = $request->code;
+        $coupon->name = $request->name;
+        $coupon->description = $request->description;
+        $coupon->max_usage = $request->max_usage;
+        $coupon->max_usage_user = $request->max_usage_user;
+        $coupon->type = $request->type;
+        $coupon->discount_amount = $request->discount_amount;
+        $coupon->min_amount = $request->min_amount;
+        $coupon->starts_at = $request->starts_at;
+        $coupon->expires_at = $request->expires_at;
+        $coupon->status = $request->status;
+
+        // Save the updated coupon
+        $coupon->save();
+
+        // Sync the selected categories (many-to-many relationship)
+        if ($request->has('categories')) {
+            $coupon->categories()->sync($request->categories);
+        }
+
+        // Return success response
+        return response()->json([
+            'status' => true,
+            'message' => 'Coupon Has Been Updated Successfully'
+        ]);
+
+        // Alternatively, you can use a redirect if needed
+        // return redirect()->route('coupon.index')->with('success', 'Coupon Has Been Updated Successfully');
     }
 
-    /**
-     * Display the specified resource.
-     */
+
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Show the composer require intervention/image for editing the specified resource.
-     */
     public function edit($couponId, Request $request)
     {
+        // Find the coupon by ID
+        $coupon = DiscountCoupon::with('categories')->find($couponId);
 
-        // echo $couponId; // Testing Purpose
-        $coupon = DiscountCoupon::find($couponId);
+        // Check if the coupon exists
         if (empty($coupon)) {
             session()->flash('error', 'Record Not Found !!!');
             return redirect()->route('coupon.index');
         }
-        return view('admin.coupon.edit', compact('coupon'));
+
+        // Retrieve all categories
+        $categories = Category::all();
+
+        // Pass the coupon and categories to the view
+        return view('admin.coupon.edit', compact('coupon', 'categories'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update($couponId, Request $request)
-    {
-        $coupon = DiscountCoupon::find($couponId);
-        if (empty($coupon)) {
-            session()->flash('error', 'Record Not Found !!!');
-            return response()->json([
-                'status' => false,
-                'notFound' => true,
-                'message' => 'Category Not Found'
-            ]);
-        }
-        $validator = Validator::make($request->all(), [
-            'code' => 'required',
-            'name' => 'required',
-            'type' => 'required|in:Fixed,Percent',
-            'discount_amount' => 'required|numeric',
-            'status' => 'required',
-        ]);
-        if ($validator->passes()) {
-            $coupon->code = $request->code;
-            $coupon->name = $request->name;
-            $coupon->description = $request->description;
-            $coupon->max_usage = $request->max_usage;
-            $coupon->max_usage_user = $request->max_usage_user;
-            $coupon->type = $request->type;
-            $coupon->discount_amount = $request->discount_amount;
-            $coupon->min_amount = $request->min_amount;
-            $coupon->starts_at = $request->starts_at;
-            $coupon->expires_at = $request->expires_at;
-            $coupon->status = $request->status;
-            $coupon->save();
-
-            return redirect()->route('coupon.index')->with('success', 'Coupon Has Been Updated Successfully');
-
-            // session()->flash('success', 'Coupon Has Been Updated Successfully');
-            // return response()->json([
-            //     'status' => true,
-            //     'message' => 'Coupon Has Been Updated Successfully'
-            // ]);
-
-        } else {
-
-            // return redirect()->route('coupon.index')->with('success', 'Coupon Has Been Updated Successfully')->with('errors', $validator->errors());
-
-            return response()->json([
-                'status' => false,
-                'message' => 'Sorry. The Coupon Could Not Be Updated.',
-                'errors' => $validator->errors(), // Include validation errors
-
-            ]);
-        }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($couponId, Request $request)
     {
         $coupon = DiscountCoupon::find($couponId); // TO Find Category By Using ID
@@ -215,5 +197,75 @@ class DiscountCodeController extends Controller
         ]);
     }
 
-   
+    public function mynCoupon(Request $request)
+    {
+        // Get the sort parameter from the request
+        $sort = $request->input('sort', 'id'); // Default sorting by ID
+
+        // Apply sorting based on the parameter
+        switch ($sort) {
+            case 'trending':
+                // Sort by a custom logic for trending (this could be based on views, ratings, etc.)
+
+                // This feature is not working properly.
+                $coupons = DiscountCoupon::with('categories')->orderBy('id', 'desc')->get();
+                break;
+
+            case 'discount':
+                // Sort by discount amount in descending order
+                $coupons = DiscountCoupon::with('categories')->orderBy('discount_amount', 'desc')->get();
+                break;
+
+            case 'expiring_soon':
+                // Sort by expiry date in descending order
+                $coupons = DiscountCoupon::with('categories')->orderBy('expires_at', 'desc')->get();
+                break;
+
+            case 'all':
+            default:
+                // Sort by ID in ascending order
+                $coupons = DiscountCoupon::with('categories')->orderBy('id', 'asc')->get();
+                break;
+        }
+
+        return view("front.account.mynCoupon", compact("coupons"));
+    }
+
+    public function getProductsByCategory(Request $request)
+    {
+        $request->validate([
+            'couponCode' => 'required|string|exists:discount_coupons,code', // Ensure the coupon exists
+        ], [
+            'couponCode.required' => 'Please enter a coupon code.',
+            'couponCode.exists' => 'The provided coupon code does not exist.',
+        ]);
+
+        $coupon = DiscountCoupon::where('code', $request->couponCode)->with('categories')->first();
+
+        if (!$coupon) {
+            return response()->json([], 404); 
+        }
+
+        $categories = $coupon->categories;
+
+        $products = Product::with(['product_images', 'category'])
+            ->whereIn('category_id', $categories->pluck('id'))
+            ->get();
+
+        $response = [
+            'coupon' => [
+                'code' => $coupon->code,
+                'description' => $coupon->description,
+                'discount_amount' => $coupon->discount_amount,
+                'type' => $coupon->type,
+                'min_amount' => $coupon->min_amount,
+            ],
+            'products' => $products,
+            'categories' => $categories,
+        ];
+
+        return response()->json($response);
+
+    }
+
 }

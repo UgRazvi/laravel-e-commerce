@@ -21,5 +21,9 @@ class DiscountCoupon extends Model
         'expires_at',
         'status'
     ];
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'category_discount_coupon');
+    }
 
 }

@@ -6,7 +6,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\AccDelInfo;
+use App\Models\CustomerAddress;
+use App\Models\DiscountCoupon;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -14,9 +17,6 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
 
     public function register()
     {
@@ -101,6 +101,7 @@ class AuthController extends Controller
     {
         return view("front.account.profile");
     }
+    
     public function logout()
     {
         // Remove the coupon code from the session if it exists
@@ -112,6 +113,7 @@ class AuthController extends Controller
             ->with("success", "You've been logout successfully.");
 
     }
+    
     public function myOrders()
     {
         $user = Auth::user();
@@ -126,6 +128,7 @@ class AuthController extends Controller
     {
         return view("front.account.profile-edit");
     }
+
     public function profileUpdate(Request $request)
     {
         // Validate the incoming request data

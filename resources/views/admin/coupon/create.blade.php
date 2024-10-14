@@ -105,12 +105,25 @@
                                 <div class="mb-3">
                                     <label for="type">Coupon Type</label>
                                     <select name="type" id="type" class="form-control">
-                                        <option value="Fixed">Fixed</option>
-                                        <option value="Percent">Percent</option>
+                                        <option value="fixed">Fixed</option>
+                                        <option value="percent">Percent</option>
                                     </select>
                                 </div>
                             </div>
+
                             <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="categories">Categories</label>
+                                    <select name="categories[]" id="categories" class="form-control select2" multiple>
+                                        @foreach ($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            
+                            <div class="col-md-12">
                                 <div class="mb-3">
                                     <label for="status">Status</label>
                                     <select name="status" id="status" class="form-control">
@@ -230,6 +243,13 @@
                 error: function(jqXHR, exception) {
                     console.log(exception);
                 }
+            });
+        });
+
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "Select categories",
+                allowClear: true
             });
         });
     </script>

@@ -24,4 +24,8 @@ class Product extends Model
     {
         return $this->belongsTo(Brand::class);
     }
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
 }

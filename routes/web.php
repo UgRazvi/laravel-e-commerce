@@ -79,7 +79,7 @@ Route::group(['prefix' => 'account'], function () {
         Route::put('/address/{id}', [CustomerAddressController::class, 'update'])->name('address.update');
         Route::delete('/address/{id}', [CustomerAddressController::class, 'destroy'])->name('address.destroy');
 
-        Route::get('/my-orders', [AuthController::class, 'myOrders'])->name("account.myOrders");
+        Route::get('/my-orders', [AuthController::class, 'myOrders'])->name("account.myOrders"); // (To work on 15 October 2024).
         Route::view("/dashboard", "front.account.dashboard")->name("account.myDashboard");
 
 
@@ -90,12 +90,18 @@ Route::group(['prefix' => 'account'], function () {
         // Don't Use Views Directly.
         Route::view("/myn-insider", "front.account.myn-insider")->name("account.myn-insider");
 
-        Route::view("/my-address", "front.account.myAddress")->name("account.myAddress");
         Route::view("/myn-cash", "front.account.mynCash")->name("account.mynCash");
         Route::view("/myn-credit", "front.account.mynCredit")->name("account.mynCredit");
-        Route::view("/myn-coupon", "front.account.mynCoupon")->name("account.mynCoupon");
+        
         Route::view("/delete-account", "front.account.deleteAccount")->name("account.deleteAccount");
         Route::post("/delete-account-suggestion", [AuthController::class, "deleteAccountSuggestion"])->name("account.deleteAccountSuggestion");
+
+        Route::get("/myn-coupon", [DiscountCodeController::class, "mynCoupon"])->name("account.mynCoupon");
+        Route::get('/get-products-by-category', [DiscountCodeController::class, 'getProductsByCategory'])->name("account.getCatProd");
+
+        // Route to handle storing a new address
+        Route::post('/account/address', [CustomerAddressController::class, 'store'])->name('address.store');
+        Route::get("/my-address", [CustomerAddressController::class, "viewUserAddress"])->name("account.myAddress");
 
         Route::view("/terms-conditions", "front.account.termsCondition")->name("account.terms");
         Route::view("/privacy-policy", "front.account.privacyPolicy")->name("account.policy");

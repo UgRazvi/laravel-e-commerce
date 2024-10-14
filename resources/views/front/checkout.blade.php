@@ -156,39 +156,6 @@
                     </div>
                     <p>Default Address</p>
 
-                    {{-- @foreach (getCustomerAddresses() as $custAdd)
-                        <div class="card border-1 p-3">
-                            <input type="radio" name="default_address" id="default_address"
-                                value="{{ $custAdd->default_address }}"
-                                @if ($custAdd->default_address ?? 0) checked @endif>
-
-                            <label for="userName"> {{ $custAdd->name ?? 'User Name' }} </label>
-                            <span> {{ $custAdd->mobile_no ?? 'Mobile No.' }} </span>
-                            <span> {{ $custAdd->address ?? 'Address' }} </span>
-                            <span> {{ $custAdd->locality_town ?? 'Locality, Town' }} </span>
-                            <span> {{ $custAdd->pincode ?? 'Pincode' }} </span>
-                            <span> {{ $custAdd->city ?? 'City' }} </span>
-                            <span> {{ $custAdd->state ?? 'State' }} </span>
-                            <span> {{ $custAdd->type ?? 'Address Type' }} </span>
-                            <span> Pay on Delivery available </span>
-
-                            <div class="form-group mt-3">
-                                <div class="d-flex gap-2">
-                                    <form action="{{ route('address.destroy', $custAdd->id) }}" method="POST"
-                                        class="remove-address-form"
-                                        onsubmit="return confirm('Are you sure you want to delete this address?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" id="editAddress" name="edit"
-                                            class="btn btn-outline-secondary rounded-pill">Remove</button>
-                                    </form>
-
-                                    <button id="editAddress" name="edit"
-                                        class="btn btn-outline-secondary rounded-pill">Edit </button>
-                                </div>
-                            </div>
-                        </div>
-                    @endforeach --}}
 
                     @foreach (getCustomerAddresses() as $custAdd)
                         <div class="card border-1 p-3">
@@ -215,7 +182,8 @@
                                     </form>
                                     <div class="editButton">
                                         <button class="btn btn-outline-secondary rounded-pill editAddress"
-                                            data-id="{{ $custAdd->id }}" data-name="{{ $custAdd->name }}"
+                                            data-cust="{{ $custAdd }}" data-id="{{ $custAdd->id }}"
+                                            data-name="{{ $custAdd->name }}"
                                             data-mobile_no="{{ $custAdd->mobile_no }}"
                                             data-pincode="{{ $custAdd->pincode }}"
                                             data-address="{{ $custAdd->address }}"
@@ -223,7 +191,7 @@
                                             data-city="{{ $custAdd->city }}" data-state="{{ $custAdd->state }}"
                                             data-type="{{ $custAdd->type }}"
                                             data-default_address="{{ $custAdd->default_address }}">
-                                            Edit</button>
+                                            Edit </button>
                                     </div>
 
                                 </div>
@@ -444,7 +412,8 @@
                                     name="apply-discount">Apply</button>
                             </div>
 
-                            <div class="coupon-error-box mt-2 mb-3  laert alert-danger text-center" id="coupon-error-box">
+                            <div class="coupon-error-box mt-2 mb-3  laert alert-danger text-center"
+                                id="coupon-error-box">
 
                             </div>
 
@@ -646,15 +615,15 @@
             dataType: 'json',
             success: function(response) {
 
-                if (response.status == true) { 
+                if (response.status == true) {
                     $("#couponDiscount").html('₹' + response.discount);
                     $("#grandTotal").html('₹' + response.grandTotal);
-                   
+
                     location.reload();
                 } else {
                     $("#coupon-error-box").html(response.message);
                     // console.log("Response Message :: " + response.message + "\nResponse Staus :: " + response.status + "\nResponse Code :: " + response.code);
-                }   
+                }
             },
             error: function(xhr, status, error) {
                 console.log("AJAX error: " + status + " - " + error);
@@ -692,6 +661,9 @@
     $(document).ready(function() {
         $('.editAddress').on('click', function() {
             // Get address data from the button's data attributes
+
+            // const cust = $(this).data('cust');
+            // console.log('cust', cust, 'cust AddID', cust.id);
             const addressId = $(this).data('id');
             const name = $(this).data('name');
             const mobileNo = $(this).data('mobile_no');
@@ -704,7 +676,9 @@
             const defaultAddress = $(this).data('default_address'); // Get the default address status
 
             // Set the data into the modal fields
+            // $('#address_id').val(cust.id);
             $('#address_id').val(addressId);
+            // console.log("addressId", addressId);
             $('#edit_name').val(name);
             $('#edit_mobile_no').val(mobileNo);
             $('#edit_pincode').val(pincode);
