@@ -101,7 +101,7 @@ class AuthController extends Controller
     {
         return view("front.account.profile");
     }
-    
+
     public function logout()
     {
         // Remove the coupon code from the session if it exists
@@ -113,16 +113,51 @@ class AuthController extends Controller
             ->with("success", "You've been logout successfully.");
 
     }
-    
-    public function myOrders()
+
+    public function myOrders(Request $request)
     {
         $user = Auth::user();
         $myOrders = Order::where('user_id', $user->id)
-            ->with(['orderItems.product', 'orderItems.product.product_images']) // Eager loading related models
-            ->orderBy('created_at', 'DESC')
-            ->get();
+            ->with(['orderItems.product', 'orderItems.product.product_images']);
+
+        // Apply status filter
+        if ($request->has('order_status') && $request->order_status != 'all') {
+            $myOrders->where('order_status', $request->order_status);
+            // dd($myOrders);
+        }
+
+        // Apply time filter
+        if ($request->has('time') && $request->time != 'anytime') {
+            switch ($request->time) {
+                case '30_days':
+                    $myOrders->where('created_at', '>=', now()->subDays(30)->toDateTimeString());
+                    break;
+                case '6_months':
+                    $myOrders->where('created_at', '>=', now()->subMonths(6)->toDateTimeString());
+                    break;
+                case '1_year':
+                    $myOrders->where('created_at', '>=', now()->subYear()->toDateTimeString());
+                    break;
+            }
+        }
+
+        // Apply search filter
+        if ($request->has('search') && $request->search != '') {
+            $searchTerm = $request->search;
+            $myOrders->where(function ($query) use ($searchTerm) {
+                $query->where('id', 'LIKE', '%' . $searchTerm . '%') // Search by order ID
+                    ->orWhereHas('orderItems.product', function ($q) use ($searchTerm) {
+                        $q->where('name', 'LIKE', '%' . $searchTerm . '%'); // Search by product name
+                    });
+            });
+        }
+
+        // Get the filtered orders and order by creation date
+        $myOrders = $myOrders->orderBy('created_at', 'DESC')->get();
+
         return view('front.account.myOrders', compact('myOrders'));
     }
+
 
     public function profileEdit(Request $request)
     {

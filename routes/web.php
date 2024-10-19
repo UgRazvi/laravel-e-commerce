@@ -1,34 +1,36 @@
 <?php
 
 // use App\Http\Controllers\ProfileController;
-
-use App\Http\Controllers\admin\BrandsController;
-use App\Http\Controllers\admin\CustomerAddressController;
-use App\Http\Controllers\admin\DiscountCodeController;
+use Razorpay\Api\Api;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Intervention\Image\ImageManager;
+use Illuminate\Support\Facades\Route;
 // use Intervention\Image\Image;
 // use Intervention\Image\ImageManagerStatic as Image;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Imagick\Driver;
-use Intervention\Image\Interfaces\ImageInterface;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\admin\HomeController;
-use App\Http\Controllers\admin\ProductCategoryController;
-use App\Http\Controllers\admin\ProductController;
-use App\Http\Controllers\admin\ProductImageController;
-use App\Http\Controllers\admin\ProductSubCategoryController;
-use App\Http\Controllers\admin\SubCategoryController;
-use App\Http\Controllers\AdminLoginController;
-use App\Http\Controllers\admin\TempImagesController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\FrontController;
-use App\Http\Controllers\MensProdController;
 use App\Http\Controllers\PageController;
-use App\Http\Controllers\SectionController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\FrontController;
+use App\Http\Controllers\SectionController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\MensProdController;
+use App\Http\Controllers\admin\HomeController;
+use App\Http\Controllers\AdminLoginController;
+use Intervention\Image\Drivers\Imagick\Driver;
+use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\admin\BrandsController;
+use App\Http\Controllers\admin\ProductController;
+use Intervention\Image\Interfaces\ImageInterface;
+use App\Http\Controllers\admin\TempImagesController;
+use App\Http\Controllers\admin\SubCategoryController;
+use App\Http\Controllers\admin\DiscountCodeController;
+use App\Http\Controllers\admin\ProductImageController;
+use App\Http\Controllers\admin\CustomerAddressController;
+use App\Http\Controllers\admin\ProductCategoryController;
+use App\Http\Controllers\admin\ProductSubCategoryController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -39,6 +41,35 @@ Route::get('/', [FrontController::class, 'index'])->name('front.home');
 
 Route::get('/payment', [CartController::class, 'payment'])->name('front.payment');
 
+Route::get('/test-razorpay', function () {
+    $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+
+    try {
+        // Create a Razorpay order
+        $razorpayOrder = $api->order->create([
+            'amount' => 2000, // Amount in paisa (i.e., 10 INR)
+            'currency' => 'INR',
+            'payment_capture' => 1, // Auto capture
+        ]);
+
+        // Convert the Razorpay order object to an array or extract the necessary data
+        $razorpayOrderData = [
+            'id' => $razorpayOrder['id'],
+            'amount' => $razorpayOrder['amount'],
+            'currency' => $razorpayOrder['currency']
+        ];
+
+        // Return the Razorpay order data
+        return [
+            'razorpay_order_id' => $razorpayOrderData['id'],
+            'amount' => $razorpayOrderData['amount'],
+            'currency' => $razorpayOrderData['currency'],
+        ];
+
+    } catch (\Exception $e) {
+        return $e->getMessage();
+    }
+});
 
 
 Route::get('/checkout', [CartController::class, 'checkout'])->name('front.checkout');
@@ -80,21 +111,20 @@ Route::group(['prefix' => 'account'], function () {
         Route::delete('/address/{id}', [CustomerAddressController::class, 'destroy'])->name('address.destroy');
 
         Route::get('/my-orders', [AuthController::class, 'myOrders'])->name("account.myOrders"); // (To work on 15 October 2024).
-        Route::view("/dashboard", "front.account.dashboard")->name("account.myDashboard");
+        Route::get('/orders/filter', [AuthController::class, 'filter'])->name('orders.filter');
+        Route::get('/item-details', [AuthController::class, 'filter'])->name('order.itemDetails');
 
+        Route::get('/dashboard', [UserProfileController::class, 'userDashboard'])->name("account.myDashboard");
 
         Route::get('/profile', [AuthController::class, 'profile'])->name("account.profile");
         Route::get('/profile/edit/', [AuthController::class, 'profileEdit'])->name("account.profileEdit");
         Route::put('/profile/update/', [AuthController::class, 'profileUpdate'])->name("account.profileUpdate");
-
-        // Don't Use Views Directly.
-        Route::view("/myn-insider", "front.account.myn-insider")->name("account.myn-insider");
-
-        Route::view("/myn-cash", "front.account.mynCash")->name("account.mynCash");
-        Route::view("/myn-credit", "front.account.mynCredit")->name("account.mynCredit");
-        
-        Route::view("/delete-account", "front.account.deleteAccount")->name("account.deleteAccount");
         Route::post("/delete-account-suggestion", [AuthController::class, "deleteAccountSuggestion"])->name("account.deleteAccountSuggestion");
+
+        Route::get("/delete-account", [UserProfileController::class, "deleteAccount"])->name("account.deleteAccount");
+        Route::get("/myn-insider", [UserProfileController::class, "mynInsider"])->name("account.myn-insider");
+        Route::get("/myn-cash", [UserProfileController::class, "mynCash"])->name("account.mynCash");
+        Route::get("/myn-credit", [UserProfileController::class, "mynCredit"])->name("account.mynCredit");
 
         Route::get("/myn-coupon", [DiscountCodeController::class, "mynCoupon"])->name("account.mynCoupon");
         Route::get('/get-products-by-category', [DiscountCodeController::class, 'getProductsByCategory'])->name("account.getCatProd");
@@ -103,8 +133,9 @@ Route::group(['prefix' => 'account'], function () {
         Route::post('/account/address', [CustomerAddressController::class, 'store'])->name('address.store');
         Route::get("/my-address", [CustomerAddressController::class, "viewUserAddress"])->name("account.myAddress");
 
-        Route::view("/terms-conditions", "front.account.termsCondition")->name("account.terms");
-        Route::view("/privacy-policy", "front.account.privacyPolicy")->name("account.policy");
+        Route::get("/terms-conditions", [UserProfileController::class, 'termsCondition'])->name("account.terms");
+        Route::get("/privacy-policy", [UserProfileController::class, 'privacyPolicy'])->name("account.policy");
+
     });
 });
 

@@ -579,7 +579,7 @@
     $("#paymentForm").submit(function(event) {
         event.preventDefault(); // Prevent default form submission
         console.log(event);
-        $("button[type='submit']").prop("disabled", true);
+        // $("button[type='submit']").prop("disabled", true);
         $.ajax({
             url: '{{ route('front.processPayment') }}',
             type: 'POST',

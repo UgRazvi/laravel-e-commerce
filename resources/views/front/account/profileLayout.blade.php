@@ -24,7 +24,7 @@
             </div>
             <div class="row px-5 mx-5">
 
-                <div class="col-lg-2 col-md-12 col-sm-12" style="border-right: 1px solid grey;">
+                <div class="col-lg-2 col-md-12 col-sm-12">
                     <ul class="mb-2 pb-5">
                         <li class="mt-2 pb-2"> <a href="{{ route('account.myDashboard') }}"
                                 class="text-primary">Overview</a> </li>
