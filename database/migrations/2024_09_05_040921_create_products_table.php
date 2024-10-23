@@ -19,10 +19,10 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->double('price', 10, 2);
             $table->double('compare_price', 10, 2)->nullable();
-            $table->foreignId('section_id')->constrained()->onDelete('cascade');
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->foreignId('sub_category_id')->nullable()->constrained()->onDelete('cascade');
-            $table->foreignId('brand_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('section_id')->constrained('sections')->onDelete('cascade');
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            $table->foreignId('sub_category_id')->nullable()->constrained('sub_categories')->onDelete('cascade');
+            $table->foreignId('brand_id')->nullable()->constrained('brands')->onDelete('cascade');
             $table->enum('is_featured', ['Yes', 'No'])->default('No');
             $table->string('sku');
             $table->string('barcode')->nullable();
