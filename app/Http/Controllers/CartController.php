@@ -7,6 +7,7 @@ use App\Models\DiscountCoupon;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Services\PayUService;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -22,10 +23,25 @@ class CartController extends Controller
 
 
     private $processPaymentService;
+    private $payUService;
 
-    public function __construct(ProcessPaymentService $processPaymentService)
+    public function __construct(ProcessPaymentService $processPaymentService, PayUService $payUService)
     {
         $this->processPaymentService = $processPaymentService;
+        $this->payUService = $payUService;
+    }
+
+    public function processPayment(Request $request)
+    {
+        if ($request->payment_method == 'COD') {
+            return $this->processPaymentService->processPaymentCOD($request);
+        }
+    }
+    public function payU(Request $request)
+    {
+        if ($request->payment_method == 'PayU') {
+            return $this->payUService->processPaymentPayU($request);
+        }
     }
 
 
@@ -259,10 +275,6 @@ class CartController extends Controller
 
     }
 
-    public function processPayment(Request $request)
-    {
-        return $this->processPaymentService->processPayment($request);
-    }
 
     // public function processPayment(Request $request)
     // {
@@ -337,9 +349,10 @@ class CartController extends Controller
     //     }
     // }
 
-    public function thank($id)
+    public function thank($txnId)
     {
-        return view("front.thank", compact("id"));
+        // dd($id);
+        return view("front.thank", compact("txnId"));
     }
 
     public function cart()
@@ -393,8 +406,64 @@ class CartController extends Controller
             $grandTotal = $subTotal - $discount; // After Discount calculation logic
         }
 
+        // $user = Auth::user();
 
-        return view("front.checkout", compact("customerAddress", "discount", "grandTotal"));
+        $MERCHANT_KEY = env('PAYU_MERCHANT_KEY');
+        $SALT = env('PAYU_MERCHANT_SALT');
+
+
+        $PAYU_BASE_URL = "https://test.payu.in";
+
+        //$PAYU_BASE_URL = "https://secure.payu.in"; // PRODUCATION
+        $name = $user->name;
+        $successURL = route('pay.u.response');
+        $failURL = route('pay.u.cancel');
+        $email = $user->email;
+        $phone = $user->mobile_no;
+        $amount = (int) $grandTotal;
+
+        $action = '';
+        $txnid = substr(hash('sha256', mt_rand() . microtime()), 0, 20);
+        $posted = array();
+        $posted = array(
+            'key' => $MERCHANT_KEY,
+            'txnid' => $txnid,
+            'amount' => $amount,
+            'firstname' => $name,
+            'email' => $email,
+            'phone' => $phone,
+            'productinfo' => 'Webappfix',
+            'surl' => $successURL,
+            'furl' => $failURL,
+            'service_provider' => 'payu_paisa',
+        );
+
+        if (empty($posted['txnid'])) {
+            $txnid = substr(hash('sha256', mt_rand() . microtime()), 0, 20);
+        } else {
+            $txnid = $posted['txnid'];
+        }
+
+        $hash = '';
+        $hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
+
+        if (empty($posted['hash']) && sizeof($posted) > 0) {
+            $hashVarsSeq = explode('|', $hashSequence);
+            $hash_string = '';
+            foreach ($hashVarsSeq as $hash_var) {
+                $hash_string .= isset($posted[$hash_var]) ? $posted[$hash_var] : '';
+                $hash_string .= '|';
+            }
+            $hash_string .= $SALT;
+
+            $hash = strtolower(hash('sha512', $hash_string));
+            $action = $PAYU_BASE_URL . '/_payment';
+        } elseif (!empty($posted['hash'])) {
+            $hash = $posted['hash'];
+            $action = $PAYU_BASE_URL . '/_payment';
+        }
+
+        return view("front.checkout", compact("customerAddress", "discount", "grandTotal",'action', 'hash', 'MERCHANT_KEY', 'txnid', 'successURL', 'failURL', 'name', 'email', 'amount'));
 
     }
 

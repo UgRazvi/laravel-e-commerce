@@ -338,7 +338,8 @@
                                 </div>
                                 <div class="col-8">
 
-                                    <form action="" method="post" id="paymentForm" name="paymentForm">
+                                    <form action="{{route('front.processPayment')}}" method="post" id="paymentForm1" name="paymentForm1">
+                                       @csrf
                                         <div class="form-group cod form-control mt-2">
                                             <div class="row align-items-center">
                                                 <div class="col-1">
@@ -361,8 +362,10 @@
                                                     ORDER</button>
                                             </div>
                                         </div>
-
-                                        <div class="form-group upi form-control mt-3">
+                                    </form>
+                                    <form action="" method="post" id="paymentForm2" name="paymentForm2">
+                                        @csrf
+                                        <div class="form-group phonepe form-control mt-3">
                                             <div class="row align-items-center">
                                                 <div class="col-1">
                                                     <input type="radio" class="payment_method"
@@ -379,7 +382,48 @@
                                             </div>
                                         </div>
                                     </form>
+                                    <form action="{{route('payment.process')}}" method="post" id="paymentForm3" name="paymentForm3">
+                                        @csrf
+                                        <div class="form-group upi form-control mt-3">
+                                            {{-- <div>{{ $usman }}</div> --}}
+                                            <input type="text" name="key"
+                                                value="{{ $MERCHANT_KEY ?? 'Empty $MERCHANT_KEY' }}" />
+                                            <input type="text" name="hash"
+                                                value="{{ $hash ?? 'Empty $hash' }}" />
+                                            <input type="text" name="txnid"
+                                                value="{{ $txnid ?? 'Empty $txnid' }}" />
+                                            <input type="text" name="amount"
+                                                value="{{ $amount ?? 'Empty $amount' }}" />
+                                            <input type="text" name="firstname" id="firstname"
+                                                value="{{ $name ?? 'Empty $name' }}" />
+                                            <input type="text" name="email" id="email"
+                                                value="{{ $email ?? 'Empty $email' }}" />
+                                            <input type="text" name="phone" id="phone"
+                                                value="{{ $phone ?? 'Empty $phone' }}" />
+                                            <input type="text" name="productinfo" value="Webappfix">
+                                            <input type="text" name="surl"
+                                                value="{{ $successURL ?? 'Empty $successURL' }}" />
+                                            <input type="text" name="furl"
+                                                value="{{ $failURL ?? 'Empty $failURL' }}" />
+                                            <input type="text" name="service_provider" value="payu_paisa" />
+                                            <div class="row align-items-center">
+                                                <div class="col-1">
+                                                    <input type="radio" class="payment_method"
+                                                        name="payment_method" id="payment_method_payu"
+                                                        value="PayU">
+                                                </div>
+                                                <div class="col-11">
+                                                    <label for="payment_method_payu">PayU</label>
+                                                </div>
+                                            </div>
+                                            <div class="payu-details mt-2 mb-2" id="payu-details"
+                                                style="display:nonef;">
+                                                <button type="submit" class="btn btn-danger mt-2 w-100">PAY
+                                                    NOW</button>
+                                            </div>
+                                        </div>
 
+                                    </form>
 
                                 </div>
                             </div>
@@ -575,33 +619,58 @@
         });
     });
 
-    // 03 - Payment Form Submission
-    $("#paymentForm").submit(function(event) {
-        event.preventDefault(); // Prevent default form submission
-        console.log(event);
-        // $("button[type='submit']").prop("disabled", true);
-        $.ajax({
-            url: '{{ route('front.processPayment') }}',
-            type: 'POST',
-            data: $(this).serializeArray(),
-            dataType: 'json',
-            success: function(response) {
-                $("button[type='submit']").prop("disabled", false);
-                if (response.status == true) { // If status is true
-                    alert(response.message); // Show a success message
-                    window.location.href = "{{ route('front.thank', ':orderId') }}".replace(
-                        ':orderId', response.orderId);
-                    // Refresh the page after showing the message
-                } else {
-                    alert('There was an issue processing your order.');
-                }
-            },
-            error: function(xhr, status, error) {
-                // Handle error response
-                console.error(xhr.responseText);
-            }
-        });
-    });
+    // 03 - Payment Form Submission 
+    // $("#paymentForm").submit(function(event) {
+    //     event.preventDefault(); // Prevent default form submission
+
+    //     const paymentMethod = $("input[name='payment_method']:checked").val();
+
+    //     // If PayU is selected, redirect to PayU payment gateway
+    //     if (paymentMethod === 'PayU') {
+    //         const formData = $(this).serializeArray();
+
+    //         $.ajax({
+    //             url: '{{ route('front.processPayment') }}',
+    //             // url: '{{ route('payment.process') }}',
+    //             type: 'POST',
+    //             data: formData,
+    //             dataType: 'json',
+    //             success: function(response) {
+    //                 if (response.status) {
+    //                     // Redirect to PayU payment gateway with necessary parameters
+    //                     window.location.href = response
+    //                         .redirectUrl; // Assuming redirectUrl is returned by your backend
+    //                 } else {
+    //                     alert('There was an issue processing your order.');
+    //                 }
+    //             },
+    //             error: function(xhr, status, error) {
+    //                 console.error(xhr.responseText);
+    //             }
+    //         });
+    //     } else {
+    //         // Existing functionality for COD
+    //         $.ajax({
+    //             url: '{{ route('front.processPayment') }}',
+    //             type: 'POST',
+    //             data: $(this).serializeArray(),
+    //             dataType: 'json',
+    //             success: function(response) {
+    //                 if (response.status) {
+    //                     alert(response.message);
+    //                     window.location.href = "{{ route('front.thank', ':orderId') }}".replace(
+    //                         ':orderId', response.orderId);
+    //                 } else {
+    //                     alert('There was an issue processing your order.');
+    //                 }
+    //             },
+    //             error: function(xhr, status, error) {
+    //                 console.error(xhr.responseText);
+    //             }
+    //         });
+    //     }
+    // });
+
 
     // JS : 04- Apply Discount 
     $("#apply-discount").click(function() {

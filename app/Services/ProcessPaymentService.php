@@ -1,19 +1,20 @@
 <?php
-
 namespace App\Services;
 
-use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\OrderItem;
-use Gloudemans\Shoppingcart\Facades\Cart;
+use App\Models\CustomerAddress;
 use Illuminate\Support\Facades\Auth;
+use Gloudemans\Shoppingcart\Facades\Cart;
+use Session; // Ensure Session is imported
 
 class ProcessPaymentService
 {
-    public function processPayment($request)
+    public function processPaymentCOD($request)
     {
         $user = Auth::user();
 
+        // Check if payment method is COD
         if ($request->payment_method == 'COD') {
             $subTotal = Cart::subtotal(2, '.', '');
 
@@ -21,8 +22,9 @@ class ProcessPaymentService
             $couponCode = null;
             $couponCodeId = null;
             $discount = 0;
-            $grandTotal = $subTotal = Cart::subtotal(2, '.', '');
+            $grandTotal = $subTotal;
 
+            // Calculate discount if applicable
             if (Session()->has('code')) {
                 $couponCode = Session()->get('code')->code;
                 $couponCodeId = Session()->get('code')->id;
@@ -35,7 +37,10 @@ class ProcessPaymentService
                 $grandTotal = $subTotal - $discount; // After Discount calculation logic
             }
 
+            // Get customer address
             $customerAddress = CustomerAddress::where('user_id', $user->id)->where('default_address', 1)->first();
+
+            // Create new order
             $order = new Order;
             $order->user_id = $user->id;
             $order->subtotal = $subTotal;
@@ -53,7 +58,7 @@ class ProcessPaymentService
             $order->pincode = $customerAddress->pincode;
             $order->save();
 
-            // Step : 04 - Store Order Items In Order Items Table.
+            // Store order items in the order items table
             foreach (Cart::content() as $item) {
                 $orderItem = new OrderItem;
                 $orderItem->order_id = $order->id;
@@ -65,16 +70,17 @@ class ProcessPaymentService
                 $orderItem->save();
             }
 
+            // Flash success message
             session()->flash("success", "Hey <strong>$user->name</strong> You've successfully placed your order via COD. <br> Your Order ID : " . $order->id);
-
-            // return redirect()->route('front.checkout')->with("success", "Hey <strong>$user->name</strong> You've successfully placed your order.");
             Cart::destroy();
+
             return response()->json([
                 'status' => true,
                 'message' => 'You Selected COD.',
                 'orderId' => $order->id,
             ]);
-
         }
     }
+
+  
 }

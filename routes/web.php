@@ -31,6 +31,9 @@ use App\Http\Controllers\admin\ProductImageController;
 use App\Http\Controllers\admin\CustomerAddressController;
 use App\Http\Controllers\admin\ProductCategoryController;
 use App\Http\Controllers\admin\ProductSubCategoryController;
+use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\PayUMoneyController;
+use App\Http\Controllers\PhonePeController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -40,36 +43,25 @@ use App\Http\Controllers\admin\ProductSubCategoryController;
 Route::get('/', [FrontController::class, 'index'])->name('front.home');
 
 Route::get('/payment', [CartController::class, 'payment'])->name('front.payment');
+Route::any('/payment/success', [PaymentController::class, 'success'])->name('front.payment.success');
+Route::any('/payment/fail', [PaymentController::class, 'fail'])->name('front.payment.fail');
+Route::get('/thank/{txnId}/', [CartController::class, 'thank'])->name('front.thank');
+Route::post('/payu/pay', [PaymentController::class, 'pay'])->name('payment.process');
 
-Route::get('/test-razorpay', function () {
-    $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
 
-    try {
-        // Create a Razorpay order
-        $razorpayOrder = $api->order->create([
-            'amount' => 2000, // Amount in paisa (i.e., 10 INR)
-            'currency' => 'INR',
-            'payment_capture' => 1, // Auto capture
-        ]);
 
-        // Convert the Razorpay order object to an array or extract the necessary data
-        $razorpayOrderData = [
-            'id' => $razorpayOrder['id'],
-            'amount' => $razorpayOrder['amount'],
-            'currency' => $razorpayOrder['currency']
-        ];
 
-        // Return the Razorpay order data
-        return [
-            'razorpay_order_id' => $razorpayOrderData['id'],
-            'amount' => $razorpayOrderData['amount'],
-            'currency' => $razorpayOrderData['currency'],
-        ];
+/** Usman PayU Starts */
+// Route::get('pay-u-money-view', [PayUMoneyController::class, 'payUMoneyView']);
+Route::get('/payU', [PayUMoneyController::class, 'payUMoneyView']);
+Route::get('pay-u-response', [PayUMoneyController::class, 'payUResponse'])->name('pay.u.response');
+Route::get('pay-u-cancel', [PayUMoneyController::class, 'payUCancel'])->name('pay.u.cancel');
+/** Usman PayU Ends */
 
-    } catch (\Exception $e) {
-        return $e->getMessage();
-    }
-});
+
+
+
+
 
 
 Route::get('/checkout', [CartController::class, 'checkout'])->name('front.checkout');
@@ -83,8 +75,7 @@ Route::post('/delete-item', [CartController::class, 'deleteItem'])->name('front.
 // Route::post('/delete-multiple-items.', [CartController::class, 'deleteMultipleItems'])->name('front.deleteMultipleItems.cart');
 Route::post('/cart/delete-multiple-items', [CartController::class, 'deleteMultipleItems'])->name('front.deleteMultipleItems.cart');
 
-
-Route::get('/thank/{orderId}', [CartController::class, 'thank'])->name('front.thank');
+// Route::get('/thank/{orderId}', [CartController::class, 'thank'])->name('front.thank');
 
 Route::post('/get-order-summary', [CartController::class, 'getOrderSummary'])->name('front.getOrderSummary');
 Route::post('/apply-discount', [CartController::class, 'applyDiscount'])->name('front.applyDiscount');
