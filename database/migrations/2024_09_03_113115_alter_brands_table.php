@@ -12,9 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('brands', function (Blueprint $table) {
-            Schema::table('brands', function (Blueprint $table) {
-                $table->string('image')->nullable()->after('slug'); // Adding image column after slug
-            });
+            $table->string('image')->nullable()->after('slug'); // Adding image column after slug
         });
     }
 
