@@ -34,7 +34,7 @@ use App\Http\Controllers\admin\ProductSubCategoryController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PayUMoneyController;
 use App\Http\Controllers\PhonePeController;
-
+use App\Http\Controllers\PaymentWebhookController;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -42,17 +42,32 @@ use App\Http\Controllers\PhonePeController;
 // Route For - Home Page
 Route::get('/', [FrontController::class, 'index'])->name('front.home');
 
+
+// Route::get('/payment', [CartController::class, 'payment'])->name('front.payment');
+
+// Route::post('/payu/pay', [PaymentController::class, 'pay'])->name('payment.process');
+
+// Route::any('/payment/success', [PaymentController::class, 'success'])->name('front.payment.success');
+// Route::any('/payment/fail', [PaymentController::class, 'fail'])->name('front.payment.fail');
+
+// Route::get('/thank/{txnId}/', [CartController::class, 'thank'])->name('front.thank');
+
+// Route::post('/webhook/payu/success', [PaymentWebhookController::class, 'handlePayUSuccess']);
 Route::get('/payment', [CartController::class, 'payment'])->name('front.payment');
-Route::any('/payment/success', [PaymentController::class, 'success'])->name('front.payment.success');
-Route::any('/payment/fail', [PaymentController::class, 'fail'])->name('front.payment.fail');
-Route::get('/thank/{txnId}/', [CartController::class, 'thank'])->name('front.thank');
+
 Route::post('/payu/pay', [PaymentController::class, 'pay'])->name('payment.process');
 
+Route::any('/payment/success', [PaymentController::class, 'success'])->name('front.payment.success');
+Route::any('/payment/fail', [PaymentController::class, 'fail'])->name('front.payment.fail');
+
+Route::get('/thank/{txnId}/', [CartController::class, 'thank'])->name('front.thank');
 
 
 
+
+
+// Test
 /** Usman PayU Starts */
-// Route::get('pay-u-money-view', [PayUMoneyController::class, 'payUMoneyView']);
 Route::get('/payU', [PayUMoneyController::class, 'payUMoneyView']);
 Route::get('pay-u-response', [PayUMoneyController::class, 'payUResponse'])->name('pay.u.response');
 Route::get('pay-u-cancel', [PayUMoneyController::class, 'payUCancel'])->name('pay.u.cancel');

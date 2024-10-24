@@ -23,6 +23,7 @@ class PayUMoneyController extends Controller
         $successURL = route('pay.u.response');
         $failURL = route('pay.u.cancel');
         $email = $request->email;
+        $phone = $request->mobile_no;
         $amount = $request->amount;
 
         $action = '';
@@ -34,6 +35,7 @@ class PayUMoneyController extends Controller
             'amount' => $amount,
             'firstname' => $name,
             'email' => $email,
+            'phone' => $phone,
             'productinfo' => 'Webappfix',
             'surl' => $successURL,
             'furl' => $failURL,
@@ -65,7 +67,7 @@ class PayUMoneyController extends Controller
             $action = $PAYU_BASE_URL . '/_payment';
         }
 
-        return view('front.pay-u', compact('action', 'hash', 'MERCHANT_KEY', 'txnid', 'successURL', 'failURL', 'name', 'email', 'amount'));
+        return view('front.pay-u', compact('action', 'hash', 'MERCHANT_KEY', 'txnid', 'successURL', 'failURL', 'name', 'email', 'phone', 'amount'));
     }
 
     public function payUResponse(Request $request)

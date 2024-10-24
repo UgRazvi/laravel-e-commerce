@@ -17,6 +17,7 @@
         <input type="" name="amount" value="{{ $amount }}" />
         <input type="" name="firstname" id="firstname" value="{{ $name }}" />
         <input type="" name="email" id="email" value="{{ $email }}" />
+        <input type="" name="phone" id="phone" value="{{ $phone }}" />
         <input type="hidden" name="productinfo" value="Webappfix">
         <input type="hidden" name="surl" value="{{ $successURL }}" />
         <input type="hidden" name="furl" value="{{ $failURL }}" />

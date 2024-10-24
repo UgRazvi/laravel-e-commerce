@@ -7,8 +7,7 @@
 
 <body>
     <form action="{{ env('PAYU_URL') }}" method="POST" name="payuPaymentForm">
-        {{-- @dd(env('PAYU_URL')); --}}
-        {{-- @dd($data); --}}
+        {{-- @dd(env('PAYU_URL'), $data); --}}
         @csrf
         @foreach ($data as $key => $value)
             <input type="text" name="{{ $key }}" value="{{ $value }}">
