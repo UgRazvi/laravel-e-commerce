@@ -62,7 +62,9 @@ Route::any('/payment/fail', [PaymentController::class, 'fail'])->name('front.pay
 
 Route::get('/thank/{txnId}/', [CartController::class, 'thank'])->name('front.thank');
 
-
+Route::get('/test', function (){
+    return nl2br(\Illuminate\Support\Facades\File::get(storage_path('logs/laravel.log')));
+});
 
 
 

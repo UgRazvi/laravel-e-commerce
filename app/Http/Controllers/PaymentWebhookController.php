@@ -14,16 +14,16 @@ class PaymentWebhookController extends Controller
         Log::info('PayU Webhook Received', $request->all());
 
         $data = $request->all();
-        dd($data);
+        // dd($data);
         if (!$this->verifyWebhookHash($data)) {
             return response()->json(['error' => 'Invalid hash'], 400);
         }
 
-        $order = Order::where('transaction_id', $data['transaction_id'])->first();
+        $order = Order::where('transaction_id', $data['txnid'])->first();
 
         if ($order && $data['status'] == 'success') {
             $order->update([
-                'order_status' => 'paid',
+                'order_status' => 'delivered',
                 'payment_id' => $data['payment_id'],
                 'payment_status' => 'paid',
             ]);
