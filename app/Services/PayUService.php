@@ -54,6 +54,7 @@ class PayUService
         $order->order_status = "pending";
         $order->transaction_id = $transactionId;
         $order->payment_status = "not_paid";
+        //  dd($order);
         $order->save();
 
         foreach (Cart::content() as $item) {
