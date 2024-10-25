@@ -3,12 +3,15 @@
 // echo "Hello Usman";
 
 use App\Models\Brand;
-use App\Models\Category;
-use App\Models\CustomerAddress;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Section;
+use App\Mail\OrderEmail;
+use App\Models\Category;
 use App\Models\SubCategory;
+use App\Models\CustomerAddress;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 // function getSections()
 // {
@@ -58,9 +61,22 @@ function getCustomerAddresses()
 {
     return CustomerAddress::get();
 }
-
 function orderEmail($orderId)
 {
-    $order = Order::where('id', $orderId)->first()->with('orderItems');
-    dd($orderId, $order);
+    $order = Order::with('orderItems')->where('id', $orderId)->first();
+
+    if (1) { // Check if email exists
+        $maildata = [
+            'subject' => 'Thanks for Order',
+            'order' => $order,
+        ];
+        dd("\n Orders : \n". $order);
+
+        Log::info("Sending email to: " . $order->email);
+        Mail::to($order->email)->send(new OrderEmail($maildata));
+        Log::info("Successfully sent mail.");
+    } else {
+        Log::info("Error: Unable to send email. Order not found or email missing.");
+        // dd($order);
+    }
 }

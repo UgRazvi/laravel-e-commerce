@@ -45,6 +45,7 @@ class PayUService
         $order->grand_total = $grandTotal;
         $order->name = $customerAddress->name;
         $order->mobile_no = $customerAddress->mobile_no;
+        $order->user_email = $user->email;
         $order->address = $customerAddress->address;
         $order->locality_town = $customerAddress->locality_town;
         $order->city = $customerAddress->city;
