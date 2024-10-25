@@ -65,15 +65,15 @@ function orderEmail($orderId)
 {
     $order = Order::with('orderItems')->where('id', $orderId)->first();
 
-    if (1) { // Check if email exists
+    if ($order && $order->user_email) { // Check if email exists
         $maildata = [
             'subject' => 'Thanks for Order',
             'order' => $order,
         ];
-        dd("\n Orders : \n". $order);
+        // dd("\n Orders : \n". $order);
 
-        Log::info("Sending email to: " . $order->email);
-        Mail::to($order->email)->send(new OrderEmail($maildata));
+        Log::info("Sending email to: " . $order->user_email);
+        Mail::to($order->user_email)->send(new OrderEmail($maildata));
         Log::info("Successfully sent mail.");
     } else {
         Log::info("Error: Unable to send email. Order not found or email missing.");

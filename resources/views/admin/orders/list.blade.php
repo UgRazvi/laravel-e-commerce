@@ -24,6 +24,7 @@
                                 <th>Item Name</th>
                                 <th>User Name</th>
                                 <th>Mob. No</th>
+                                <th>E-mail</th>
                                 <th>Price</th>
                                 <th>Qty</th>
                                 <th>Total</th>
@@ -60,6 +61,7 @@
                                             <td>{{ $item->name ?? 'item name' }}</td>
                                             <td>{{ $order->name ?? 'order name' }}</td>
                                             <td>{{ $order->mobile_no ?? 'order mobile_no' }}</td>
+                                            <td>{{ $order->user_email ?? 'order email' }}</td>
                                             <td>{{ $item->price ?? 'item price' }}</td>
                                             <td>{{ $item->qty ?? 'item qty' }}</td>
                                             <td>{{ $item->total ?? 'item total' }}</td>

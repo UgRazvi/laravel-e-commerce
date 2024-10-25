@@ -39,7 +39,7 @@ use App\Http\Controllers\PaymentWebhookController;
 Route::get('/', [FrontController::class, 'index'])->name('front.home');
 
 Route::get('/test-mail', function () {
-    orderEmail(33);
+    orderEmail(35);
 });
 
 Route::get('/test-logs', function () {
