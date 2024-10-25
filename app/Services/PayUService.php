@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\CustomerAddress;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Session; // Ensure Session is imported
@@ -12,24 +13,11 @@ class PayUService
 {
     public function pay($request)
     {
-        $user = Auth::User();
+        $user = Auth::user();
         $transactionId = uniqid();
 
         $merchantKey = env('PAYU_MERCHANT_KEY');
         $merchantSalt = env('PAYU_MERCHANT_SALT');
-
-        $data = [
-            'key' => $merchantKey,
-            'txnid' => $transactionId,
-            'amount' => (int) ($request->amount),
-            'productinfo' => $request->productinfo,
-            'firstname' => $request->firstname,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'surl' => route('front.payment.success'),
-            'furl' => route('front.payment.fail'),
-            'hash' => $this->generateHash($merchantKey, $merchantSalt, $transactionId, $request->amount, $request->productinfo, $request->firstname, $request->email),
-        ];
 
         $subTotal = Cart::subtotal(2, '.', '');
         $discount = 0;
@@ -78,14 +66,61 @@ class PayUService
             $orderItem->save();
         }
 
+        // Ensure amount is string format for hash calculation
+        $data = [
+            'key' => $merchantKey,
+            'txnid' => $transactionId,
+            'amount' => (string) ($grandTotal), // Change to grandTotal
+            'productinfo' => 'Your Product Info', // Provide actual product info
+            'firstname' => $request->firstname,
+            'email' => $request->email,
+            'phone' => $customerAddress->mobile_no,
+            'surl' => route('front.payment.success'),
+            'furl' => route('front.payment.fail'),
+            'hash' => $this->generateHash(
+                $merchantKey,
+                $merchantSalt,
+                $transactionId,
+                (string) ($grandTotal),
+                'Your Product Info', // Provide actual product info
+                $request->firstname,
+                $request->email
+            ),
+        ];
+
         return $data;
     }
 
     private function generateHash($key, $salt, $txnid, $amount, $productinfo, $firstname, $email)
     {
-        $hashString = $key . '|' . $txnid . '|' . $amount . '|' . $productinfo . '|' . $firstname . '|' . $email . '|||||||||||' . $salt;
-        return strtolower(hash('sha512', $hashString));
+        // Including empty udf1 to udf5 in the hash as required by PayU
+        $udf1 = '';
+        $udf2 = '';
+        $udf3 = '';
+        $udf4 = '';
+        $udf5 = '';
+
+        // Hash string as per PayU documentation
+        $hashString = "$key|$txnid|$amount|$productinfo|$firstname|$email|$udf1|$udf2|$udf3|$udf4|$udf5||||||$salt";
+
+        // Generate the hash
+        $hash = strtolower(hash('sha512', $hashString));
+
+        // Log Hash Data for debugging
+        Log::info("\n Hash Data: ", [
+            'key' => $key,
+            'txnid' => $txnid,
+            'amount' => $amount,
+            'productinfo' => $productinfo,
+            'firstname' => $firstname,
+            'email' => $email,
+            'hash' => $hash,
+        ]);
+
+        return $hash;
     }
+
+
 }
 
 

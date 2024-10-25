@@ -2,12 +2,14 @@
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Payment Page</title>
 </head>
+
 <body>
     <form action="{{ $action }}" method="post" name="payuForm">
         @csrf <!-- Ensure CSRF protection -->
@@ -18,7 +20,7 @@
         <input type="" name="firstname" id="firstname" value="{{ $name }}" />
         <input type="" name="email" id="email" value="{{ $email }}" />
         <input type="" name="phone" id="phone" value="{{ $phone }}" />
-        <input type="hidden" name="productinfo" value="Webappfix">
+        <input type="hidden" name="productinfo" value="{{ $item->name }}">
         <input type="hidden" name="surl" value="{{ $successURL }}" />
         <input type="hidden" name="furl" value="{{ $failURL }}" />
         <input type="hidden" name="service_provider" value="payu_paisa" />

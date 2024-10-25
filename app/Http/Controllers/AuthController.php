@@ -107,7 +107,7 @@ class AuthController extends Controller
         // Remove the coupon code from the session if it exists
         session()->forget('code');
 
-
+        dd("Unable to Log Out");
         Auth::logout();
         return redirect()->route('account.login')
             ->with("success", "You've been logout successfully.");

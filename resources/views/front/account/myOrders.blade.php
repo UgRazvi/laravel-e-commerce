@@ -64,10 +64,11 @@
                                             </path>
                                         </svg>
                                     @endif
-                                    <strong> {{ $order->order_status ?? 'No Order Status' }} </strong>
+                                    <strong> {{ $order->order_status ?? 'UNPLACED' }} </strong>
+                                    <strong class="px-5"> Payment :{{ $order->payment_status ?? 'UNPAID' }} </strong>
                                 </span>
 
-                                <label><span>on</span> {{ \Carbon\Carbon::parse($item->created_at)->format('D, j M Y') }}
+                                <label><span>on</span> {{ \Carbon\Carbon::parse($item->created_at)->format('D, j M Y H:i:s') }}
                                     <span>as per your order</span></label>
                                 <div class="card bg-light px-2">
                                     <form action="#/#" method="post" id="orderItemForm" class="orderItemForm"

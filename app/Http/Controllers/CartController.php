@@ -254,7 +254,7 @@ class CartController extends Controller
 
         // Optionally, redirect or return response
         return response()->json(['message' => 'Address added successfully.']);
-       
+
     }
 
 
@@ -278,33 +278,138 @@ class CartController extends Controller
         // dd($cartContent);
         return view("front.cart", compact('cartContent', "discount", "grandTotal"));
     }
+    // public function checkout()
+    // {
+    //     $user = Auth::user();
+    //     $discount = 0;
+    //     if (Cart::count() == 0) {
+    //         // return redirect()->route('front.cart');
+    //         return redirect()->route('front.cart')
+    //             ->with("error", "You don't have any product in your cart yet.");
+    //     }
+
+    //    // Anyone without Authorized Access Can Access Checkout Page.
+    //      if (Auth::check() == false) {
+
+    //          if (!session()->has("url.intended")) {
+    //              session(['url.intended' => url()->current()]);
+    //          }
+
+    //          return redirect()->route('account.login')
+    //              ->with("error", "You're not logged. Please Log In first to access this page.");
+    //      }
+    //      session()->forget("url.intended");
+
+    //     $customerAddress = CustomerAddress::where('user_id', $user->id)->first();
+
+
+    //     // $subTotal = Cart::subtotal(2, '.', '');
+    //     $grandTotal = $subTotal = Cart::subtotal(2, '.', '');
+
+    //     if (Session()->has('code')) {
+    //         $code = Session()->get('code');
+    //         if ($code->type == 'percent') {
+    //             $discount = ($code->discount_amount / 100) * $subTotal;
+    //         } else {
+    //             $discount = $code->discount_amount;
+    //         }
+    //         $grandTotal = $subTotal - $discount; // After Discount calculation logic
+    //     }
+
+    //     // $user = Auth::user();
+
+    //     $MERCHANT_KEY = env('PAYU_MERCHANT_KEY');
+    //     $SALT = env('PAYU_MERCHANT_SALT');
+
+
+    //     $PAYU_BASE_URL = "https://test.payu.in";
+
+    //     //$PAYU_BASE_URL = "https://secure.payu.in"; // PRODUCATION
+    //     $name = $user->name;
+    //     $successURL = route('pay.u.response');
+    //     $failURL = route('pay.u.cancel');
+    //     $email = $user->email;
+    //     $phone = $user->mobile_no;
+    //     $amount = (int) $grandTotal;
+
+    //     $action = '';
+    //     $txnid = substr(hash('sha256', mt_rand() . microtime()), 0, 20);
+    //     $posted = array();
+    //     $posted = array(
+    //         'key' => $MERCHANT_KEY,
+    //         'txnid' => $txnid,
+    //         'amount' => $amount,
+    //         'firstname' => $name,
+    //         'email' => $email,
+    //         'phone' => $phone,
+    //         // 'productinfo' => $productinfo,
+    //         'productinfo' => $item->name,
+    //         'surl' => $successURL,
+    //         'furl' => $failURL,
+    //         'service_provider' => 'payu_paisa',
+    //     );
+
+    //     if (empty($posted['txnid'])) {
+    //         $txnid = substr(hash('sha256', mt_rand() . microtime()), 0, 20);
+    //     } else {
+    //         $txnid = $posted['txnid'];
+    //     }
+
+    //     $hash = '';
+    //     $hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
+
+    //     if (empty($posted['hash']) && sizeof($posted) > 0) {
+    //         $hashVarsSeq = explode('|', $hashSequence);
+    //         $hash_string = '';
+    //         foreach ($hashVarsSeq as $hash_var) {
+    //             $hash_string .= isset($posted[$hash_var]) ? $posted[$hash_var] : '';
+    //             $hash_string .= '|';
+    //         }
+    //         $hash_string .= $SALT;
+
+    //         $hash = strtolower(hash('sha512', $hash_string));
+    //         $action = $PAYU_BASE_URL . '/_payment';
+    //     } elseif (!empty($posted['hash'])) {
+    //         $hash = $posted['hash'];
+    //         $action = $PAYU_BASE_URL . '/_payment';
+    //     }
+
+    //     return view("front.checkout", compact("customerAddress", "discount", "grandTotal",'action', 'hash', 'MERCHANT_KEY', 'txnid', 'successURL', 'failURL', 'name', 'email', 'phone','amount'));
+
+    // }
+
+
     public function checkout()
     {
         $user = Auth::user();
         $discount = 0;
+
+        // Check if the cart is empty
         if (Cart::count() == 0) {
-            // return redirect()->route('front.cart');
             return redirect()->route('front.cart')
                 ->with("error", "You don't have any product in your cart yet.");
         }
 
-        if (Auth::check() == false) {
-
+        // Check if the user is logged in
+        if (!Auth::check()) {
             if (!session()->has("url.intended")) {
                 session(['url.intended' => url()->current()]);
             }
 
             return redirect()->route('account.login')
-                ->with("error", "You're not logged. Please Log In first to access this page.");
+                ->with("error", "You're not logged in. Please log in first to access this page.");
         }
 
-        $customerAddress = CustomerAddress::where('user_id', $user->id)->first();
-
+        // Remove intended URL session
         session()->forget("url.intended");
 
-        // $subTotal = Cart::subtotal(2, '.', '');
+        // Fetch user's saved address
+        $customerAddress = CustomerAddress::where('user_id', $user->id)->first();
+
+        // Subtotal before discount
         $grandTotal = $subTotal = Cart::subtotal(2, '.', '');
 
+        // Apply discount if available
         if (Session()->has('code')) {
             $code = Session()->get('code');
             if ($code->type == 'percent') {
@@ -312,18 +417,14 @@ class CartController extends Controller
             } else {
                 $discount = $code->discount_amount;
             }
-            $grandTotal = $subTotal - $discount; // After Discount calculation logic
+            $grandTotal = $subTotal - $discount;
         }
 
-        // $user = Auth::user();
-
+        // PayU configuration
         $MERCHANT_KEY = env('PAYU_MERCHANT_KEY');
         $SALT = env('PAYU_MERCHANT_SALT');
+        $PAYU_BASE_URL = "https://test.payu.in";  // Use production URL for live
 
-
-        $PAYU_BASE_URL = "https://test.payu.in";
-
-        //$PAYU_BASE_URL = "https://secure.payu.in"; // PRODUCATION
         $name = $user->name;
         $successURL = route('pay.u.response');
         $failURL = route('pay.u.cancel');
@@ -331,31 +432,33 @@ class CartController extends Controller
         $phone = $user->mobile_no;
         $amount = (int) $grandTotal;
 
-        $action = '';
+        // Generate transaction ID
         $txnid = substr(hash('sha256', mt_rand() . microtime()), 0, 20);
-        $posted = array();
-        $posted = array(
+
+        // Concatenate all product names in the cart into a single string
+        $productNames = [];
+        foreach (Cart::content() as $item) {
+            $productNames[] = $item->name;  // Product name from cart
+        }
+        $productinfo = implode(', ', $productNames);  // Join product names with a comma
+
+        // Prepare posted data for PayU
+        $posted = [
             'key' => $MERCHANT_KEY,
             'txnid' => $txnid,
             'amount' => $amount,
             'firstname' => $name,
             'email' => $email,
             'phone' => $phone,
-            'productinfo' => 'Webappfix',
+            'productinfo' => $productinfo,  // Passing product info here
             'surl' => $successURL,
             'furl' => $failURL,
             'service_provider' => 'payu_paisa',
-        );
+        ];
 
-        if (empty($posted['txnid'])) {
-            $txnid = substr(hash('sha256', mt_rand() . microtime()), 0, 20);
-        } else {
-            $txnid = $posted['txnid'];
-        }
-
+        // Generate hash for the request
         $hash = '';
-        $hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
-
+        $hashSequence = "key|txnid|amount|productinfo|firstname|email||||||||||";
         if (empty($posted['hash']) && sizeof($posted) > 0) {
             $hashVarsSeq = explode('|', $hashSequence);
             $hash_string = '';
@@ -364,7 +467,6 @@ class CartController extends Controller
                 $hash_string .= '|';
             }
             $hash_string .= $SALT;
-
             $hash = strtolower(hash('sha512', $hash_string));
             $action = $PAYU_BASE_URL . '/_payment';
         } elseif (!empty($posted['hash'])) {
@@ -372,8 +474,23 @@ class CartController extends Controller
             $action = $PAYU_BASE_URL . '/_payment';
         }
 
-        return view("front.checkout", compact("customerAddress", "discount", "grandTotal",'action', 'hash', 'MERCHANT_KEY', 'txnid', 'successURL', 'failURL', 'name', 'email', 'amount'));
-
+        // Pass data to the view
+        return view("front.checkout", compact(
+            "customerAddress",
+            "discount",
+            "grandTotal",
+            "action",
+            "hash",
+            "MERCHANT_KEY",
+            "txnid",
+            "successURL",
+            "failURL",
+            "name",
+            "email",
+            "phone",
+            "amount",
+            "productinfo",
+        ));
     }
 
     public function getOrderSummary(Request $request)

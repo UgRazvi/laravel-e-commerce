@@ -338,8 +338,9 @@
                                 </div>
                                 <div class="col-8">
 
-                                    <form action="{{route('front.processPayment')}}" method="post" id="paymentForm1" name="paymentForm1">
-                                       @csrf
+                                    <form action="{{ route('front.processPayment') }}" method="post"
+                                        id="paymentForm1" name="paymentForm1">
+                                        @csrf
                                         <div class="form-group cod form-control mt-2">
                                             <div class="row align-items-center">
                                                 <div class="col-1">
@@ -382,49 +383,34 @@
                                             </div>
                                         </div>
                                     </form>
-                                    <form action="{{route('payment.process')}}" method="post" id="paymentForm3" name="paymentForm3">
+                                    <form action="{{ route('payment.process') }}" method="post" id="paymentForm3" name="paymentForm3">
                                         @csrf
                                         <div class="form-group upi form-control mt-3">
-                                            {{-- <div>{{ $usman }}</div> --}}
-                                            <input type="text" name="key"
-                                                value="{{ $MERCHANT_KEY ?? 'Empty $MERCHANT_KEY' }}" />
-                                            <input type="text" name="hash"
-                                                value="{{ $hash ?? 'Empty $hash' }}" />
-                                            <input type="text" name="txnid"
-                                                value="{{ $txnid ?? 'Empty $txnid' }}" />
-                                            <input type="text" name="amount"
-                                                value="{{ $amount ?? 'Empty $amount' }}" />
-                                            <input type="text" name="firstname" id="firstname"
-                                                value="{{ $name ?? 'Empty $name' }}" />
-                                            <input type="text" name="email" id="email"
-                                                value="{{ $email ?? 'Empty $email' }}" />
-                                            <input type="text" name="phone" id="phone"
-                                                value="{{ $phone ?? 'Empty $phone' }}" />
-                                            <input type="text" name="productinfo" value="Webappfix">
-                                            <input type="text" name="surl"
-                                                value="{{ $successURL ?? 'Empty $successURL' }}" />
-                                            <input type="text" name="furl"
-                                                value="{{ $failURL ?? 'Empty $failURL' }}" />
-                                            <input type="text" name="service_provider" value="payu_paisa" />
+                                            <input type="hidden" name="key" value="{{ $MERCHANT_KEY ?? '' }}" />
+                                            <input type="hidden" name="hash" value="{{ $hash ?? '' }}" />
+                                            <input type="hidden" name="txnid" value="{{ $txnid ?? '' }}" />
+                                            <input type="text" name="amount" value="{{ $amount ?? '' }}" />
+                                            <input type="text" name="firstname" id="firstname" value="{{ $name ?? '' }}" />
+                                            <input type="text" name="email" id="email" value="{{ $email ?? '' }}" />
+                                            <input type="text" name="phone" id="phone" value="{{ $phone ?? '' }}" />
+                                            <input type="text" name="productinfo" value="{{ $productinfo ?? 'Your Product Info' }}" />
+                                            <input type="hidden" name="surl" value="{{ $successURL ?? '' }}" />
+                                            <input type="hidden" name="furl" value="{{ $failURL ?? '' }}" />
+                                            <input type="hidden" name="service_provider" value="payu_paisa" />
                                             <div class="row align-items-center">
                                                 <div class="col-1">
-                                                    <input type="radio" class="payment_method"
-                                                        name="payment_method" id="payment_method_payu"
-                                                        value="PayU">
+                                                    <input type="radio" class="payment_method" name="payment_method" id="payment_method_payu" value="PayU" />
                                                 </div>
                                                 <div class="col-11">
                                                     <label for="payment_method_payu">PayU</label>
                                                 </div>
                                             </div>
-                                            <div class="payu-details mt-2 mb-2" id="payu-details"
-                                                style="display:nonef;">
-                                                <button type="submit" class="btn btn-danger mt-2 w-100">PAY
-                                                    NOW</button>
+                                            <div class="payu-details mt-2 mb-2" id="payu-details" style="display:nonef;">
+                                                <button type="submit" class="btn btn-danger mt-2 w-100">PAY NOW</button>
                                             </div>
                                         </div>
-
                                     </form>
-
+                                    
                                 </div>
                             </div>
                         </div>
