@@ -8,6 +8,8 @@
 <script src="{{ asset('front-assets/js/notify.min.js') }}"></script>
 <script src="{{ asset('front-assets/js/ion.rangeSlider.min.js') }}"></script>
 <script src="{{ asset('front-assets/js/custom.js') }}"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
 <script>
     window.onscroll = function() {
         myFunction()

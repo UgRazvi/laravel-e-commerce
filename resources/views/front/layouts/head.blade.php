@@ -49,6 +49,8 @@
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;500&family=Raleway:ital,wght@0,400;0,600;0,800;1,200&family=Roboto+Condensed:wght@400;700&family=Roboto:wght@300;400;700;900&display=swap"
         rel="stylesheet">
 
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
     <!-- Fav Icon -->
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('front-assets/images/Myntra_logo.webp') }}" />
 

@@ -34,7 +34,7 @@ class ProductController extends Controller
                 }
             );
         }
-        $products = $products->paginate(10);
+        $products = $products->paginate(1);
         // Pass the brands to the view
         $brands = Brand::orderBy('name', 'asc')->get();
 

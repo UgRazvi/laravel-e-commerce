@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="{{ asset('admin-assets/plugins/summernote/summernote.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-assets/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-assets/css/custom.css ') }} ">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -102,6 +104,7 @@
     
     <script src="{{ asset('admin-assets/plugins/dropzone/dropzone.js') }}"></script>
     <script src="{{ asset('admin-assets/js/demo.js') }}"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
         $.ajaxSetup({

@@ -5,6 +5,7 @@
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\CustomerAddress;
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\Section;
 use App\Models\SubCategory;
@@ -53,6 +54,13 @@ function getBrands()
     return Brand::orderBy('name', 'asc')->get();  // Fetch all brands ordered by name
 }
 
-function getCustomerAddresses(){
+function getCustomerAddresses()
+{
     return CustomerAddress::get();
+}
+
+function orderEmail($orderId)
+{
+    $order = Order::where('id', $orderId)->first()->with('orderItems');
+    dd($orderId, $order);
 }

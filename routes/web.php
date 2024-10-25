@@ -5,13 +5,9 @@ use Razorpay\Api\Api;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Intervention\Image\ImageManager;
 use Illuminate\Support\Facades\Route;
-// use Intervention\Image\Image;
-// use Intervention\Image\ImageManagerStatic as Image;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\PageController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\FrontController;
 use App\Http\Controllers\SectionController;
@@ -19,22 +15,22 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MensProdController;
 use App\Http\Controllers\admin\HomeController;
 use App\Http\Controllers\AdminLoginController;
-use Intervention\Image\Drivers\Imagick\Driver;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\admin\BrandsController;
 use App\Http\Controllers\admin\ProductController;
-use Intervention\Image\Interfaces\ImageInterface;
 use App\Http\Controllers\admin\TempImagesController;
 use App\Http\Controllers\admin\SubCategoryController;
 use App\Http\Controllers\admin\DiscountCodeController;
 use App\Http\Controllers\admin\ProductImageController;
 use App\Http\Controllers\admin\CustomerAddressController;
+use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\admin\ProductCategoryController;
 use App\Http\Controllers\admin\ProductSubCategoryController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PayUMoneyController;
-use App\Http\Controllers\PhonePeController;
 use App\Http\Controllers\PaymentWebhookController;
+
+
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -42,17 +38,11 @@ use App\Http\Controllers\PaymentWebhookController;
 // Route For - Home Page
 Route::get('/', [FrontController::class, 'index'])->name('front.home');
 
+Route::get('/test-mail', function () {
+    orderEmail(33);
+});
 
-// Route::get('/payment', [CartController::class, 'payment'])->name('front.payment');
 
-// Route::post('/payu/pay', [PaymentController::class, 'pay'])->name('payment.process');
-
-// Route::any('/payment/success', [PaymentController::class, 'success'])->name('front.payment.success');
-// Route::any('/payment/fail', [PaymentController::class, 'fail'])->name('front.payment.fail');
-
-// Route::get('/thank/{txnId}/', [CartController::class, 'thank'])->name('front.thank');
-
-// Route::post('/webhook/payu/success', [PaymentWebhookController::class, 'handlePayUSuccess']);
 Route::get('/payment', [CartController::class, 'payment'])->name('front.payment');
 
 Route::post('/payu/pay', [PaymentController::class, 'pay'])->name('payment.process');
@@ -62,13 +52,13 @@ Route::any('/payment/fail', [PaymentController::class, 'fail'])->name('front.pay
 
 Route::get('/thank/{txnId}/', [CartController::class, 'thank'])->name('front.thank');
 
-Route::get('/test', function (){
+Route::get('/test', function () {
     return nl2br(\Illuminate\Support\Facades\File::get(storage_path('logs/laravel.log')));
 });
 
 
 
-// Test
+// For Testing Purposes Only
 /** Usman PayU Starts */
 Route::get('/payU', [PayUMoneyController::class, 'payUMoneyView']);
 Route::get('pay-u-response', [PayUMoneyController::class, 'payUResponse'])->name('pay.u.response');
@@ -166,7 +156,12 @@ Route::group(['prefix' => 'admin'], function () {
         // Products Routes
         Route::get('/get-products', [ProductController::class, 'getProducts'])->name('products.getProducts');
         // To Save Product Images Permanently.
+
+        // Product Controller
         Route::resource('/products', ProductController::class);
+
+        // Order Controller
+        Route::resource('/orders', OrderController::class);
 
         // Coupons Route.
         Route::resource('/coupon', DiscountCodeController::class);

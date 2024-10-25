@@ -12,7 +12,10 @@ class Order extends Model
     {
         return $this->hasMany(OrderItem::class);
     }
-
+    public function product_images()
+    {
+        return $this->hasMany(ProductImages::class);
+    }
     protected $fillable = ['*'];
     // protected $fillable = ['order_status', 'payment_status', /* other fields */];
 
