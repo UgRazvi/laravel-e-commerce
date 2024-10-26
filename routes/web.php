@@ -38,9 +38,9 @@ use App\Http\Controllers\PaymentWebhookController;
 // Route For - Home Page
 Route::get('/', [FrontController::class, 'index'])->name('front.home');
 
-Route::get('/test-mail', function () {
-    orderEmail(35);
-});
+// Route::get('/test-mail', function () {
+//     orderEmail('671c748e9c566');
+// });
 
 Route::get('/test-logs', function () {
     return nl2br(\Illuminate\Support\Facades\File::get(storage_path('logs/laravel.log')));

@@ -72,7 +72,7 @@ class ProcessPaymentService
 
             // Flash success message
             session()->flash("success", "Hey <strong>$user->name</strong> You've successfully placed your order via COD. <br> Your Order ID : " . $order->id);
-            Cart::destroy();
+            // Cart::destroy();
 
             return response()->json([
                 'status' => true,

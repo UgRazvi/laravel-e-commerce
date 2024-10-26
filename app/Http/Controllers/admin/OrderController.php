@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
 use App\Models\Order;
+use App\Models\ProductImages;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -69,18 +70,28 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $orderId)
     {
-        return view("orders.show", compact("id"));
+        $order = Order::where('id', $orderId)->first();
+        return view("admin.orders.show", compact("order"));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($orderId, Request $request)
     {
-        //
+        // Find the order with related items, products, and product images
+        $order = Order::with(['orderItems.product.product_images'])->find($orderId);
+
+        // Check if order exists
+        if (!$order) {
+            return redirect()->route('orders.index')->with('error', 'Order not found....!!!');
+        }
+
+        return view('admin.orders.edit', compact('order'));
     }
+
 
     /**
      * Update the specified resource in storage.

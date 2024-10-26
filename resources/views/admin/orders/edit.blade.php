@@ -1,338 +1,255 @@
 @extends('admin.layouts.app')
 
 @section('dyn-content')
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-        <div class="container-fluid my-2">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Edit Brand</h1>
-                </div>
-                <div class="col-sm-6 text-right">
-                    <a href="{{ route('products.index') }}" class="btn btn-primary">Back</a>
+    <section class="section-5 pt-3 pb-3 mb-3 bg-white">
+        <div class="container">
+            <div class="light-font">
+                <ol class="breadcrumb primary-color mb-0">
+                    <li class="breadcrumb-item"><a class="white-text" href="{{route('orders.index')}}">Orders</a></li>
+                    <li class="breadcrumb-item">List</li>
+                </ol>
+            </div>
+        </div>
+    </section>
+
+    <section class=" section-11 ">
+        <div class="container  mt-5">
+            <div class="row">
+             
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="h5 mb-0 pt-2 pb-2">My Orders</h2>
+                        </div>
+
+                        <div class="card-body pb-0">
+                            <!-- Info -->
+                            <div class="card card-sm">
+                                <div class="card-body bg-light mb-3">
+                                    <div class="row">
+                                        <div class="col-6 col-lg-3">
+                                            <!-- Heading -->
+                                            <h6 class="heading-xxxs text-muted">Order No:</h6>
+                                            <!-- Text -->
+                                            <p class="mb-lg-0 fs-sm fw-bold">
+                                                {{$order->transaction_id}}
+                                                <td>
+                                                    @if ($item->product && $item->product->product_images->first())
+                                                        <img src="{{ asset('uploads/Products/' . $item->product->product_images->first()->image) }}"
+                                                            alt="{{ $item->product->product_images->first()->image }}"
+                                                            class="" width="25" alt="Product Image" />
+                                                    @else
+                                                        <img src="{{ asset('uploads/Products/DummyImage.png') }}" class=""
+                                                            width="25" alt="Dummy Product Image">
+                                                    @endif
+                                                </td>
+                                                {{-- <td>{{ $order->id ?? 'order id' }}</td> --}}
+                                                <td>{{ $order->transaction_id ?? 'order transaction_id' }}</td>
+                                                {{-- <td>{{ $item->name ?? 'item name' }}</td> --}}
+                                                {{-- <td>{{ $order->name ?? 'order name' }}</td> --}}
+                                                {{-- <td>{{ $order->mobile_no ?? 'order mobile_no' }}</td> --}}
+                                                {{-- <td>{{ $order->user_email ?? 'order email' }}</td> --}}
+                                                <td>{{ $item->price ?? 'item price' }}</td>
+                                                <td>{{ $item->qty ?? 'item qty' }}</td>
+                                                <td>{{ $item->total ?? 'item total' }}</td>
+                                                {{-- <td>{{ $order->shipping ?? 'order shipping' }}</td> --}}
+                                                {{-- <td>{{ $order->coupon_code ?? '-' }}</td> --}}
+                                                <td>{{ $order->order_status ?? 'order order_status' }}</td>
+                                                <td>{{ $order->payment_status ?? 'order payment_status' }}</td>
+                                                {{-- <td>{{ $order->address ?? 'order address' }}</td>
+                                                <td>{{ $order->locality_town ?? 'order locality_town' }}</td>
+                                                <td>{{ $order->city ?? 'order city' }}</td>
+                                                <td>{{ $order->pincode ?? 'order pincode' }}</td>
+                                                <td>{{ $order->state ?? 'order state' }}</td> --}}
+                                                <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d/m/y') }}
+                                                    {{-- <td>{{ \Carbon\Carbon::parse($item->created_at)->format('D, j M Y h:i:s A') }} --}}
+                                                </td>
+                                                <td>
+                                                    <a href="{{ route('orders.edit', $item->id) }}">
+    
+                                                        <svg class="filament-link-icon w-4 h-4 mr-1"
+                                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                            fill="currentColor" aria-hidden="true">
+                                                            <path
+                                                                d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
+                                                            </path>
+                                                        </svg>
+                                                    </a>
+                                                </td>
+                                            </p>
+                                        </div>
+                                        <div class="col-6 col-lg-3">
+                                            <!-- Heading -->
+                                            <h6 class="heading-xxxs text-muted">Shipped date:</h6>
+                                            <!-- Text -->
+                                            <p class="mb-lg-0 fs-sm fw-bold">
+                                                <time datetime="2019-10-01">
+                                                    01 Oct, 2019
+                                                </time>
+                                            </p>
+                                        </div>
+                                        <div class="col-6 col-lg-3">
+                                            <!-- Heading -->
+                                            <h6 class="heading-xxxs text-muted">Status:</h6>
+                                            <!-- Text -->
+                                            <p class="mb-0 fs-sm fw-bold">
+                                                Awating Delivery
+                                            </p>
+                                        </div>
+                                        <div class="col-6 col-lg-3">
+                                            <!-- Heading -->
+                                            <h6 class="heading-xxxs text-muted">Order Amount:</h6>
+                                            <!-- Text -->
+                                            <p class="mb-0 fs-sm fw-bold">
+                                                $259.00
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-footer p-3">
+
+                            <!-- Heading -->
+                            <h6 class="mb-7 h5 mt-4">Order Items (3)</h6>
+
+                            <!-- Divider -->
+                            <hr class="my-3">
+
+                            <!-- List group -->
+                            <ul>
+                                <li class="list-group-item">
+                                    <div class="row align-items-center">
+                                        <div class="col-4 col-md-3 col-xl-2">
+                                            <!-- Image -->
+                                            <a href="product.html"><img src="images/product-1.jpg" alt="..."
+                                                    class="img-fluid"></a>
+                                        </div>
+                                        <div class="col">
+                                            <!-- Title -->
+                                            <p class="mb-4 fs-sm fw-bold">
+                                                <a class="text-body" href="product.html">Cotton floral print Dress x 1</a>
+                                                <br>
+                                                <span class="text-muted">$40.00</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="row align-items-center">
+                                        <div class="col-4 col-md-3 col-xl-2">
+                                            <!-- Image -->
+                                            <a href="#"><img src="images/product-2.jpg" alt="..."
+                                                    class="img-fluid"></a>
+                                        </div>
+                                        <div class="col">
+                                            <!-- Title -->
+                                            <p class="mb-4 fs-sm fw-bold">
+                                                <a class="text-body" href="#">Suede cross body Bag x 1</a> <br>
+                                                <span class="text-muted">$49.00</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </li>
+
+                                <li class="list-group-item">
+                                    <div class="row align-items-center">
+                                        <div class="col-4 col-md-3 col-xl-2">
+                                            <!-- Image -->
+                                            <a href="#"><img src="images/product-3.jpg" alt="..."
+                                                    class="img-fluid"></a>
+
+                                        </div>
+                                        <div class="col">
+
+                                            <!-- Title -->
+                                            <p class="mb-4 fs-sm fw-bold">
+                                                <a class="text-body" href="#">Sweatshirt with Pocket</a> <br>
+                                                <span class="text-muted">$39.00</span>
+                                            </p>
+
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="card card-lg mb-5 mt-3">
+                        <div class="card-body">
+                            <!-- Heading -->
+                            <h6 class="mt-0 mb-3 h5">Order Total</h6>
+
+                            <!-- List group -->
+                            <ul>
+                                <li class="list-group-item d-flex">
+                                    <span>Subtotal</span>
+                                    <span class="ms-auto">$128.00</span>
+                                </li>
+                                <li class="list-group-item d-flex">
+                                    <span>Tax</span>
+                                    <span class="ms-auto">$0.00</span>
+                                </li>
+                                <li class="list-group-item d-flex">
+                                    <span>Shipping</span>
+                                    <span class="ms-auto">$8.00</span>
+                                </li>
+                                <li class="list-group-item d-flex fs-lg fw-bold">
+                                    <span>Total</span>
+                                    <span class="ms-auto">$136.00</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <!-- /.container-fluid -->
     </section>
-    <!-- Main content -->
-    <section class="content">
-        <!-- Default box -->
-        {{-- Section : X-03 --}}
-        <div class="container-fluid">
+    
+    <h1>Order Details</h1>
+    <p><strong>Order ID:</strong> {{ $order->id }}</p>
+    <p><strong>Customer Name:</strong> {{ $order->name }}</p>
+    <p><strong>Address:</strong> {{ $order->address }}</p>
+    <p><strong>Total:</strong> {{ $order->grand_total }}</p>
 
-            <form action="{{ route('products.update', $product->id) }}" method="POST" id="productForm" name="productForm"
-                enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
+    <!-- Display Order Items with Product Details -->
+    <h2>Order Items</h2>
+    @foreach ($order->orderItems as $item)
+        <div class="order-item">
+            <p><strong>Product Name:</strong> {{ $item->product->name }}</p>
+            <p><strong>Quantity:</strong> {{ $item->qty }}</p>
+            <p><strong>Price:</strong> {{ $item->price }}</p>
 
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-8">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="mb-3">
-                                                <label for="title">Title</label>
-                                                <input type="text" name="title" id="title" class="form-control"
-                                                    placeholder="Title" value="{{ $product->title }}">
-                                                <p class="error"></p>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="mb-3">
-                                                <label for="slug">Slug</label>
-                                                <input readonly type="text" name="slug" id="slug"
-                                                    class="form-control" placeholder="Slug" value="{{ $product->slug }}">
-                                                <p class="error"></p>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="mb-3">
-                                                <label for="short_description">Short Description</label>
-                                                <textarea name="short_description" id="short_description" cols="30" rows="10" class="summernote"
-                                                    placeholder="">{{ $product->short_description }}</textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="mb-3">
-                                                <label for="description">Description</label>
-                                                <textarea name="description" id="description" cols="30" rows="10" class="summernote"
-                                                    placeholder="Description">{{ $product->description }}</textarea>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="mb-3">
-                                                <label for="shipping_returns">Shipping & Returns</label>
-                                                <textarea name="shipping_returns" id="shiiping_returns" cols="30" rows="10" class="summernote" placeholder="">{{ $product->shipping_returns }}</textarea>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h2 class="h4 mb-3">Media</h2>
-                                    <div id="image" class="dropzone dz-clickable">
-                                        <div class="dz-message needsclick">
-                                            <br>Drop files here or click to upload.<br><br>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row" id="product-gallery">
-                                @if (!empty($productImages))
-                                    @foreach ($productImages as $image)
-                                        <div class="col-md-3" id="image-row-{{ $image->id }}">
-                                            <div class="card">
-
-
-                                                {{-- <input type="hidden" name="image_array[]" value="{{ $image->id }}"> --}}
-                                                <img src="{{ asset('uploads/Products/' . $image->image) }}"
-                                                    class="card-img-top" alt="Response Image">
-                                                <div class="card-body">
-                                                    <a href="javascript:void(0)" onclick="deleteImage({{ $image->id }})"
-                                                        class="btn btn-danger">DELETE</a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                @endif
-                            </div>
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h2 class="h4 mb-3">Pricing</h2>
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <div class="mb-3">
-                                                <label for="price">Price</label>
-                                                <input type="text" name="price" id="price" class="form-control"
-                                                    placeholder="Price" value="{{ $product->price }}">
-                                                <p class="error"></p>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="mb-3">
-                                                <label for="compare_price">Compare at Price</label>
-                                                <input type="text" name="compare_price" id="compare_price"
-                                                    class="form-control" placeholder="Compare Price"
-                                                    value="{{ $product->compare_price }}">
-                                                <p class="text-muted mt-3">
-                                                    To show a reduced price, move the product's original price into
-                                                    Compare at
-                                                    price. Enter a lower value into Price.
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h2 class="h4 mb-3">Inventory</h2>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label for="sku">SKU (Stock Keeping Unit)</label>
-                                                <input type="text" name="sku" id="sku" class="form-control"
-                                                    placeholder="sku" value="{{ $product->sku }}">
-                                                <p class="error"></p>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="mb-3">
-                                                <label for="barcode">Barcode</label>
-                                                <input type="text" name="barcode" id="barcode" class="form-control"
-                                                    placeholder="Barcode" value="{{ $product->barcode }}">
-                                                <p class="error"></p>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="mb-3">
-                                                <div class="custom-control custom-checkbox">
-                                                    {{-- <input type="hidden" name="track_qty" id="track_qty" value="No"> --}}
-                                                    <input class="custom-control-input" type="checkbox" id="track_qty"
-                                                        name="track_qty" value="Yes"
-                                                        {{ $product->track_qty == 'Yes' ? 'checked' : '' }}>
-                                                    <label for="track_qty" class="custom-control-label">Track
-                                                        Quantity</label>
-                                                    <p class="error"></p>
-                                                </div>
-                                            </div>
-                                            <div class="mb-3" id="qtyField">
-                                                <input type="number" min="0" name="qty" id="qty"
-                                                    class="form-control" placeholder="Qty" value="{{ $product->qty }}">
-                                                <p class="error"></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h2 class="h4 mb-3">Product status</h2>
-                                    <div class="mb-3">
-                                        <select name="status" id="status" class="form-control">
-                                            <option {{ $product->status == 1 ? 'selected' : '' }} value="1">Active
-                                            </option>
-                                            <option {{ $product->status == 0 ? 'selected' : '' }} value="0">Block
-                                            </option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card">
-                                <div class="card-body">
-                                    <h2 class="h4 mb-3">Product Category</h2>
-
-                                    <div class="mb-3">
-                                        <label for="section">Section</label>
-                                        <select name="section" id="section" class="form-control">
-                                            <option value="">Select The Product Section</option>
-                                            @if (!empty($sections))
-                                                @foreach ($sections as $section)
-                                                    <option {{ $product->section_id == $section->id ? 'selected' : '' }}
-                                                        value="{{ $section->id }}">{{ $section->name }}
-                                                    </option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                        <p class="error"></p>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="category">Category</label>
-                                        <select name="category" id="category" class="form-control">
-                                            <option value="">Select The Product Category</option>
-                                            @if (!empty($categories))
-                                                @foreach ($categories as $category)
-                                                    <option {{ $product->category_id == $category->id ? 'selected' : '' }}
-                                                        value="{{ $category->id }}">{{ $category->name }}
-                                                    </option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                        <p class="error"></p>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="sub_category">Sub Category</label>
-                                        <select name="sub_category" id="sub_category" class="form-control">
-                                            <option value="">Select The Product Sub Category</option>
-                                            @if (!empty($subcategories))
-                                                @foreach ($subcategories as $subcategory)
-                                                    <option
-                                                        {{ $product->sub_category_id == $subcategory->id ? 'selected' : '' }}
-                                                        value="{{ $subcategory->id }}">{{ $subcategory->name }}
-                                                    </option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h2 class="h4 mb-3">Product Brand</h2>
-                                    <div class="mb-3">
-                                        <select name="brand" id="brand" class="form-control">
-                                            <option value="">Select The Brand</option>
-                                            @if (!empty($brands))
-                                                @foreach ($brands as $brand)
-                                                    <option {{ $product->brand_id == $brand->id ? 'selected' : '' }}
-                                                        value="{{ $brand->id }}">{{ $brand->name }}
-                                                    </option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h2 class="h4 mb-3">Featured product</h2>
-                                    <div class="mb-3">
-                                        <select name="is_featured" id="is_featured" class="form-control">
-                                            <option {{ $product->is_featured == 'No' ? 'selected' : '' }} value="No">
-                                                No</option>
-                                            <option {{ $product->is_featured == 'Yes' ? 'selected' : '' }} value="Yes">
-                                                Yes</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h2 class="h4 mb-3">Related product</h2>
-                                    <div class="mb-3">
-
-                                        <select class="related-product form-control" id="related_products"
-                                            name="related_products[]" multiple="multiple">
-                                            @if (!empty($relatedProducts))
-                                                @foreach ($relatedProducts as $relatedProduct)
-                                                    <option selected value="{{ $relatedProduct->id }}">
-                                                        {{ $relatedProduct->title }}</option>
-                                                @endforeach
-                                            @endif
-                                        </select>
-                                        <p class="error"></p>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="pb-5 pt-3">
-                        <button type="submit" class="btn btn-primary">Update</button>
-                        <a href="{{ route('products.index') }}" class="btn btn-outline-dark ml-3">Cancel</a>
-                    </div>
-                </div>
-            </form>
-
-
+            <!-- Product Image Section -->
+            <h3>Product Images</h3>
+            @if ($item->product && $item->product->product_images->first())
+                <img src="{{ asset('uploads/Products/' . $item->product->product_images->first()->image) }}"
+                    alt="{{ $item->product->product_images->first()->image }}" width="50" alt="Product Image" />
+            @else
+                <img src="{{ asset('uploads/Products/DummyImage.png') }}" width="50" alt="Dummy Product Image">
+            @endif
         </div>
-        {{-- Section : X-03 --}}
-        <!-- /.card -->
-    </section>
-    <!-- /.content -->
+    @endforeach
 @endsection
 
 
 @section('customJs')
     <script>
-        $('.related-product').select2({
-            ajax: {
-                url: '{{ route('products.getProducts') }}',
-                dataType: 'json',
-                tags: true,
-                multiple: true,
-                minimumInputLength: 3,
-                processResults: function(data) {
-                    return {
-                        results: data.tags
-                    };
-                }
-            }
-        });
         // Handle form submission via AJAX
-        $("#productForm").submit(function(event) {
+        $("#orderForm").submit(function(event) {
             event.preventDefault();
             var element = $(this);
             $("button[type=submit]").prop('disabled', true);
             $.ajax({
-                url: '{{ route('products.update', $product->id) }}',
+                url: '{{ route('orders.update', $order->id) }}',
                 type: 'PUT',
                 data: element.serialize(),
                 dataType: 'json',
                 success: function(response) {
                     $("button[type=submit]").prop('disabled', false);
                     if (response.status) {
-                        window.location.href = "{{ route('products.index') }}";
+                        window.location.href = "{{ route('orders.index') }}";
                         $("#title").removeClass('is-invalid').siblings('p').removeClass(
                             'invalid-feedback').html("");
                         $("#name").removeClass('is-invalid').siblings('p').removeClass(
@@ -352,139 +269,5 @@
                 }
             });
         });
-
-        // Fetch Categories dynamically
-        $("#section").change(function() {
-            var section_id = $(this).val();
-            $.ajax({
-                url: "{{ route('product-categories.index') }}",
-                type: "GET",
-                data: {
-                    section_id: section_id
-                },
-                dataType: "json",
-                success: function(response) {
-                    $("#category").find("option").not(":first").remove();
-                    $.each(response.SubCategories, function(key, item) {
-                        $("#category").append(
-                            `<option value='${item.id}'>${item.name}</option>`);
-                    });
-                },
-                error: function(jqXHR, exception) {
-                    console.log("Something went wrong");
-                }
-            });
-        });
-
-        // Fetch sub-categories dynamically
-        $("#category").change(function() {
-            var category_id = $(this).val();
-            $.ajax({
-                url: "{{ route('product-subcategories.index') }}",
-                type: "GET",
-                data: {
-                    category_id: category_id
-                },
-                dataType: "json",
-                success: function(response) {
-                    $("#sub_category").find("option").not(":first").remove();
-                    $.each(response.SubCategories, function(key, item) {
-                        $("#sub_category").append(
-                            `<option value='${item.id}'>${item.name}</option>`);
-                    });
-                },
-                error: function(jqXHR, exception) {
-                    console.log("Something went wrong");
-                }
-            });
-        });
-
-        // Generate slug based on title
-        $("#title").change(function() {
-            var element = $(this);
-            $("button[type=submit]").prop('disabled', true);
-            $.ajax({
-                url: '{{ route('get.slug') }}',
-                type: 'GET',
-                data: {
-                    title: element.val()
-                },
-                dataType: 'json',
-                success: function(response) {
-                    $("button[type=submit]").prop('disabled', false);
-                    if (response.status) {
-                        $("#slug").val(response.slug);
-                    }
-                }
-            });
-        });
-
-        // Dropzone configuration
-        Dropzone.autoDiscover = false;
-        const dropzone = $("#image").dropzone({
-            url: "{{ route('product-images.update') }}",
-            maxFiles: 10,
-            paramName: 'image',
-            params: {
-                'product_id': '{{ $product->id }}'
-            },
-            addRemoveLinks: true,
-            acceptedFiles: "image/jpeg,image/png,image/gif",
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(file, response) {
-                // Store the image ID in the hidden input field
-                var existingIds = $('#image_id').val();
-                var updatedIds = existingIds ? existingIds + ',' + response.image_id : response.image_id;
-                $('#image_id').val(updatedIds);
-
-                // Add the uploaded image to the gallery
-                var html = `<div class="col-md-3" id="image-row-${response.image_id}">
-                  <div class="card">
-                      <input type="hidden" name="image_array[]" value="${response.image_id}">
-                      <img src="${response.imagePath}" class="card-img-top" alt="Response Image">
-                      <div class="card-body">
-                          <a href="javascript:void(0)" onclick="deleteImage(${response.image_id})" class="btn btn-danger">DELETE</a>
-                      </div>
-                  </div>
-                </div>`;
-                $("#product-gallery").append(html);
-            }
-
-            // success: function(file, response) {
-            //     $("#image_id").val(response.image_id);
-            //     var html = `<div class="col-md-3" id="image-row-${response.image_id}"> <div class="card">
-        //   <input type="hidden" name="image_array[]" value="${response.image_id}">
-        //   <img src="${response.imagePath}" class="card-img-top" alt="Response Image">
-        //   <div class="card-body">
-        //       <a href="javascript:void(0)" onclick="deleteImage(${response.image_id})" class="btn btn-danger">DELETE</a>
-        //   </div> </div> </div>`;
-            //     $("#product-gallery").append(html);
-            // }
-        });
-
-        // Function to remove image
-        function deleteImage(id) {
-            $("#image-row-" + id).remove();
-            if (confirm("Are You Sue To Really Delete This Image ?")) {
-
-
-                $.ajax({
-                    url: '{{ route('product-images.destroy') }}',
-                    type: 'DELETE',
-                    data: {
-                        id: id
-                    },
-                    success: function(response) {
-                        if (response.status == true) {
-                            alert(response.message);
-                        } else {
-                            alert(response.message);
-                        }
-                    }
-                });
-            }
-        }
     </script>
 @endsection

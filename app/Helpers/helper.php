@@ -63,7 +63,7 @@ function getCustomerAddresses()
 }
 function orderEmail($orderId)
 {
-    $order = Order::with('orderItems')->where('id', $orderId)->first();
+    $order = Order::with('orderItems')->where('transaction_id', $orderId)->first();
 
     if ($order && $order->user_email) { // Check if email exists
         $maildata = [
@@ -74,7 +74,7 @@ function orderEmail($orderId)
 
         Log::info("Sending email to: " . $order->user_email);
         Mail::to($order->user_email)->send(new OrderEmail($maildata));
-        Log::info("Successfully sent mail.");
+        Log::info("Successfully sent mail  with Txn Id : ". $orderId);
     } else {
         Log::info("Error: Unable to send email. Order not found or email missing.");
         // dd($order);
