@@ -39,6 +39,7 @@
                                 <th>Pin Code</th>
                                 <th>State</th>
                                 <th>Order Date</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -77,6 +78,15 @@
                                             <td>{{ $order->state ?? 'order state' }}</td>
                                             <td>{{ \Carbon\Carbon::parse($item->created_at)->format('D, j M Y h:i:s A') }}
                                             </td>
+                                            <a href="{{ route('orders.show', $order->id) }}">
+                                                <svg class="filament-link-icon w-4 h-4 mr-1"
+                                                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                                    fill="currentColor" aria-hidden="true">
+                                                    <path
+                                                        d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z">
+                                                    </path>
+                                                </svg>
+                                            </a>
                                         </tr>
                                     @endforeach
                                 @endforeach

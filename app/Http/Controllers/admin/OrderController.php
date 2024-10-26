@@ -71,7 +71,7 @@ class OrderController extends Controller
      */
     public function show(string $id)
     {
-        //
+        return view("orders.show", compact("id"));
     }
 
     /**
