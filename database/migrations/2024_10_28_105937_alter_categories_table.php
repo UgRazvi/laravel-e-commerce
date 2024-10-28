@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('categories', function (Blueprint $table) {
-            $table->foreignId('section_id')->constrained('sections')->onDelete('cascade')->after('showhome');
+            $table->enum('showhome', ['Yes', 'No'])->after('status')->default('No');
         });
     }
 
@@ -21,7 +21,7 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('categories', function (Blueprint $table) {
-            $table->dropColumn('section_id');
+            $table->dropColumn('showhome');
         });
     }
 };
