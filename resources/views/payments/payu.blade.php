@@ -10,7 +10,6 @@
         {{-- @dd(env('PAYU_URL'), $data); --}}
         @csrf
         @foreach ($data as $key => $value)
-        @dd($data);
             <input type="text" name="{{ $key }}" value="{{ $value }}">
         @endforeach
         <input type="submit" value="Pay Now">
