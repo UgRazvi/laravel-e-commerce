@@ -7,6 +7,7 @@ use App\Models\Brand;
 use App\Models\Order;
 use App\Models\ProductImages;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -16,7 +17,9 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         // Start with the base query for orders
-        $orders = Order::with(['orderItems.product', 'orderItems.product.product_images'])->orderBy('created_at', 'DESC');
+        $orders = Order::with(["orderItems", 'orderItems.product', 'orderItems.product.product_images'])->orderBy('id', 'ASC');
+
+        // dd($orders->first()->orderItems()->first()->product->product_images()->first());
 
         // If there is a search keyword, apply it to the query
         if ($keyword = $request->get("keyword")) {
@@ -50,7 +53,21 @@ class OrderController extends Controller
         return view("admin.orders.list", compact("orders"));
     }
 
+    public function sendInvoiceEmail(Request $request, $orderId)
+    {
+        // echo "HEllo $orderId";
+        // dd($request->userType);
+        orderEmail($orderId, $request->userType);
 
+        $message = "Email sent to : " . $request->userType . " With Order Id : " . $orderId . " successfully";
+        Log::info("Email sent to : " . $request->userType . " With Order Id : " . $orderId . " successfully");
+
+        session()->flash('sucess', $message);
+        return response([
+            'status' => true,
+            'message' => $message,
+        ]);
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -72,7 +89,10 @@ class OrderController extends Controller
      */
     public function show(string $orderId)
     {
-        $order = Order::where('id', $orderId)->first();
+        $order = Order::with(["orderItems", 'orderItems.product', 'orderItems.product.product_images'])->find($orderId);
+
+        // dd("Order Data : " , $order);
+
         return view("admin.orders.show", compact("order"));
     }
 

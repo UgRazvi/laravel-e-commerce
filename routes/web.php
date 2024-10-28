@@ -163,6 +163,8 @@ Route::group(['prefix' => 'admin'], function () {
 
         // Order Controller
         Route::resource('/orders', OrderController::class);
+        Route::post('/orders/send-email/{id}', [OrderController::class, 'sendInvoiceEmail'])->name('orders.sendInvoiceEmail');
+
 
         // Coupons Route.
         Route::resource('/coupon', DiscountCodeController::class);

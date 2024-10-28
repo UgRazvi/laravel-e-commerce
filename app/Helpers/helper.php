@@ -61,20 +61,31 @@ function getCustomerAddresses()
 {
     return CustomerAddress::get();
 }
-function orderEmail($orderId)
+function orderEmail($orderId, $userType)
 {
     $order = Order::with('orderItems')->where('transaction_id', $orderId)->first();
 
-    if ($order && $order->user_email) { // Check if email exists
-        $maildata = [
-            'subject' => 'Thanks for Order',
-            'order' => $order,
-        ];
-        // dd("\n Orders : \n". $order);
+    // dd($userType);
 
-        Log::info("Sending email to: " . $order->user_email);
-        Mail::to($order->user_email)->send(new OrderEmail($maildata));
-        Log::info("Successfully sent mail  with Txn Id : ". $orderId);
+    if ($userType == "customer") {
+        $subject = "Thanks for your order !!!";
+        $email = $order->user_email;
+    } else if ($userType == "admin") {
+        $subject = "You've got an order !!!";
+        $email = env('ADMIN_EMAIL');
+    }
+
+    if ($order && $email) { // Check if email exists
+        $maildata = [
+            'subject' => $subject,
+            'order' => $order,
+            'userType' => $userType,
+        ];
+        // dd("\n User Type : " . $userType . "\n Email : \n" . $email);
+
+        Log::info("Sending email to: " . $email);
+        Mail::to($email)->send(new OrderEmail($maildata));
+        Log::info("Successfully sent mail  with Txn Id : " . $orderId);
     } else {
         Log::info("Error: Unable to send email. Order not found or email missing.");
         // dd($order);

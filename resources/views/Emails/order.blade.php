@@ -75,7 +75,7 @@
         }
 
         .grand-total {
-            background-color: #1a73e8; 
+            background-color: #1a73e8;
             font-weight: bold;
             color: #fff;
             font-size: 18px;
@@ -96,17 +96,25 @@
     @php
         $order = $maildata['order'];
     @endphp
-  
+
     <div class="container">
         <div class="header">
-            <h1>Thank You for Your Order!</h1>
-            <p>Your order has been successfully placed.</p>
+
+            @if ($maildata['userType'] == 'customer')
+                <h1>Thank You for Your Order!</h1>
+                <p>Your order has been successfully placed.</p>
+                <p><strong>Your Order ID:</strong> #{{ $order->transaction_id }}</p>
+            @else
+                <h1>You've got an Order!</h1>
+                <p><strong>Order ID:</strong> #{{ $order->transaction_id }}</p>
+            @endif
+
         </div>
 
         <div class="content">
             <h2>Order Details</h2>
             <div class="order-info">
-                <p><strong>Order ID:</strong> #{{ $order->transaction_id }}</p>
+
                 <p><strong>Customer Name:</strong> {{ $order->name }}</p>
                 <p><strong>Email:</strong> {{ $order->user_email }}</p>
                 <p><strong>Mobile Number:</strong> {{ $order->mobile_no }}</p>
