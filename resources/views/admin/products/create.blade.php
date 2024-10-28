@@ -313,12 +313,12 @@
 
                                     <select class="related-product form-control" id="related_products"
                                         name="related_products[]" multiple="multiple">
-                                        {{-- @if (!empty($relatedProducts))
+                                        @if (!empty($relatedProducts))
                                             @foreach ($relatedProducts as $relatedProduct)
                                                 <option selected value="{{ $relatedProduct->id }}">
                                                     {{ $relatedProduct->title }}</option>
                                             @endforeach
-                                        @endif --}}
+                                        @endif
                                     </select>
                                     <p class="error"></p>
                                 </div>
