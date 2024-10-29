@@ -13,6 +13,7 @@ class PayUService
 {
     public function pay($request)
     {
+        // dd($request);
         $user = Auth::user();
         $transactionId = uniqid();
 

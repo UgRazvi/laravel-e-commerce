@@ -68,6 +68,47 @@ class OrderController extends Controller
             'message' => $message,
         ]);
     }
+
+    public function updatePaymentStatus(Request $request, $orderId) {
+        // Find the order by its ID
+        $order = Order::where('transaction_id', $orderId);
+    
+        // dd($order);
+        // Check if the order exists
+        if (!$order) {
+            return response()->json(['message' => 'Order not found'], 404);
+        }
+    
+        // Validate the incoming request data
+        $request->validate([
+            'status' => 'required|string|in:pending,shipped,delivered', // Adjust as necessary
+        ]);
+    
+        try {
+            // Update the order status and payment status based on the request
+            $order->update([
+                'order_status' => $request->input('status'), // Use the status from the request
+                'payment_status' => $request->input('status') === 'pending' ? 'not_paid' : 'paid', // Set payment_status based on order status
+            ]);
+            Log::info('Order Updated Successfully', ['order_id' => $orderId]);
+    
+            // Send Invoice E-Mail to Customer
+            if($request->input('status') === 'pending'){
+
+            }else{
+                orderEmail($orderId, "customer");
+                return response()->json(['message' => 'E-Mail Sent Successfully with Order ID : '. $orderId], 200);
+            }
+            
+            return response()->json(['message' => 'Order status updated successfully'], 200);
+
+        } catch (\Exception $e) {
+            Log::error('Order Update Failed: ' . $e->getMessage());
+            return response()->json(['message' => 'Failed to update order status'], 500);
+        }
+    }
+    
+
     /**
      * Show the form for creating a new resource.
      */

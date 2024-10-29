@@ -19,6 +19,7 @@ class PaymentController extends Controller
 
     public function pay(Request $request)
     {
+        // dd($request);
         $data = $this->payUService->pay($request);
         return view('payments.payu', compact('data'));
     }

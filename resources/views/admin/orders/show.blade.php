@@ -109,24 +109,26 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h2 class="h4 mb-3">Order Status</h2>
-                            <div class="mb-3">
-                                <select name="status" id="status" class="form-control">
-                                    <option value="pending" {{ $order->order_status == 'pending' ? 'selected' : '' }}>
-                                        Pending</option>
-                                    <option value="shipped" {{ $order->order_status == 'shipped' ? 'selected' : '' }}>
-                                        Shipped</option>
-                                    <option value="delivered" {{ $order->order_status == 'delivered' ? 'selected' : '' }}>
-                                        Delivered</option>
-                                </select>
-                            </div>
-                            <div class="mb-3 d-none ">
-                                <button class="btn btn-primary">Update</button>
+                    <form action="{{ route('orders.updatePaymentStatus', $order->transaction_id) }}" method="post" id="PaymentStatusForm" name="PaymentStatusForm">
+                        @csrf
+                        <div class="card">
+                            <div class="card-body">
+                                <h2 class="h4 mb-3">Order Status</h2>
+                                <div class="mb-3">
+                                    <select name="status" id="status" class="form-control">
+                                        <option value="pending" {{ $order->order_status == 'pending' ? 'selected' : '' }}>Pending</option>
+                                        <option value="shipped" {{ $order->order_status == 'shipped' ? 'selected' : '' }}>Shipped</option>
+                                        <option value="delivered" {{ $order->order_status == 'delivered' ? 'selected' : '' }}>Delivered</option>
+                                    </select>
+                                </div>
+                    
+                                <div class="mb-3">
+                                    <button type="submit" class="btn btn-primary">Update</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
+                    
                     <form action="" method="post" id="sendinvoiceEmail" name="sendinvoiceEmail">
                         @csrf
                         <div class="card">
@@ -170,5 +172,19 @@
                 });
             }
         });
+        // $("#PaymentStatusForm").submit(function(event) {
+        //     event.preventDefault(); // Capital "D" in Default
+        //     if (confirm("Are you sure to Update Payment Status ?")) {
+        //         $.ajax({
+        //             url: '{{ route('orders.updatePaymentStatus', $order->transaction_id) }}',
+        //             type: 'post',
+        //             data: $(this).serializeArray(),
+        //             dataType: 'json',
+        //             success: function(response) {
+        //                 window.location.href = '{{ route('orders.show', $order->id) }}';
+        //             }
+        //         });
+        //     }
+        // });
     </script>
 @endsection
