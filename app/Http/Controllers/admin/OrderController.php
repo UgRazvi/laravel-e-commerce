@@ -90,7 +90,7 @@ class OrderController extends Controller
                 'order_status' => $request->input('status'), // Use the status from the request
                 'payment_status' => $request->input('status') === 'pending' ? 'not_paid' : 'paid', // Set payment_status based on order status
             ]);
-            Log::info('Order Updated Successfully', ['order_id' => $orderId]);
+            Log::info('OrderController - Order Updated Successfully', ['order_id' => $orderId]);
     
             // Send Invoice E-Mail to Customer
             if($request->input('status') === 'pending'){

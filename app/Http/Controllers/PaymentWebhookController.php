@@ -26,14 +26,14 @@ class PaymentWebhookController extends Controller
                     'order_status' => 'delivered',
                     'payment_status' => 'paid',
                 ]);
-                Log::info('Order Updated Successfully');
+                Log::info('Payment Web Hook - Order Updated Successfully');
 
                 // Send Invoice E-Mail to Customer.
                 orderEmail($data['txnid'], "customer");
                 // Log::info('Invoice E-Mail Sent To User : '. $data['name'] - $data['user_email'].' Successfully with TXN ID : '. $data['txnid']);
 
             } catch (\Exception $e) {
-                Log::error('Payment Web Hook -  Order Update Failed: ' . $e->getMessage());
+                Log::error('Payment Web Hook - Order Update Failed: ' . $e->getMessage());
             }
 
             return response()->json(['message' => 'Webhook handled successfully'], 200);
