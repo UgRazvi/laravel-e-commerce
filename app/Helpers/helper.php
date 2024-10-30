@@ -65,14 +65,19 @@ function orderEmail($orderId, $userType)
 {
     $order = Order::with('orderItems')->where('transaction_id', $orderId)->first();
 
+    Log::info('ORDER DETAILS : ' . $order . ' with ORDER ID : ' . $orderId . ' and USER TYPE : ' . $userType);
     // dd($userType);
 
     if ($userType == "customer") {
         $subject = "Thanks for your order !!!";
         $email = $order->user_email;
+
+        Log::info('USER - TYPE : ' . $userType . ' SUBJECT : ' . $subject . ' EMAIL : ' . $email);
+        
     } else if ($userType == "admin") {
         $subject = "You've got an order !!!";
         $email = env('ADMIN_EMAIL');
+        Log::info('USER - TYPE : ' . $userType . ' SUBJECT : ' . $subject . ' EMAIL : ' . $email);
     }
 
     if ($order && $email) { // Check if email exists
@@ -81,6 +86,7 @@ function orderEmail($orderId, $userType)
             'order' => $order,
             'userType' => $userType,
         ];
+        
         // dd("\n User Type : " . $userType . "\n Email : \n" . $email);
 
         Log::info("Sending email to: " . $email);
