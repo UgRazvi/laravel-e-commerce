@@ -103,7 +103,7 @@ class OrderController extends Controller
             return response()->json(['message' => 'Order status updated successfully'], 200);
 
         } catch (\Exception $e) {
-            Log::error('Order Update Failed: ' . $e->getMessage());
+            Log::error('Order Controller - Order Update Failed: ' . $e->getMessage());
             return response()->json(['message' => 'Failed to update order status'], 500);
         }
     }
