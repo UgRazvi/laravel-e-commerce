@@ -111,7 +111,7 @@
                             </div>
                             <div>
                                 <a href="#remove" id="removeSelected">REMOVE</a> |
-                                <a href="#wishlist">ADD TO WISHLIST</a>
+                                <a href="#wishlist" id="moveSelected">ADD TO WISHLIST</a>
                             </div>
                         </div>
                     </div>
@@ -472,7 +472,7 @@
 
         // Check if there are selected items
         if (selectedItems.length === 0) {
-            alert('No items selected');
+            alert('No item selected');
             return;
         }
 
@@ -566,6 +566,50 @@
                 console.error();
             }
         });
+    });
+
+    $('#moveSelected').click(function(e) {
+        e.preventDefault();
+        var selectedItems = [];
+
+        // Get the rowId for each selected item
+        $('.productCheckbox:checked').each(function() {
+            selectedItems.push($(this).data('index'));
+        });
+
+        // Check if there are selected items
+        if (selectedItems.length === 0) {
+            alert('No item selected');
+            return;
+        }
+
+        // Confirm before deleting
+        if (confirm("Do you really want to move the selected items?")) {
+            $.ajax({
+                url: '{{ route('front.addToWishList') }}',
+                type: 'POST',
+                data: {
+                    items: selectedItems,
+                    _token: '{{ csrf_token() }}'
+                },
+                dataType: 'json',
+                success: function(response) {
+                    // alert("Great.");
+                    if (response.status) {
+                        // alert("Great 2.");
+                        window.location.href =
+                            "{{ route('front.wishlist') }}";
+                    } else {
+                        window.location.href =
+                        "{{ route('account.login') }}";
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                    alert('An error occurred while updating the cart.');
+                }
+            });
+        }
     });
 </script>
 

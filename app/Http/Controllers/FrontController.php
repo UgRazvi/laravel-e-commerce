@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Wishlist;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class FrontController extends Controller
 {
@@ -26,52 +29,49 @@ class FrontController extends Controller
 
         return view("front.Ytb_home", compact("featured_products", "latest_products")); // To Follow 
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function addToWishList(Request $request)
     {
-        //
+        // Log request data for debugging
+        // dd($request->all());
+
+        if (!Auth::check()) {
+            session(['url.intended' => url()->previous()]);
+            return response()->json(['status' => false]);
+        }
+
+        // Check if the product exists before adding it to the wishlist
+        $product = Product::find($request->id);
+        if ($product == null) {
+            return response()->json([
+                'status' => true,
+                'message' => '<div class="alert alert-danger">Product could not be found.</div>'
+            ]);
+        }
+
+        // Check if the product is already in the wishlist to avoid duplicates
+        $existingWishlist = Wishlist::where('user_id', Auth::id())
+            ->where('product_id', $request->id)
+            ->first();
+
+        if ($existingWishlist) {
+            return response()->json([
+                'status' => true,
+                'message' => '<div class="alert alert-warning">Product is already in your wishlist.</div>'
+            ]);
+        }
+
+        // Add product to wishlist
+        $wishlist = new Wishlist;
+        $wishlist->user_id = Auth::id();
+        $wishlist->product_id = $request->id;
+        $wishlist->save();
+
+        return response()->json([
+            'status' => true,
+            'message' => '<div class="alert alert-success">Product "' . $product->title . '" added to wishlist.</div>'
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+   
 }

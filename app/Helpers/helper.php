@@ -10,6 +10,7 @@ use App\Mail\OrderEmail;
 use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\CustomerAddress;
+use App\Models\ProductImages;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -52,6 +53,11 @@ function getProducts()
         ->get();
 }
 
+function getProductImage($productId)
+{
+return ProductImages::where('product_id', $productId)->first();
+}
+
 function getBrands()
 {
     return Brand::orderBy('name', 'asc')->get();  // Fetch all brands ordered by name
@@ -73,7 +79,7 @@ function orderEmail($orderId, $userType)
         $email = $order->user_email;
 
         Log::info('USER - TYPE : ' . $userType . ' SUBJECT : ' . $subject . ' EMAIL : ' . $email);
-        
+
     } else if ($userType == "admin") {
         $subject = "You've got an order !!!";
         $email = env('ADMIN_EMAIL');
@@ -86,7 +92,7 @@ function orderEmail($orderId, $userType)
             'order' => $order,
             'userType' => $userType,
         ];
-        
+
         // dd("\n User Type : " . $userType . "\n Email : \n" . $email);
 
         Log::info("Sending email to: " . $email);

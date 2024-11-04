@@ -11,6 +11,8 @@ use App\Models\DiscountCoupon;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Wishlist;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -57,6 +59,7 @@ class AuthController extends Controller
 
     public function login()
     {
+        // dd("LOGGED IN");
         return view("front.account.login");
     }
 
@@ -107,7 +110,7 @@ class AuthController extends Controller
         // Remove the coupon code from the session if it exists
         session()->forget('code');
 
-        dd("Unable to Log Out");
+        // dd("Unable to Log Out");
         Auth::logout();
         return redirect()->route('account.login')
             ->with("success", "You've been logout successfully.");
@@ -239,4 +242,11 @@ class AuthController extends Controller
         // return redirect()->route('account.deleteAccount')->with("success", "Your suggestions have been submitted successfully.");
     }
 
+    public function wishlist()
+    {
+        
+        $wishlists = Wishlist::where('user_id',  Auth::user()->id)->with('product')->get();
+        // dd($wishlist);
+        return view("front.wishlist", compact('wishlists'));
+    }
 }

@@ -469,13 +469,19 @@
                                 <span class="small-text">BUY WITH EARLY ACCESS</span>
                             </div>
                         </a>
+                        <a href="javascript:void(0);" onclick="addToWishlist({{ $product->id }})"
+                            class="btn btns-outline-secondary w-100 mb-2 pt-4 btn-wishlist">
+                            <div class="btn-content text-center">
+                                <span class="small-text">WISHLIST</span>
+                            </div>
+                        </a>
 
-                        <a href="javascript:void(0);" onclick="addToWishlist()"
+                        {{-- <a href="javascript:void(0);" onclick="addToWishlist()"
                             class="btn btns-outline-secondary w-100 mb-2 pt-4 btn-wishlist">
                             <div class="btn-content">
                                 <span class="big-text">WISHLIST</span>
                             </div>
-                        </a>
+                        </a> --}}
                     </div>
 
                     <!-- Delivery Options -->

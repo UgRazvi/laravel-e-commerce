@@ -80,7 +80,7 @@
                             </a>
 
                             <!-- Wishlist Icon -->
-                            <a href="{{route('front.checkout')}}" class="nav-link me-2">
+                            <a href="{{route('front.wishlist')}}" class="nav-link me-2">
                                 <i class="fas fa-heart text-primary"></i>
                             </a>
 

@@ -53,14 +53,15 @@
                                      </div>
 
                                      <!-- Add To Cart Icon -->
-                                     <a class="wishlist position-absolute" href="javascript:void(0);"
+                                     <a class="cart position-absolute" href="javascript:void(0);"
                                          onclick="addToCart({{ $product->id }})"
                                          style="top: 10px; left: 10px; z-index: 100;">
                                          <i class="fa fa-shopping-cart"></i>
                                      </a>
 
                                      <!-- Wishlist Icon -->
-                                     <a class="wishlist position-absolute" href="222" style="top: 10px; right: 10px;">
+                                     <a class="wishlist position-absolute" href="javascript:void(0);"
+                                         onclick="addToWishList({{ $product->id }})" style="top: 10px; right: 10px;">
                                          <i class="far fa-heart"></i>
                                      </a>
                                  </div>

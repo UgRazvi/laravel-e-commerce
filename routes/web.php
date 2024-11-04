@@ -67,8 +67,8 @@ Route::get('pay-u-cancel', [PayUMoneyController::class, 'payUCancel'])->name('pa
 /** Usman PayU Ends */
 
 
-
-
+Route::get('/wishlist', [AuthController::class, 'wishlist'])->name('front.wishlist');
+Route::post('/add-to-wishlist', [FrontController::class, 'addToWishList'])->name('front.addToWishList');
 
 
 

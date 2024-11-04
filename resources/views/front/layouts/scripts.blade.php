@@ -37,30 +37,61 @@
             url: '{{ route('front.addToCart') }}', // Route for adding item to cart
             type: 'post',
             data: {
-                id: id // Sending the product ID to the server
+                id: id,
+                _token: '{{ csrf_token() }}'
             },
             dataType: 'json',
             success: function(response) { // Use 'response' for handling the server response
-                if (response.status == true) {
-                    // // Show a confirm dialog to the user
-                    // if (confirm(response.message + "\nWould you like to view your cart?")) {
-                    //     // If user confirms, redirect to the cart page
-                    //     window.location.href = "{{ route('front.cart') }}";
-                    // } else {
-                    //     // If user cancels, stay on the current page
-                    //     console.log("User chose not to view the cart.");
-                    // }
-
-                    window.location.href = "{{ route('front.cart') }}";
+                if (response.status == false) {
+                    window.location.href = "{{ route('account.login') }}";
                 } else {
-                    console.log(response.message); // Log error messages
-                    alert(response.message); // Optionally show an alert for error messages
+                    window.location.href = "{{ route('front.cart') }}";
                 }
             },
             error: function(xhr, status, error) { // Error handling for AJAX request failure
-                console.error('Error:', error); // Log the error for debugging purposes
-                alert("An error occurred while adding the product to the cart.");
+                console.error(
+                    '\n Error:', error,
+                    "\n Status : ", status,
+                    "\n XHR : ", xhr,
+                );
+                alert("An error occurred while adding the product to the cart.", error);
             }
         });
+    }
+
+    function addToWishList(id) {
+        // alert(id);
+        $.ajax({
+            url: '{{ route('front.addToWishList') }}',
+            type: 'POST',
+            data: {
+                id: id,
+                _token: '{{ csrf_token() }}'
+            },
+            dataType: 'json',
+            success: function(response) {
+                // alert("Great.");
+               
+                if (response.status == false) {
+                    alert("Sorry Unauthorized Access.");
+                    window.location.href =
+                        "{{ route('account.login') }}";
+                } else {
+                    // alert("Great 2.");
+                    $("#wishlistModal .modal-body").html(response.message);
+                    $("#wishlistModal").modal('show');
+                    // window.location.href = "{{ route('front.wishlist') }}";
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(
+                    '\n Error:', error,
+                    "\n Status : ", status,
+                    "\n XHR : ", xhr,
+                );
+                alert('Sorry An error occurred while updating the WishList.');
+            }
+        });
+
     }
 </script>

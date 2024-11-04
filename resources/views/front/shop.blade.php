@@ -87,7 +87,8 @@
 
         <div class="row">
             <!-- Sidebar (Filters) -->
-            <div class="col-md-3 col-sm-3 col-12 mb-3 " id="filter-sidebar" style="height:max-content; position:sticky; top:10px;">
+            <div class="col-md-3 col-sm-3 col-12 mb-3 " id="filter-sidebar"
+                style="height:max-content; position:sticky; top:10px;">
                 <!-- Categories Card -->
                 <div class="row">
                     <div class="col-12 card">
@@ -226,11 +227,16 @@
                                             style="top: 10px; left: 10px; z-index: 100;">
                                             <i class="fa fa-shopping-cart"></i>
                                         </a>
-                                        <!-- Wishlist Icon -->
-                                        <a class="wishlist position-absolute" href="222"
-                                            style="top: 10px; right: 10px;">
+                                        <a class="wishlist position-absolute" href="javascript:void(0);"
+                                            onclick="addToWishList({{ $product->id }})"
+                                            style="top: 10px; right: 10px; z-index: 100;">
                                             <i class="far fa-heart"></i>
                                         </a>
+                                        <!-- Wishlist Icon -->
+                                        {{-- <a onclick="addToWishList()"{{ $product->id }} class="wishlist position-absolute"
+                                            href="javascript:void(0);" style="top: 10px; right: 10px;">
+                                            <i class="far fa-heart"></i>
+                                        </a> --}}
                                     </div>
 
                                     <div class="card-body text-center mt-3">
@@ -341,5 +347,4 @@
             apply_filters(result);
         });
     </script>
-
 @endsection
