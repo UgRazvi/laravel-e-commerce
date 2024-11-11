@@ -460,46 +460,30 @@
     }
 
 
-    // JS : 06 - Remove Selected Items
-    $('#removeSelected').click(function(e) {
-        e.preventDefault();
-        var selectedItems = [];
+    // JS: 06 - Cancel Coupon Code
+    $("#cancelCoupon").click(function() {
+        $.ajax({
+            url: '{{ route('front.removeCoupon') }}',
+            type: 'post',
+            dataType: 'json',
+            success: function(response) {
+                if (respone.status == true) {
+                    // console.log("\n Response Status : " = response.status + "\n Response Message : " = response.message + "\n Response Code : " = response.code);
+                    // $("#shippingAmount").html('$' + response.shippingCharge);
+                    $("#couponDiscount").html('₹' + response.discount);
+                    $("#grandTotal").html('₹' + response.grandTotal);
+                    $("#cancelCouponBox").hide();
 
-        // Get the rowId for each selected item
-        $('.productCheckbox:checked').each(function() {
-            selectedItems.push($(this).data('index'));
-        });
-
-        // Check if there are selected items
-        if (selectedItems.length === 0) {
-            alert('No item selected');
-            return;
-        }
-
-        // Confirm before deleting
-        if (confirm("Do you really want to remove the selected items?")) {
-            $.ajax({
-                url: '{{ route('front.deleteMultipleItems.cart') }}',
-                type: 'POST',
-                data: {
-                    items: selectedItems,
-                    _token: '{{ csrf_token() }}'
-                },
-                dataType: 'json',
-                success: function(response) {
-                    if (response.status) {
-                        window.location.href =
-                            "{{ route('front.cart') }}";
-                    } else {
-                        alert(response.message);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.log('Error:', error);
-                    alert('An error occurred while updating the cart.');
+                } else {
+                    console.log("Response Message :: " + response.message +
+                        "\nResponse Staus :: " +
+                        response.status + "\nResponse Code :: " + response.code);
                 }
-            });
-        }
+            },
+            error: function(response) {
+                console.error();
+            }
+        });
     });
 
 
@@ -542,30 +526,47 @@
         });
     });
 
-    // JS: 09 - Cancel Coupon Code
-    $("#cancelCoupon").click(function() {
-        $.ajax({
-            url: '{{ route('front.removeCoupon') }}',
-            type: 'post',
-            dataType: 'json',
-            success: function(response) {
-                if (respone.status == true) {
-                    // console.log("\n Response Status : " = response.status + "\n Response Message : " = response.message + "\n Response Code : " = response.code);
-                    // $("#shippingAmount").html('$' + response.shippingCharge);
-                    $("#couponDiscount").html('₹' + response.discount);
-                    $("#grandTotal").html('₹' + response.grandTotal);
-                    $("#cancelCouponBox").hide();
 
-                } else {
-                    console.log("Response Message :: " + response.message +
-                        "\nResponse Staus :: " +
-                        response.status + "\nResponse Code :: " + response.code);
-                }
-            },
-            error: function(response) {
-                console.error();
-            }
+    // JS : 09 - Remove Selected Items
+    $('#removeSelected').click(function(e) {
+        // alert("Hello");
+        e.preventDefault();
+        var selectedItems = [];
+
+        // Get the rowId for each selected item
+        $('.productCheckbox:checked').each(function() {
+            selectedItems.push($(this).data('index'));
         });
+
+        // Check if there are selected items
+        if (selectedItems.length === 0) {
+            alert('No item selected');
+            return;
+        }
+
+        // Confirm before deleting
+        if (confirm("Do you really want to remove the selected items?")) {
+            $.ajax({
+                url: '{{ route('front.deleteMultipleItems.cart') }}',
+                type: 'POST',
+                data: {
+                    items: selectedItems,
+                    _token: '{{ csrf_token() }}'
+                },
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status) {
+                        window.location.href = "{{ route('front.cart') }}";
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                    alert('An error occurred while updating the cart.');
+                }
+            });
+        }
     });
 
     $('#moveSelected').click(function(e) {
@@ -583,8 +584,8 @@
             return;
         }
 
-        // Confirm before deleting
-        if (confirm("Do you really want to move the selected items?")) {
+        // Confirm before moving items to the wishlist
+        if (confirm("Do you really want to move the selected items to the wishlist?")) {
             $.ajax({
                 url: '{{ route('front.addToWishList') }}',
                 type: 'POST',
@@ -594,23 +595,106 @@
                 },
                 dataType: 'json',
                 success: function(response) {
-                    // alert("Great.");
-                    if (response.status) {
-                        // alert("Great 2.");
-                        window.location.href =
-                            "{{ route('front.wishlist') }}";
+                    if (response.status === false) {
+                        window.location.href = "{{ route('account.login') }}";
                     } else {
-                        window.location.href =
-                        "{{ route('account.login') }}";
+                        window.location.href = "{{ route('front.wishlist') }}";
                     }
                 },
                 error: function(xhr, status, error) {
                     console.log('Error:', error);
-                    alert('An error occurred while updating the cart.');
+                    alert('An error occurred while updating the wishlist.');
                 }
             });
         }
     });
+
+    // $('#removeSelected').click(function(e) {
+    //     // alert("Test1");
+    //     e.preventDefault();
+    //     var selectedItems = [];
+
+    //     // Get the rowId for each selected item
+    //     $('.productCheckbox:checked').each(function() {
+    //         selectedItems.push($(this).data('index'));
+    //     });
+
+    //     // Check if there are selected items
+    //     if (selectedItems.length === 0) {
+    //         alert('No item selected');
+    //         return;
+    //     }
+
+    //     // Confirm before deleting
+    //     if (confirm("Do you really want to remove the selected items?")) {
+    //         $.ajax({
+    //             url: '{{ route('front.deleteMultipleItems.cart') }}',
+    //             type: 'POST',
+    //             data: {
+    //                 items: selectedItems,
+    //                 _token: '{{ csrf_token() }}'
+    //             },
+    //             dataType: 'json',
+    //             success: function(response) {
+    //                 if (response.status) {
+    //                     window.location.href =
+    //                         "{{ route('front.cart') }}";
+    //                 } else {
+    //                     alert(response.message);
+    //                 }
+    //             },
+    //             error: function(xhr, status, error) {
+    //                 console.log('Error:', error);
+    //                 alert('An error occurred while updating the cart.');
+    //             }
+    //         });
+    //     }
+    // });
+
+    // // JS : 10 - Remove Selected Items
+    // $('#moveSelected').click(function(e) {
+    //     e.preventDefault();
+    //     var selectedItems = [];
+
+    //     // Get the rowId for each selected item
+    //     $('.productCheckbox:checked').each(function() {
+    //         selectedItems.push($(this).data('index'));
+    //     });
+
+    //     // Check if there are selected items
+    //     if (selectedItems.length === 0) {
+    //         alert('No item selected');
+    //         return;
+    //     }
+
+    //     // Confirm before deleting
+    //     if (confirm("Do you really want to move the selected items?")) {
+    //         $.ajax({
+    //             url: '{{ route('front.addToWishList') }}',
+    //             type: 'POST',
+    //             data: {
+    //                 items: selectedItems,
+    //                 _token: '{{ csrf_token() }}'
+    //             },
+    //             dataType: 'json',
+    //             success: function(response) {
+
+    //                 success: function(response) { // Use 'response' for handling the server response
+    //                     if (response.status == false) {
+    //                         window.location.href = "{{ route('account.login') }}";
+    //                     } else {
+    //                         window.location.href = "{{ route('front.wishlist') }}";
+    //                     }
+    //                 },
+
+    //             },
+    //             error: function(xhr, status, error) {
+    //                 console.log('Error:', error);
+    //                 alert('An error occurred while updating the cart.');
+    //             }
+    //         });
+    //     }
+    // });
 </script>
 
 @include('front.layouts.scripts')

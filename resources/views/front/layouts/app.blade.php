@@ -14,9 +14,9 @@
     @include('front.layouts.footer')
 
     <!-- Wishlist modal -->
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    {{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
         Wishlist modal
-    </button>
+    </button> --}}
 
     <!-- Modal -->
     <div class="modal fade" id="wishlistModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

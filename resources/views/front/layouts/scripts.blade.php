@@ -11,6 +11,37 @@
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
 <script>
+    function removeProduct(id) {
+        $.ajax({
+            url: '{{ route('account.removeWishlistProduct') }}',
+            type: 'POST',
+            data: {
+                id: id,
+                _token: '{{ csrf_token() }}' // Include CSRF token
+            },
+            dataType: 'json',
+            success: function(response) {
+
+                // alert("Hello");
+                if (response.status === true) {
+                    console.log(
+                        "\nResponse Status: " + response.status +
+                        "\nResponse Message: " + response.message
+                    );
+                    location.reload();
+                    // Optionally, remove the item from the DOM or refresh the page
+                } else {
+                    console.log("Error: " + response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX Error: " + status + " - " + error);
+            }
+        });
+    }
+</script>
+
+<script>
     window.onscroll = function() {
         myFunction()
     };
@@ -71,7 +102,7 @@
             dataType: 'json',
             success: function(response) {
                 // alert("Great.");
-               
+
                 if (response.status == false) {
                     alert("Sorry Unauthorized Access.");
                     window.location.href =

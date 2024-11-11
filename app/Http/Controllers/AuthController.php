@@ -244,9 +244,30 @@ class AuthController extends Controller
 
     public function wishlist()
     {
-        
-        $wishlists = Wishlist::where('user_id',  Auth::user()->id)->with('product')->get();
+
+        $wishlists = Wishlist::where('user_id', Auth::user()->id)->with('product')->get();
         // dd($wishlist);
         return view("front.wishlist", compact('wishlists'));
     }
+
+    public function removeProductFromWishlist(Request $request)
+    {
+        // dd("HELLO");
+        $user = Auth::user();
+        $wishlist = Wishlist::where("user_id", $user->id)->where('product_id', $request->id)->first();
+    
+        if ($wishlist == null) {
+            return response()->json([
+                "status" => true,
+                "message" => "Product has been removed already."
+            ], 200);
+        } else {
+            $wishlist->delete();
+            return response()->json([
+                "status" => true,
+                "message" => "Product removed successfully."
+            ], 200);
+        }
+    }
+    
 }

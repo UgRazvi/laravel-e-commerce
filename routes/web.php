@@ -134,6 +134,8 @@ Route::group(['prefix' => 'account'], function () {
 
         Route::get("/terms-conditions", [UserProfileController::class, 'termsCondition'])->name("account.terms");
         Route::get("/privacy-policy", [UserProfileController::class, 'privacyPolicy'])->name("account.policy");
+        
+        Route::post("/remove-wishlist-product", [AuthController::class, 'removeProductFromWishlist'])->name("account.removeWishlistProduct");
 
     });
 });
