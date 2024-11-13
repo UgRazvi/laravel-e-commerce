@@ -181,27 +181,12 @@
                 <div class="row">
                     @if ($products->isNotEmpty())
                         @foreach ($products as $product)
+                            {{-- @dd($product); --}}
                             @php
                                 $productImage = $product->product_images->first();
                             @endphp
                             <div class="col-md-6 col-lg-3 col-sm-6 col-12 mb-3">
-                                {{-- <div class="card h-100">
-                                    <a href="{{ route('front.product', $product->slug) }}" class="product-img">
-                                        @if ($productImage && $productImage->image != '')
-                                            <img src="{{ asset('uploads/Products/' . $productImage->image) }}"
-                                                class="card-img-top cardImages"
-                                                style="height: 300px; object-fit: cover; padding: 5px;"
-                                                alt="Product Image {{ $product->id }}">
-                                        @endif
-                                    </a>
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ $product->title }}</h5>
-                                    </div>
-                                    <ul class="list-group list-group-flush">
-                                        <li class="list-group-item">{{ $product->title }}</li>
-                                        <li class="list-group-item">{{ $product->price }}</li>
-                                    </ul>
-                                </div> --}}
+
                                 <div class="card product-card">
 
                                     <div class="product-image position-relative">
@@ -227,24 +212,24 @@
                                             style="top: 10px; left: 10px; z-index: 100;">
                                             <i class="fa fa-shopping-cart"></i>
                                         </a>
+                                        <!-- Wishlist Icon -->
                                         <a class="wishlist position-absolute" href="javascript:void(0);"
                                             onclick="addToWishList({{ $product->id }})"
                                             style="top: 10px; right: 10px; z-index: 100;">
                                             <i class="far fa-heart"></i>
                                         </a>
-                                        <!-- Wishlist Icon -->
-                                        {{-- <a onclick="addToWishList()"{{ $product->id }} class="wishlist position-absolute"
-                                            href="javascript:void(0);" style="top: 10px; right: 10px;">
-                                            <i class="far fa-heart"></i>
-                                        </a> --}}
+
                                     </div>
 
                                     <div class="card-body text-center mt-3">
 
                                         <!-- Product Name -->
                                         <p class="product-item-title mb-2">{{ $product->title }}</p>
-
-                                        <!-- Brand -->
+                                        
+                                        <!-- Item Quantity -->
+                                        <p class="product-item-title"><strong>( {!! $product->qty !!} )</strong></p>
+                                        
+                                        <!-- Short Description -->
                                         <p class="product-item-brand mb-1"><strong>{!! $product->short_description !!}</strong></p>
 
                                         <!-- Pricing Section -->

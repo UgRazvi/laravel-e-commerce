@@ -364,20 +364,21 @@
                                             </div>
                                         </div>
                                     </form>
+                                    {{-- {{ route('front.processCashFree') }} --}}
                                     <form action="" method="post" id="paymentForm2" name="paymentForm2">
                                         @csrf
                                         <div class="form-group phonepe form-control mt-3">
                                             <div class="row align-items-center">
                                                 <div class="col-1">
                                                     <input type="radio" class="payment_method"
-                                                        name="payment_method" id="payment_method_upi" value="UPI">
+                                                        name="payment_method" id="payment_method_upi" value="CashFree">
                                                 </div>
                                                 <div class="col-11">
-                                                    <label for="payment_method_upi">PhonePe</label>
+                                                    <label for="payment_method_upi">CashFree</label>
                                                 </div>
                                             </div>
                                             <div class="upi-details mt-2 mb-2" id="upi-details"
-                                                style="display:none;">
+                                                style="">
                                                 <button type="submit" class="btn btn-danger mt-2 w-100">PAY
                                                     NOW</button>
                                             </div>
@@ -516,7 +517,7 @@
             if ($(this).val() === 'COD') {
                 $("#cod-details").show();
                 $("#upi-details").hide();
-            } else if ($(this).val() === 'UPI') {
+            } else if ($(this).val() === 'CashFree') {
                 $("#upi-details").show();
                 $("#cod-details").hide();
             }

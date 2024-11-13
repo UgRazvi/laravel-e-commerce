@@ -4,6 +4,7 @@ namespace App\Services;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\CustomerAddress;
+use App\Models\Product;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -67,6 +68,12 @@ class PayUService
             $orderItem->price = $item->price;
             $orderItem->total = (($item->price) * ($item->qty));
             $orderItem->save();
+            
+            $productData = Product::find($item->id);
+            $currentQty = $productData->qty;
+            $updatedQty = $currentQty - $item->qty;
+            $productData->qty = $updatedQty;
+            $productData->save();
         }
 
         // Ensure amount is string format for hash calculation

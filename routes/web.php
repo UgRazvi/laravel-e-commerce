@@ -26,6 +26,7 @@ use App\Http\Controllers\admin\CustomerAddressController;
 use App\Http\Controllers\admin\OrderController;
 use App\Http\Controllers\admin\ProductCategoryController;
 use App\Http\Controllers\admin\ProductSubCategoryController;
+use App\Http\Controllers\CashfreePaymentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PayUMoneyController;
 use App\Http\Controllers\PaymentWebhookController;
@@ -45,6 +46,13 @@ Route::get('/', [FrontController::class, 'index'])->name('front.home');
 Route::get('/test-logs', function () {
     return nl2br(\Illuminate\Support\Facades\File::get(storage_path('logs/laravel.log')));
 });
+
+
+    // Cashfree Payment Gateway Setup
+    Route::get('cashfree/payments/create', [CashfreePaymentController::class, 'create'])->name('callback');
+    Route::post('cashfree/payments/store', [CashfreePaymentController::class, 'store'])->name('store');
+    Route::any('cashfree/payments/success', [CashfreePaymentController::class, 'success'])->name('success');
+
 
 
 Route::get('/payment', [CartController::class, 'payment'])->name('front.payment');
@@ -97,7 +105,6 @@ Route::group(['prefix' => 'account'], function () {
 
         Route::get('/login', [AuthController::class, 'login'])->name('account.login');
         Route::post('/login', [AuthController::class, 'authenticate'])->name('account.authenticate');
-
     });
     Route::group(['middleware' => "auth"], function () {
         // Route::get('/profile', [AuthController::class, 'profile'])->name("account.profile");
@@ -106,6 +113,8 @@ Route::group(['prefix' => 'account'], function () {
         Route::post('/process-checkout', [CartController::class, 'processCheckout'])->name('front.processCheckout');
         Route::post('/process-payment', [CartController::class, 'processPayment'])->name('front.processPayment');
 
+
+    
         Route::put('/address/{id}', [CustomerAddressController::class, 'update'])->name('address.update');
         Route::delete('/address/{id}', [CustomerAddressController::class, 'destroy'])->name('address.destroy');
 
@@ -134,9 +143,8 @@ Route::group(['prefix' => 'account'], function () {
 
         Route::get("/terms-conditions", [UserProfileController::class, 'termsCondition'])->name("account.terms");
         Route::get("/privacy-policy", [UserProfileController::class, 'privacyPolicy'])->name("account.policy");
-        
-        Route::post("/remove-wishlist-product", [AuthController::class, 'removeProductFromWishlist'])->name("account.removeWishlistProduct");
 
+        Route::post("/remove-wishlist-product", [AuthController::class, 'removeProductFromWishlist'])->name("account.removeWishlistProduct");
     });
 });
 

@@ -7,6 +7,7 @@ use App\Models\DiscountCoupon;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Models\Product;
+use App\Services\CashfreeService;
 use App\Services\PayUService;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
@@ -24,25 +25,68 @@ class CartController extends Controller
 
     private $processPaymentService;
     private $payUService;
+    private $cashfreeService;
 
-    public function __construct(ProcessPaymentService $processPaymentService, PayUService $payUService)
+    public function __construct(ProcessPaymentService $processPaymentService, PayUService $payUService, CashfreeService $cashfreeService)
     {
         $this->processPaymentService = $processPaymentService;
         $this->payUService = $payUService;
+        $this->cashfreeService = $cashfreeService;
     }
-
+    
     public function processPayment(Request $request)
     {
-        if ($request->payment_method == 'COD') {
-            return $this->processPaymentService->processPaymentCOD($request);
+        switch ($request->payment_method) {
+            case 'COD':
+                return $this->processPaymentService->processPaymentCOD($request);
+            
+            case 'PayU':
+                return $this->payUService->pay($request);
+            
+            case 'CashFree':
+                return $this->cashfreeService->cashFreePay($request);
+            
+            default:
+                return response()->json(['error' => 'Invalid payment method'], 400);
         }
     }
-    public function payU(Request $request)
-    {
-        if ($request->payment_method == 'PayU') {
-            return $this->payUService->pay($request);
-        }
+    
+    public function cashFreeCallback(Request $request)
+{
+    // CashFree sends back parameters for payment verification (order_id, payment_status, etc.)
+    $orderId = $request->order_id;
+    $paymentStatus = $request->payment_status;
+    
+    // Verify payment
+    $paymentVerification = $this->cashfreeService->verifyPayment($orderId);
+
+    if (isset($paymentVerification['error']) && $paymentVerification['error']) {
+        return response()->json(['error' => 'Payment verification failed', 'message' => $paymentVerification['message']], 500);
     }
+
+    // Process the payment result (success or failure)
+    if ($paymentStatus == 'SUCCESS') {
+        // Handle successful payment (update order status, etc.)
+        return view('payment.success'); // Show success page
+    } else {
+        // Handle failed payment (show error message, etc.)
+        return view('payment.failure'); // Show failure page
+    }
+}
+public function cashFreeNotification(Request $request)
+{
+    // Process CashFree notification here (could be successful or failure status)
+    $paymentStatus = $request->payment_status;
+    $orderId = $request->order_id;
+
+    // Verify payment and update order status accordingly
+    $paymentVerification = $this->cashfreeService->verifyPayment($orderId);
+
+    // Handle the result
+    // Update order status based on payment verification
+}
+
+    
 
 
     public function addToCart(Request $request)
@@ -231,7 +275,7 @@ class CartController extends Controller
 
         }
 
-        // Step : 2 - Save USer Address
+        // Step : 2 - Save User Address
         // If the current address is marked as default, unset the default for existing addresses
         if ($request->default_address == 1) {
             CustomerAddress::where('user_id', $user->id)
@@ -278,106 +322,6 @@ class CartController extends Controller
         // dd($cartContent);
         return view("front.cart", compact('cartContent', "discount", "grandTotal"));
     }
-    // public function checkout()
-    // {
-    //     $user = Auth::user();
-    //     $discount = 0;
-    //     if (Cart::count() == 0) {
-    //         // return redirect()->route('front.cart');
-    //         return redirect()->route('front.cart')
-    //             ->with("error", "You don't have any product in your cart yet.");
-    //     }
-
-    //    // Anyone without Authorized Access Can Access Checkout Page.
-    //      if (Auth::check() == false) {
-
-    //          if (!session()->has("url.intended")) {
-    //              session(['url.intended' => url()->current()]);
-    //          }
-
-    //          return redirect()->route('account.login')
-    //              ->with("error", "You're not logged. Please Log In first to access this page.");
-    //      }
-    //      session()->forget("url.intended");
-
-    //     $customerAddress = CustomerAddress::where('user_id', $user->id)->first();
-
-
-    //     // $subTotal = Cart::subtotal(2, '.', '');
-    //     $grandTotal = $subTotal = Cart::subtotal(2, '.', '');
-
-    //     if (Session()->has('code')) {
-    //         $code = Session()->get('code');
-    //         if ($code->type == 'percent') {
-    //             $discount = ($code->discount_amount / 100) * $subTotal;
-    //         } else {
-    //             $discount = $code->discount_amount;
-    //         }
-    //         $grandTotal = $subTotal - $discount; // After Discount calculation logic
-    //     }
-
-    //     // $user = Auth::user();
-
-    //     $MERCHANT_KEY = env('PAYU_MERCHANT_KEY');
-    //     $SALT = env('PAYU_MERCHANT_SALT');
-
-
-    //     $PAYU_BASE_URL = "https://test.payu.in";
-
-    //     //$PAYU_BASE_URL = "https://secure.payu.in"; // PRODUCATION
-    //     $name = $user->name;
-    //     $successURL = route('pay.u.response');
-    //     $failURL = route('pay.u.cancel');
-    //     $email = $user->email;
-    //     $phone = $user->mobile_no;
-    //     $amount = (int) $grandTotal;
-
-    //     $action = '';
-    //     $txnid = substr(hash('sha256', mt_rand() . microtime()), 0, 20);
-    //     $posted = array();
-    //     $posted = array(
-    //         'key' => $MERCHANT_KEY,
-    //         'txnid' => $txnid,
-    //         'amount' => $amount,
-    //         'firstname' => $name,
-    //         'email' => $email,
-    //         'phone' => $phone,
-    //         // 'productinfo' => $productinfo,
-    //         'productinfo' => $item->name,
-    //         'surl' => $successURL,
-    //         'furl' => $failURL,
-    //         'service_provider' => 'payu_paisa',
-    //     );
-
-    //     if (empty($posted['txnid'])) {
-    //         $txnid = substr(hash('sha256', mt_rand() . microtime()), 0, 20);
-    //     } else {
-    //         $txnid = $posted['txnid'];
-    //     }
-
-    //     $hash = '';
-    //     $hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";
-
-    //     if (empty($posted['hash']) && sizeof($posted) > 0) {
-    //         $hashVarsSeq = explode('|', $hashSequence);
-    //         $hash_string = '';
-    //         foreach ($hashVarsSeq as $hash_var) {
-    //             $hash_string .= isset($posted[$hash_var]) ? $posted[$hash_var] : '';
-    //             $hash_string .= '|';
-    //         }
-    //         $hash_string .= $SALT;
-
-    //         $hash = strtolower(hash('sha512', $hash_string));
-    //         $action = $PAYU_BASE_URL . '/_payment';
-    //     } elseif (!empty($posted['hash'])) {
-    //         $hash = $posted['hash'];
-    //         $action = $PAYU_BASE_URL . '/_payment';
-    //     }
-
-    //     return view("front.checkout", compact("customerAddress", "discount", "grandTotal",'action', 'hash', 'MERCHANT_KEY', 'txnid', 'successURL', 'failURL', 'name', 'email', 'phone','amount'));
-
-    // }
-
 
     public function checkout()
     {
@@ -616,5 +560,9 @@ class CartController extends Controller
     {
         session()->forget('code');
         return $this->getOrderSummary($request);
+    }
+
+    public function processCashFree(Request $request){
+        // dd($request);
     }
 }
