@@ -104,26 +104,11 @@ class OrderController extends Controller
 
         } catch (\Exception $e) {
             Log::error('Order Controller - Order Update Failed: ' . $e->getMessage());
-            return response()->json(['message' => 'Failed to update order status'], 500);
+            return response()->json(['message' => 'Order updation Complete !'], 500);
         }
     }
     
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
@@ -154,19 +139,4 @@ class OrderController extends Controller
     }
 
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

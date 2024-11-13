@@ -19,6 +19,8 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+   
+     // Allow mass assignment on these fields
     protected $fillable = [
         'name',
         'email',
@@ -31,6 +33,10 @@ class User extends Authenticatable
         'state',
         'type', // Home or work
         'default_address',
+        'birthday',
+        'gender',
+        'role',
+        'status',
     ];
 
     /**

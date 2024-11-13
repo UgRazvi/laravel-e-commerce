@@ -317,6 +317,12 @@
             // Append price range to URL
             url += '&price_min=' + from + '&price_max=' + to;
 
+            // Append Search to URL
+            var keyword = $("#search").val(); // Saving Search Value in Keyword
+            if (keyword.length > 0) { // If Keyword contains any value and is not empty
+                url += '&search=' + keyword; // Append Search Value to URL
+            }
+
             // Append sorting option to URL
             if ($("#sort").val()) {
                 url += '&sort=' + $("#sort").val();

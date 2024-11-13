@@ -37,6 +37,9 @@ class PayUService
 
         $customerAddress = CustomerAddress::where('user_id', $user->id)->where('default_address', 1)->first();
 
+        // dd($customerAddress);
+        if($customerAddress != ''){
+
         $order = new Order;
         $order->user_id = $user->id;
         $order->subtotal = $subTotal;
@@ -76,6 +79,12 @@ class PayUService
             $productData->save();
         }
 
+        }
+
+        else{
+            return redirect()->route('front.cart')
+            ->with('error', 'Please select a default address before proceeding.');
+        }
         // Ensure amount is string format for hash calculation
         $data = [
             'key' => $merchantKey,

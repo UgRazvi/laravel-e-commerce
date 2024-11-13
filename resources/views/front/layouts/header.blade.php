@@ -62,11 +62,11 @@
 
                     <!-- Search Bar with Icons -->
                     <div class="d-flex align-items-center">
-                        <form action="" class="d-flex me-3">
+                        <form action="{{route('front.shop')}}" class="d-flex me-3" >
                             <div class="input-group">
                                 <input type="text" placeholder="Search For Products" class="form-control"
-                                    aria-label="Search for Products">
-                                <button class="btn btn-outline-secondary" type="submit">
+                                name="search" id="search" value="{{Request::get('search')}}">
+                                <button type="submit" class="btn btn-outline-secondary" type="submit">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>

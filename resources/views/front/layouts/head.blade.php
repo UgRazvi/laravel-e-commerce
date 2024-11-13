@@ -38,7 +38,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('front-assets/css/style.css') }}" />
 
     <script src="{{ asset('front-assets/js/jquery-3.6.0.min.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">

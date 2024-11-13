@@ -364,8 +364,7 @@
                                             </div>
                                         </div>
                                     </form>
-                                    {{-- {{ route('front.processCashFree') }} --}}
-                                    <form action="" method="post" id="paymentForm2" name="paymentForm2">
+                                    <form action="{{ route('callback') }}" method="post" id="paymentForm2" name="paymentForm2">
                                         @csrf
                                         <div class="form-group phonepe form-control mt-3">
                                             <div class="row align-items-center">

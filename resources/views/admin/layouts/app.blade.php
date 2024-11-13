@@ -89,7 +89,16 @@
     </div>
     <!-- ./wrapper -->
     <!-- jQuery -->
-    <script src="{{ asset('admin-assets/plugins/jquery/jquery.min.js ') }}"></script>
+
+    <!-- jQuery (from DataTables CDN) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<!-- DataTables JS -->
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+
+    {{-- <script src="{{ asset('admin-assets/plugins/jquery/jquery.min.js ') }}"></script> --}}
     <!-- Bootstrap 4 -->
     <script src="{{ asset('admin-assets/plugins/bootstrap/js/bootstrap.bundle.min.js ') }}"></script>
     <!-- AdminLTE App -->
@@ -104,7 +113,6 @@
     
     <script src="{{ asset('admin-assets/plugins/dropzone/dropzone.js') }}"></script>
     <script src="{{ asset('admin-assets/js/demo.js') }}"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 
     <script type="text/javascript">
         $.ajaxSetup({

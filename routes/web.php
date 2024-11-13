@@ -30,7 +30,7 @@ use App\Http\Controllers\CashfreePaymentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PayUMoneyController;
 use App\Http\Controllers\PaymentWebhookController;
-
+use App\Http\Controllers\UserController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -39,19 +39,19 @@ use App\Http\Controllers\PaymentWebhookController;
 // Route For - Home Page
 Route::get('/', [FrontController::class, 'index'])->name('front.home');
 
-// Route::get('/test-mail', function () {
-//     orderEmail('671c748e9c566');
-// });
+Route::get('/test-mail', function () {
+    orderEmail('673474a51e39d', 'customer');
+});
 
 Route::get('/test-logs', function () {
     return nl2br(\Illuminate\Support\Facades\File::get(storage_path('logs/laravel.log')));
 });
 
 
-    // Cashfree Payment Gateway Setup
-    Route::get('cashfree/payments/create', [CashfreePaymentController::class, 'create'])->name('callback');
-    Route::post('cashfree/payments/store', [CashfreePaymentController::class, 'store'])->name('store');
-    Route::any('cashfree/payments/success', [CashfreePaymentController::class, 'success'])->name('success');
+// Cashfree Payment Gateway Setup
+Route::any('cashfree/payments/create', [CashfreePaymentController::class, 'create'])->name('callback');
+Route::post('cashfree/payments/store', [CashfreePaymentController::class, 'store'])->name('store');
+Route::any('cashfree/payments/success', [CashfreePaymentController::class, 'success'])->name('success');
 
 
 
@@ -157,6 +157,9 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('/authenticate', [AdminLoginController::class, 'authenticate'])->name('admin.authenticate');
     });
     Route::group(['middleware' => ['admin.auth']], function () {
+
+        // Users LISTING
+        Route::resource('/users', UserController::class);
 
         Route::post('/product-images/update', [ProductImageController::class, 'update'])->name('product-images.update');
         Route::delete('/product-images/', [ProductImageController::class, 'destroy'])->name('product-images.destroy');
