@@ -61,7 +61,7 @@
 
                 <div class="form-group mb-4">
                     <label for="birthday">Birthday (dd/mm/yyyy)</label>
-                    <input type="text" id="birthday" name="birthday" class="form-control" maxlength="10"
+                    <input type="date" id="birthday" name="birthday" class="form-control" maxlength="10"
                         placeholder="Enter birthday" value="{{ $user->birthday ? $user->birthday->format('d/m/Y') : '' }}">
                 </div>
 

@@ -44,11 +44,13 @@ class AuthController extends Controller
             $user->password = Hash::make($request->password);
             $user->save();
 
-            session()->flash("success", "Hey <strong> {$request->name} </strong>, You've been registered successfully.");
+            // session()->flash("success", "Hey <strong> {$request->name} </strong>, You've been registered successfully.");
             //ALert laravel
-            return response()->json([
-                'status' => true,
-            ]);
+            // return response()->json([
+            //     'status' => true,
+            // ]);
+
+            return redirect()->route('account.login')->with("success", "<strong> {$request->name} </strong>, You've been registered successfully");
         } else {
             return response()->json([
                 'status' => false,
@@ -167,6 +169,46 @@ class AuthController extends Controller
         return view("front.account.profile-edit");
     }
 
+    // public function profileUpdate(Request $request)
+    // {
+    //     // Validate the incoming request data
+    //     $request->validate([
+    //         'mobile_no' => 'required|string|max:10',
+    //         'name' => 'required|string|max:50',
+    //         'email' => 'required|email|max:255',
+    //         'gender' => 'required|in:male,female',
+    //         'birthday' => 'nullable|date_format:d/m/Y',
+    //         'alternate_mobile_no' => 'nullable|string|max:10',
+    //         'hint_name' => 'nullable|string|max:50',
+    //     ]);
+
+    //     // Get the authenticated user
+    //     $user = Auth::user(); // This should return an instance of the User model
+
+
+    //     // Update user attributes
+    //     $user->mobile_no = $request->input('mobile_no');
+    //     $user->name = $request->input('name');
+    //     $user->email = $request->input('email');
+    //     $user->gender = $request->input('gender');
+
+    //     // Convert the birthday from dd/mm/yyyy to Y-m-d format if provided
+    //     if ($request->input('birthday')) {
+    //         $birthday = \DateTime::createFromFormat('d/m/Y', $request->input('birthday'));
+    //         if ($birthday) {
+    //             $user->birthday = $birthday->format('Y-m-d');
+    //         }
+    //     }
+
+    //     $user->alternate_mobile_no = $request->input('alternate_mobile_no');
+    //     $user->hint_name = $request->input('hint_name');
+
+    //     // Save the updated user details
+    //     $user->save();
+
+    //     // Redirect back with a success message
+    //     return redirect()->back()->with('success', 'Profile updated successfully.');
+    // }
     public function profileUpdate(Request $request)
     {
         // Validate the incoming request data
@@ -174,39 +216,43 @@ class AuthController extends Controller
             'mobile_no' => 'required|string|max:10',
             'name' => 'required|string|max:50',
             'email' => 'required|email|max:255',
-            'gender' => 'required|in:male,female',
-            'birthday' => 'nullable|date_format:d/m/Y',
+            'birthday' => 'nullable|date_format:Y-m-d', // Updated format
             'alternate_mobile_no' => 'nullable|string|max:10',
             'hint_name' => 'nullable|string|max:50',
         ]);
-
+    
         // Get the authenticated user
         $user = Auth::user(); // This should return an instance of the User model
-
-
+    
         // Update user attributes
         $user->mobile_no = $request->input('mobile_no');
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->gender = $request->input('gender');
-
-        // Convert the birthday from dd/mm/yyyy to Y-m-d format if provided
+    
+        // Convert the birthday from d/m/Y to Y-m-d format if provided
         if ($request->input('birthday')) {
-            $birthday = \DateTime::createFromFormat('d/m/Y', $request->input('birthday'));
+            // The birthday will now be in YYYY-MM-DD format from the date input field
+            $birthday = \Carbon\Carbon::createFromFormat('Y-m-d', $request->input('birthday'));
             if ($birthday) {
                 $user->birthday = $birthday->format('Y-m-d');
+            } else {
+                return redirect()->back()->withErrors(['birthday' => 'The birthday format is invalid.'])->withInput();
             }
         }
-
+    
+        // Other fields
         $user->alternate_mobile_no = $request->input('alternate_mobile_no');
         $user->hint_name = $request->input('hint_name');
-
+    
         // Save the updated user details
         $user->save();
-
+    
         // Redirect back with a success message
         return redirect()->back()->with('success', 'Profile updated successfully.');
     }
+    
+
 
     public function deleteAccountSuggestion(Request $request)
     {

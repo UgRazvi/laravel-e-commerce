@@ -100,12 +100,10 @@
                 <div class="text-center ">
                     <img src="{{ asset('front-assets/images/Login.jpg') }}" class="img-fluid" alt="Login Image" />
                 </div>
-                <form class="bg-white p-4 shadow" action="" method="post" name="registrationForm"
+                {{-- <form class="bg-white p-4 shadow" action="" method="post" name="registrationForm"
                     id="registrationForm">
                     @csrf
-                    {{-- <div class="text-center mb-4">
-                        <img src="{{ asset('front-assets/images/Login.jpg') }}" class="img-fluid" alt="Login Image" />
-                    </div> --}}
+                    
                     <div class=" mt-4">
                         <h4>Login <span style="fonts"> or </span> Signup </h4>
                     </div>
@@ -179,7 +177,72 @@
                     <p class="text-muted mt-4 pb-5" style="font-size: 10px;">Have trouble logging in? <a
                             href="#" class="text-danger fw-bold">Get
                             help</a></p>
+                </form> --}}
+                <form class="bg-white p-4 shadow" action="{{ route('account.processRegister') }}" method="POST" id="registrationForm">
+                    @csrf
+                    <div class="mt-4">
+                        <h4>Login <span style="font-style: italic;">or</span> Signup</h4>
+                    </div>
+                
+                    <div class="mt-4">
+                        <div class="input-group" style="border: 1px solid grey;">
+                            <input type="text" class="form-control @error('name') is-invalid @enderror border-0" id="name" name="name" placeholder="Enter Name" title="Enter Correct Name">
+                        </div>
+                        @error('name')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+                
+                    <div class="mt-4">
+                        <div class="input-group" style="border: 1px solid grey;">
+                            <input type="email" class="form-control @error('email') is-invalid @enderror border-0" id="email" name="email" placeholder="Enter E-Mail" title="Enter Correct E-Mail">
+                        </div>
+                        @error('email')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+                
+                    <div class="mt-4">
+                        <div class="input-group" style="border: 1px solid grey;">
+                            <span class="input-group-text bg-white border-0">+91 | </span>
+                            <input type="text" class="form-control @error('mobile_no') is-invalid @enderror border-0" id="mobile_no" name="mobile_no" placeholder="Enter Number" pattern="[1-9]{1}[0-9]{9}" title="Enter Correct Number">
+                        </div>
+                        @error('mobile_no')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+                
+                    <div class="mt-4">
+                        <div class="input-group" style="border: 1px solid grey;">
+                            <input type="password" class="form-control @error('password') is-invalid @enderror border-0" id="password" name="password" placeholder="Password" title="Password">
+                        </div>
+                        @error('password')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+                
+                    <div class="mt-4">
+                        <div class="input-group" style="border: 1px solid grey;">
+                            <input type="password" class="form-control @error('password_confirmation') is-invalid @enderror border-0" id="password_confirmation" name="password_confirmation" placeholder="Confirm Password" title="Confirm Password">
+                        </div>
+                        @error('password_confirmation')
+                            <p class="text-danger">{{ $message }}</p>
+                        @enderror
+                    </div>
+                
+                    <p class="text-muted mt-4" style="font-size: 10px;">
+                        By continuing, I agree to the <a href="#" class="text-decoration-none fw-bold text-danger">Terms of Use</a> & <a href="#" class="text-decoration-none fw-bold text-danger">Privacy Policy</a>
+                    </p>
+                
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-danger">
+                            <p class="mb-0">CONTINUE</p>
+                        </button>
+                    </div>
+                
+                    <p class="text-muted mt-4 pb-5" style="font-size: 10px;">Have trouble logging in? <a href="#" class="text-danger fw-bold">Get help</a></p>
                 </form>
+                
             </div>
         </div>
     </div>
