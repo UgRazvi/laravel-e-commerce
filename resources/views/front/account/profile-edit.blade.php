@@ -48,21 +48,43 @@
                         value="{{ $user->email }}" required>
                 </div>
 
+                {{-- <div class="form-group mb-4">
+                    <label>Gender</label>
+                    <div class="d-flex">
+                        <input type="hidden" name="gender" id="gender" value="{{ $user->gender }}">
+                        <button type="button" class="btn btn-outline-secondary btn-block w-50 gender-btn"
+                            data-gender="male" value="{{$user->gender}}">Male</button>
+                        <button type="button" class="btn btn-outline-secondary btn-block w-50 gender-btn"
+                            data-gender="female" value="{{$user->gender}}">Female</button>
+                    </div>
+                </div> --}}
+
                 <div class="form-group mb-4">
                     <label>Gender</label>
                     <div class="d-flex">
-                        <button type="button" class="btn btn-outline-secondary btn-block w-50 gender-btn"
-                            data-gender="male">Male</button>
-                        <button type="button" class="btn btn-outline-secondary btn-block w-50 gender-btn"
-                            data-gender="female">Female</button>
+                        <!-- Hidden input to store the selected gender -->
+                        <input type="hidden" name="gender" id="gender" value="{{ $user->gender }}">
+                
+                        <!-- Male button -->
+                        <button type="button" class="btn btn-outline-secondary btn-block w-50 gender-btn" 
+                                data-gender="male" 
+                                id="male-btn"
+                                value="male" 
+                                onclick="selectGender('male')">Male</button>
+                
+                        <!-- Female button -->
+                        <button type="button" class="btn btn-outline-secondary btn-block w-50 gender-btn" 
+                                data-gender="female" 
+                                id="female-btn"
+                                value="female" 
+                                onclick="selectGender('female')">Female</button>
                     </div>
-                    <input type="hidden" name="gender" id="gender" value="{{ $user->gender }}">
                 </div>
 
                 <div class="form-group mb-4">
                     <label for="birthday">Birthday (dd/mm/yyyy)</label>
                     <input type="date" id="birthday" name="birthday" class="form-control" maxlength="10"
-                        placeholder="Enter birthday" value="{{ $user->birthday ? $user->birthday->format('d/m/Y') : '' }}">
+                        placeholder="Enter birthday" value="{{ $user->birthday ? $user->birthday->format('Y-m-d') : '' }}">
                 </div>
 
                 <div class="form-group mb-4">
@@ -94,7 +116,7 @@
         .gender-btn {
             position: relative;
         }
-
+    
         .gender-btn.selected::after {
             content: '✔';
             position: absolute;
@@ -104,14 +126,27 @@
             font-size: 16px;
         }
     </style>
-
+    
     <script>
-        $(document).ready(function() {
-            $('.gender-btn').on('click', function() {
-                $('.gender-btn').removeClass('selected');
-                $(this).addClass('selected');
-                $('#gender').val($(this).data('gender')); // Set the hidden input value
-            });
+        // Function to update gender selection
+        function selectGender(gender) {
+            // Set the value of the hidden input field
+            document.getElementById('gender').value = gender;
+    
+            // Remove the 'selected' class from both buttons
+            const buttons = document.querySelectorAll('.gender-btn');
+            buttons.forEach(btn => btn.classList.remove('selected'));
+    
+            // Add the 'selected' class to the clicked button
+            const selectedButton = document.querySelector(`#${gender}-btn`);
+            selectedButton.classList.add('selected');
+        }
+    
+        // Initial selection based on the current gender value
+        document.addEventListener('DOMContentLoaded', () => {
+            const selectedGender = document.getElementById('gender').value;
+            selectGender(selectedGender);
         });
     </script>
+    
 @endsection
