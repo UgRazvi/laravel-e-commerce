@@ -1,6 +1,6 @@
 @extends('admin.layouts.app')
+
 @section('dyn-content')
-<main>
     
 <!-- Content Header (Page header) -->
 <section class="content-header">					
@@ -19,11 +19,11 @@
 
 <!-- Main content -->
 <section class="content">
-    <div class="container-fluid">
-        <div class="card">
-            <div class="card-body">					
-                <form action="{{ route('users.store') }}" method="POST">
-                    @csrf
+    <form action="{{ route('users.store') }}" method="POST">
+    @csrf
+        <div class="container-fluid">
+            <div class="card">
+                <div class="card-body">					
                     <div class="row">
                         <!-- User Name -->
                         <div class="col-md-6">
@@ -114,9 +114,22 @@
                                 </i>
                             </div>
                         </div>
+
                         
+                        {{-- User Image --}}
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <input type="hidden" name="image_id" value="" id="image_id">
+                                <label for="image">Image</label>
+                                <div id="image" class="dropzone dz-clickable">
+                                    <div class="dz-message needsclick">
+                                        <br>Drop files here or click to upload.<br><br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <!-- Status -->
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="status">Status</label>
                                 <select name="status" id="status" class="form-control">
@@ -125,26 +138,23 @@
                                 </select>
                             </div>
                         </div>
-
-                        <!-- Submit Button -->
-                        <div class="col-md-12">
-                            <button type="submit" class="btn btn-primary">Save User</button>
-                        </div>
                     </div>
-                </form>
-            </div>							
+                </div>							
+            </div>
+            <!-- Submit Button -->
+            <div class="pb-5 pt-3">
+                <button type="submit" class="btn btn-primary">Create</button>
+                <a href="{{route('users.index')}}" class="btn btn-outline-dark ml-3">Cancel</a>
+            </div>
         </div>
-        <div class="pb-5 pt-3">
-            <button class="btn btn-primary">Create</button>
-            <a href="{{route('users.index')}}" class="btn btn-outline-dark ml-3">Cancel</a>
-        </div>
-    </div>
+    </form>
     <!-- /.card -->
 </section>
 <!-- /.content -->
-
-</main>
 @endsection
+
+
+@section('customJs')
 <script>
     // Wait for the DOM to be fully loaded
     document.addEventListener("DOMContentLoaded", function () {
@@ -186,4 +196,30 @@
             });
         }
     });
+
+    // Dropzone
+        Dropzone.autoDiscover = false;
+        const dropzone = $("#image").dropzone({
+            init: function() {
+                this.on('addedfile', function(file) {
+                    if (this.files.length > 1) {
+                        this.removeFile(this.files[0]);
+                    }
+                });
+            },
+            url: "{{ route('temp-images.create') }}",
+            maxFiles: 1,
+            paramName: 'image',
+            addRemoveLinks: true,
+            acceptedFiles: "image/jpeg,image/png,image/gif",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(file, response) {
+                $("#image_id").val(response.image_id);
+                console.log(response)
+            }
+        });
 </script>
+
+@endsection

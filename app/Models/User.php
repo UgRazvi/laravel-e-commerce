@@ -37,6 +37,7 @@ class User extends Authenticatable
         'gender',
         'role',
         'status',
+        'image',
     ];
 
     /**

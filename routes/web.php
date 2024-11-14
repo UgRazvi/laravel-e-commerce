@@ -24,6 +24,7 @@ use App\Http\Controllers\admin\DiscountCodeController;
 use App\Http\Controllers\admin\ProductImageController;
 use App\Http\Controllers\admin\CustomerAddressController;
 use App\Http\Controllers\admin\OrderController;
+use App\Http\Controllers\admin\PageController;
 use App\Http\Controllers\admin\ProductCategoryController;
 use App\Http\Controllers\admin\ProductSubCategoryController;
 use App\Http\Controllers\CashfreePaymentController;
@@ -77,6 +78,7 @@ Route::get('pay-u-cancel', [PayUMoneyController::class, 'payUCancel'])->name('pa
 
 Route::get('/wishlist', [AuthController::class, 'wishlist'])->name('front.wishlist');
 Route::post('/add-to-wishlist', [FrontController::class, 'addToWishList'])->name('front.addToWishList');
+Route::get('/page/{slug}', [FrontController::class, 'page'])->name('front.page');
 
 
 
@@ -160,6 +162,8 @@ Route::group(['prefix' => 'admin'], function () {
 
         // Users LISTING
         Route::resource('/users', UserController::class);
+        // Statis Pages
+        Route::resource('/pages', PageController::class);
 
         Route::post('/product-images/update', [ProductImageController::class, 'update'])->name('product-images.update');
         Route::delete('/product-images/', [ProductImageController::class, 'destroy'])->name('product-images.destroy');

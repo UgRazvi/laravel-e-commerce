@@ -46,8 +46,14 @@
                         <li> <a href="{{route('account.deleteAccount')}}" class="text-primary">Delete Account</a> </li>
                         <hr>
                         <li class="pb-3 pt-2"> <span class="text-muted">LEGAL</span> </li>
-                        <li> <a href="{{route('account.terms')}}" class="text-primary">Terms Of Use</a> </li>
-                        <li> <a href="{{route('account.policy')}}" class="text-primary">Privacy Policy</a> </li>
+
+                        @if (staticPages()->isNotEmpty())
+                            @foreach (staticPages() as $page)
+                            <li> <a href="{{ route('front.page', $page->slug )}}" title="{{ $page->name  }}" class="text-primary">{{ $page->name  }}</a> </li>
+                            @endforeach
+                        @endif
+                        {{-- <li> <a href="{{route('account.terms')}}" class="text-primary">Terms Of Use</a> </li> --}}
+                        {{-- <li> <a href="{{route('account.policy')}}" class="text-primary">Privacy Policy</a> </li> --}}
 
                     </ul>
                 </div>

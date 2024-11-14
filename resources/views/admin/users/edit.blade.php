@@ -1,6 +1,5 @@
 @extends('admin.layouts.app')
 @section('dyn-content')
-<main>
     
 <!-- Content Header (Page header) -->
 <section class="content-header">					
@@ -19,13 +18,15 @@
 
 <!-- Main content -->
 <section class="content">
-    <div class="container-fluid">
-        <div class="card">
-            <div class="card-body">					
-                <form action="{{ route('users.update', $user->id) }}" method="POST">
-                    @csrf
-                    @method('PUT') <!-- Specify that this is a PUT request for editing -->
+    <form action="{{ route('users.update', $user->id) }}" method="POST">
+        @csrf
+        @method('PUT')
+        <!-- Specify that this is a PUT request for editing -->
+        <div class="container-fluid pb-3    ">
+            <div class="card">
+                <div class="card-body">					
                     <div class="row">
+                        
                         <!-- User Name -->
                         <div class="col-md-6">
                             <div class="mb-3">
@@ -54,7 +55,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="birthday">Birthday</label>
-                                <input type="date" name="birthday" id="birthday" class="form-control" value="{{ old('birthday', \Carbon\Carbon::parse($user->birthday)->format('F j, Y')) }}">
+                                <input type="date" name="birthday" id="birthday" class="form-control" value="{{ old('birthday', \Carbon\Carbon::parse($user->birthday)->format('Y-m-d')) }}">
                             </div>
                         </div>
                         
@@ -63,8 +64,8 @@
                             <div class="mb-3">
                                 <label for="gender">Gender</label>
                                 <select name="gender" id="gender" class="form-control">
-                                    <option value="Male" {{ old('gender', $user->gender) == 'Male' ? 'selected' : '' }}>Male</option>
-                                    <option value="Female" {{ old('gender', $user->gender) == 'Female' ? 'selected' : '' }}>Female</option>
+                                    <option value="Male" {{ old('gender', $user->gender) == 'male' ? 'selected' : '' }}>Male</option>
+                                    <option value="Female" {{ old('gender', $user->gender) == 'female' ? 'selected' : '' }}>Female</option>
                                 </select>
                             </div>
                         </div>
@@ -115,9 +116,28 @@
                                 </i>
                             </div>
                         </div>
-                        
+
+                        {{-- User Image --}}
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <input type="hidden" name="image_id" value="" id="image_id">
+                                <label for="image">Image</label>
+                                <div id="image" class="dropzone dz-clickable">
+                                    <div class="dz-message needsclick">
+                                        <br>Drop files here or click to upload.<br><br>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- @dd($user); --}}
+                            @if (!empty($user->image))
+                                <div class="show-img-if-present">
+                                    <img src="{{ asset('uploads/Users/' . $user->id . '.jpeg') }}" alt="Your Image">
+                                </div>
+                            @endif
+                        </div>
+
                         <!-- Status -->
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="status">Status</label>
                                 <select name="status" id="status" class="form-control">
@@ -127,21 +147,24 @@
                             </div>
                         </div>
 
-                        <!-- Submit Button -->
-                        <div class="col-md-12">
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                        </div>
                     </div>
-                </form>
-            </div>							
+                </div>	
+                						
+            </div>
+            <!-- /.card -->
+
+            <!-- Submit Button -->
+            <div class="col-md-6">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
         </div>
-    </div>
-    <!-- /.card -->
+        <!-- /.container-fluid -->
+    </form>
 </section>
 <!-- /.content -->
 
-</main>
 @endsection
+@section('customJs')
 
 <script>
     // Wait for the DOM to be fully loaded
@@ -184,4 +207,30 @@
             });
         }
     });
+
+      
+    // Dropzone
+    Dropzone.autoDiscover = false;
+        const dropzone = $("#image").dropzone({
+            init: function() {
+                this.on('addedfile', function(file) {
+                    if (this.files.length > 1) {
+                        this.removeFile(this.files[0]);
+                    }
+                });
+            },
+            url: "{{ route('temp-images.create') }}",
+            maxFiles: 1,
+            paramName: 'image',
+            addRemoveLinks: true,
+            acceptedFiles: "image/jpeg,image/png,image/gif",
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            success: function(file, response) {
+                $("#image_id").val(response.image_id);
+                console.log(response)
+            }
+});
 </script>
+@endsection

@@ -10,6 +10,7 @@ use App\Mail\OrderEmail;
 use App\Models\Category;
 use App\Models\SubCategory;
 use App\Models\CustomerAddress;
+use App\Models\Page;
 use App\Models\ProductImages;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -102,4 +103,49 @@ function orderEmail($orderId, $userType)
         Log::info("Error: Unable to send email. Order not found or email missing.");
         // dd($order);
     }
+
+   
 }
+function staticPages(){
+    $page = Page::orderBy("name", "ASC")->get();
+    return $page;
+}
+
+if (!function_exists('getUserImage')) {
+    function getUserImage($userId)
+    {
+        $extensions = ['jpg', 'jpeg', 'png', 'gif'];  // List of possible image extensions
+
+        // Check for each possible extension
+        foreach ($extensions as $ext) {
+            $imagePath = public_path('uploads/Users/' . $userId . '.' . $ext);
+            if (file_exists($imagePath)) {
+                return asset('uploads/Users/' . $userId . '.' . $ext);
+            }
+        }
+
+        // Return a default image if no image is found
+        return asset('uploads/Users/default.jpg');
+    }
+}
+
+if (!function_exists('getAdminImage')) {
+    function getAdminImage($userId)
+    {
+        // List of possible image extensions
+        $extensions = ['jpg', 'jpeg', 'png', 'gif']; 
+
+        // Loop through each possible extension
+        foreach ($extensions as $ext) {
+            $imagePath = public_path('uploads/Users/' . $userId . '.' . $ext);
+            if (file_exists($imagePath)) {
+                return asset('uploads/Users/' . $userId . '.' . $ext);
+            }
+        }
+
+        // Return a default image if no image is found
+        return asset('admin-assets/img/avatar5.png');
+    }
+}
+
+

@@ -43,31 +43,39 @@
                     <table class="table table-hover text-nowrap">
                         <thead>
                             <tr>
-                                <th width="60">ID</th>
+                                <th>ID</th>
+                                <th class="d-none">IMAGE</th>
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Mobile No</th>
                                 <th>Gender</th>
                                 <th>Role</th>
                                 <th>Birth Day</th>
-                                <th width="100">Status</th>
-                                <th width="100">Actions</th>
+                                <th>Status</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @if (!empty($users))
                             @foreach ($users as $user)
                             {{-- @dd($user); --}}
-                            <tr>
+                            <tr class="text-center">
                                 <td>
                                     {{$user->id}}
+                                </td>
+                                <td class="d-none">
+                                    @if (!empty($user->image))
+                                        <img src="{{ asset('uploads/Users/' . $user->id . '.jpeg') }}" class="img-thumbnail" width="50" alt="User Image">
+                                    @else
+                                        <img src="{{ asset('admin-assets/img/avatar5.png') }}" class="img-thumbnail" width="50" alt="Dummy Image">
+                                    @endif
                                 </td>
                                 <td>{{$user->name}}</td>
                                 <td>{{$user->email}}</td>
                                 <td>{{$user->mobile_no}}</td>
                                 <td>{{$user->gender}}</td>
                                 <td>{{ ($user->role == 2) ? 'Admin' : 'User' }}</td>
-                                <td>{{ \Carbon\Carbon::parse($user->birthday)->format('F j, Y') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($user->birthday)->format('M j, y') }}</td>
 
                                 <td>
                                     @if ($user->status == 1)

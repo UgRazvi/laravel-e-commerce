@@ -59,8 +59,8 @@
                                         <img src="{{ asset('uploads/category/' . $category->image) }}" alt="Your Image">
                                     </div>
                                 @endif
-
                             </div>
+
                             <div class="col-md-6">
                                 <div class="mb-3">
                                     <label for="status">Status</label>

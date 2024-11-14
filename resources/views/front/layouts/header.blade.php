@@ -1,6 +1,6 @@
   <header class="bg-white">
         <div class="container">
-            <nav class="navbar navbar-expand-xl navbar-light bg-white" id="navbar">
+            <nav class="navbar navbar-expand-lg navbar-light bg-white" id="navbar">
 
                 <!-- Brand Logo -->
                 <a href="{{route('front.home')}}" class="navbar-brand">

@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="{{ asset('admin-assets/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-assets/css/custom.css ') }} ">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.7/dist/sweetalert2.min.css" rel="stylesheet">
 
 </head>
 
@@ -47,15 +49,26 @@
                     </a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link p-0 pr-3" data-toggle="dropdown" href="#">
+                    {{-- <a class="nav-link p-0 pr-3" data-toggle="dropdown" href="#">
                         <img src="{{ asset('admin-assets/img/avatar5.png') }}" class='img-circle elevation-2'
                             width="40" height="40" alt="Admin-Image">
+                    </a> --}}
+
+                    {{-- @dd(Auth::guard('admin')->user()->image); --}}
+                    <a class="nav-link p-0 pr-3" data-toggle="dropdown" href="#1">
+                        <!-- Display the user's profile image or default image -->
+                        {{-- <img src="{{ Auth::guard('admin')->user()->image ? asset('uploads/Users/' . Auth::guard('admin')->user()->id . '.jpg') : asset('admin-assets/img/avatar5.png') }}" 
+                             class="img-circle elevation-2"
+                             width="40" height="40" alt="{{ Auth::guard('admin')->user()->name }}"> --}}
+                             <img src="{{ getAdminImage(Auth::guard('admin')->user()->id) }}" class="img-circle elevation-2" width="40" height="40" alt="{{ Auth::guard('admin')->user()->name }}">
+
                     </a>
+
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-3">
                         <h4 class="h4 mb-0"><strong>{{ Auth::guard('admin')->user()->name }}</strong></h4>
                         <div class="mb-3">{{ Auth::guard('admin')->user()->email }}</div>
                         <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">
+                        <a href="{{ route('users.show', Auth::guard('admin')->user()->id) }}" class="dropdown-item">
                             <i class="fas fa-user-cog mr-2"></i> Settings
                         </a>
                         <div class="dropdown-divider"></div>
@@ -113,6 +126,8 @@
     
     <script src="{{ asset('admin-assets/plugins/dropzone/dropzone.js') }}"></script>
     <script src="{{ asset('admin-assets/js/demo.js') }}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.7/dist/sweetalert2.min.js"></script>
 
     <script type="text/javascript">
         $.ajaxSetup({
