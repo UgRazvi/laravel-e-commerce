@@ -58,6 +58,8 @@ class PaymentWebhookController extends Controller
 
         $hashString = $merchantSalt . '|' . $data['status'] . '||||||' . $udf5 . '|' . $udf4 . '|' . $udf3 . '|' . $udf2 . '|' . $udf1 . '|' . $data['email'] . '|' . $data['firstname'] . '|' . $data['productinfo'] . '|' . $data['amount'] . '|' . $data['txnid'] . '|' . $data['key'];
 
+        // $hashString = "$key|$txnid|$amount|$productinfo|$firstname|$email|$udf1|$udf2|$udf3|$udf4|$udf5||||||$salt";
+
 
         $generatedHash = strtolower(hash('sha512', $hashString));
 

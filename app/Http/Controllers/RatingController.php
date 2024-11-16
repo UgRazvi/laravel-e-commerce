@@ -11,25 +11,47 @@ class RatingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
-    {
-        // Start the query
-        $ratings = ProductRating::with('product')->get(); // Eager load the 'product' relationship
+    // public function index(Request $request)
+    // {
+    //     // Start the query
+    //     $ratings = ProductRating::with('product')->get(); // Eager load the 'product' relationship
         
-        // Check if there is a keyword search
-        if ($keyword = $request->get("keyword")) {
-            $ratings = $ratings->where(function ($query) use ($keyword) {
-                // Existing search criteria for product_ratings table
-                $query->where("product_ratings.username", "like", "%{$keyword}%")
-                    ->orWhere("product_ratings.email", "like", "%{$keyword}%")
-                    ->orWhere("product_ratings.status", "like", "%{$keyword}%")
-                    ->orWhere("product_ratings.rating", "like", "%{$keyword}%")
-                    ->orWhere("product_ratings.comment", "like", "%{$keyword}%");
-            });
-        }
+    //     // Check if there is a keyword search
+    //     if ($keyword = $request->get("keyword")) {
+    //         $ratings = $ratings->where(function ($query) use ($keyword) {
+    //             // Existing search criteria for product_ratings table
+    //             $query->where("product_ratings.username", "like", "%{$keyword}%")
+    //                 ->orWhere("product_ratings.email", "like", "%{$keyword}%")
+    //                 ->orWhere("product_ratings.status", "like", "%{$keyword}%")
+    //                 ->orWhere("product_ratings.rating", "like", "%{$keyword}%")
+    //                 ->orWhere("product_ratings.comment", "like", "%{$keyword}%");
+    //         });
+    //     }
     
-        return view("admin.Rating.list", compact("ratings"));
+    //     return view("admin.Rating.list", compact("ratings"));
+    // }
+    public function index(Request $request)
+{
+    // Start the query, eager load the product relationship
+    $ratings = ProductRating::with('product')->get(); // Eager load the 'product' relationship
+// dd($ratings);
+    // Apply search filters if there's a keyword
+    if ($keyword = $request->get("keyword")) {
+        $ratings = $ratings->where(function ($query) use ($keyword) {
+            $query->where("product_ratings.username", "like", "%{$keyword}%")
+                ->orWhere("product_ratings.email", "like", "%{$keyword}%")
+                ->orWhere("product_ratings.status", "like", "%{$keyword}%")
+                ->orWhere("product_ratings.rating", "like", "%{$keyword}%")
+                ->orWhere("product_ratings.comment", "like", "%{$keyword}%");
+        });
     }
+
+    // Get the results (you can use paginate instead of get if you want pagination)
+    // $ratings = $ratings->get();  // or ->paginate(10); for pagination
+
+    return view("admin.Rating.list", compact("ratings"));
+}
+
     
 
     /**

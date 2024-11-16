@@ -85,7 +85,7 @@ class PayUService
             return redirect()->route('front.cart')
             ->with('error', 'Please select a default address before proceeding.');
         }
-        // Ensure amount is string format for hash calculation
+        // Ensure amount is in string format for hash calculation
         $data = [
             'key' => $merchantKey,
             'txnid' => $transactionId,

@@ -62,12 +62,15 @@ Route::any('cashfree/payments/success', [CashfreePaymentController::class, 'succ
 
 Route::get('/payment', [CartController::class, 'payment'])->name('front.payment');
 
+
+
 Route::post('/payu/pay', [PaymentController::class, 'pay'])->name('payment.process');
 
 Route::any('/payment/success', [PaymentController::class, 'success'])->name('front.payment.success');
 Route::any('/payment/fail', [PaymentController::class, 'fail'])->name('front.payment.fail');
 
 Route::get('/thank/{txnId}/', [CartController::class, 'thank'])->name('front.thank');
+
 
 
 Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])->name('front.forgotPassword');

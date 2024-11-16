@@ -21,7 +21,7 @@
                         <tr class="text-center">
                             {{-- <th>Image</th> --}}
                             <th>ID</th>
-                            <th>Product ID</th>
+                            <th>Product</th>
                             <th>User Name</th>
                             <th>E-mail</th>
                             <th>Commment</th>
@@ -32,14 +32,14 @@
                     </thead>
                     <tbody>
 
-                        @dd($ratings->product->title)
-
+                        
                         @if (!empty($ratings))
                         @foreach ($ratings as $rating)
                         <tr class="text-center">
                             
+                            {{-- @dd($rating->product->title) --}}
                             <td>{{ $rating->id ?? 'Rating ID' }}</td>
-                            <td>{{ $rating->product_id ?? 'Product ID' }}</td>
+                            <td>{{ $rating->product->title ?? 'Product Name' }}</td>
                             <td>{{ $rating->username ?? 'Username' }}</td>
                             <td>{{ $rating->email ?? 'Email' }}</td>
                             <td>{{ $rating->comment ?? 'Comment' }}</td>
