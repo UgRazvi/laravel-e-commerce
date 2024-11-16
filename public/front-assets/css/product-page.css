@@ -1,0 +1,414 @@
+/* Usman Added Style Starts */
+
+.rating {
+    direction: rtl;
+    unicode-bidi: bidi-override;
+    color: #ddd;
+    /* Personal choice */
+    font-size: 8px;
+    margin-left: -15px;
+}
+
+.rating input {
+    display: none;
+}
+
+.rating label:hover,
+.rating label:hover~label,
+.rating input:checked+label,
+.rating input:checked+label~label {
+    color: #ffc107;
+    /* Personal color choice. Lifted from Bootstrap 4 */
+    font-size: 8px;
+}
+
+
+.front-stars,
+.back-stars,
+.star-rating {
+    display: flex;
+}
+
+.star-rating {
+    align-items: left;
+    font-size: 1.5em;
+    justify-content: left;
+    margin-left: -5px;
+}
+
+.back-stars {
+    color: #CCC;
+    position: relative;
+}
+
+.front-stars {
+    color: #FFBC0B;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    transition: all 0.5s;
+}
+
+
+.percent {
+    color: #bb5252;
+    font-size: 1.5em;
+}
+
+/* Usman Added Style Ends */
+
+/* Custom styles to match Myntra's design */
+.product-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.product-subtitle {
+    font-size: 16px;
+    color: #555;
+}
+
+.pricing-section h4 {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.pricing-section .text-decoration-line-through {
+    font-size: 16px;
+}
+
+.size-selection .btn-group {
+    display: flex;
+    gap: 10px;
+}
+
+.size-selection h6 {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* Custom styles for circular size chart */
+.size-circle {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 5px;
+    font-weight: bold;
+    font-size: 18px;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+/* Hover effect for size circles */
+.size-circle:hover {
+    border-color: #ff5722;
+}
+
+.btn-check {
+    display: none;
+}
+
+/* Active size selection */
+.btn-check:checked+.size-circle {
+    border-color: #007bff;
+    background-color: #f0f0f0;
+    color: #007bff;
+}
+
+.btn-outline-secondary {
+    border-radius: 20px;
+    padding: 5px 15px;
+}
+
+.action-buttons {
+    display: flex;
+    /* Align buttons in a row */
+}
+
+.btn-add-to-bag {
+    background-color: #ff527b;
+    /* Pink background */
+    color: white;
+    /* White font color */
+    text-align: left;
+    /* Align text to the left */
+    padding: 15px;
+    /* Add some padding */
+    border-radius: 0;
+    /* No rounded corners */
+    flex: 1;
+    /* Make the button take equal space */
+}
+
+.btn-wishlist {
+    border: 1px solid #ccc;
+    /* Light black border */
+    background-color: transparent;
+    /* No background */
+    color: #333;
+    /* Default text color for outline button */
+    flex: 1;
+    /* Make the button take equal space */
+}
+
+/* Hover effect for the Add to Bag button */
+.btn-add-to-bag:hover {
+    background-color: #ff8fa3;
+    /* Lighter pink on hover */
+    color: white;
+    /* White font color on hover */
+}
+
+/* Hover effect for the Wishlist button */
+.btn-wishlist:hover {
+    border: 1px solid darkblack;
+    /* Dark black border on hover */
+    background-color: transparent;
+    /* Keep background transparent */
+    color: #333;
+    /* Default text color remains */
+}
+
+/* Additional styles */
+.btn-content {
+    display: flex;
+    flex-direction: column;
+    /* Stack text vertically */
+}
+
+.big-text {
+    font-size: 20px;
+    /* Big font size */
+    font-weight: bold;
+    /* Bold text */
+}
+
+.small-text {
+    font-size: 14px;
+    /* Smaller font size */
+    margin-top: 5px;
+    /* Space between lines */
+}
+
+.carousel-inner img {
+    border-radius: 8px;
+}
+
+.ratings h2 {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.rating-breakdown .progress {
+    height: 8px;
+    border-radius: 5px;
+}
+
+.customer-photos img {
+    border-radius: 8px;
+}
+
+/* Custom styling for the rating box */
+.rating-box {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #ffffff;
+    margin-bottom: 10px;
+}
+
+.rating-box .star-rating {
+    color: #ffc107;
+    /* Yellow for star icons */
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.rating-box .rating-value {
+    font-weight: bold;
+    margin-right: 5px;
+    font-size: 18px;
+}
+
+.rating-box .total-ratings {
+    font-size: 14px;
+    color: #555;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+
+    /* Adjust layout on tablets and smaller screens */
+    .product-title {
+        font-size: 20px;
+    }
+
+    .product-subtitle {
+        font-size: 14px;
+    }
+
+    .pricing-section h4 {
+        font-size: 20px;
+    }
+
+    .size-circle {
+        width: 45px;
+        height: 45px;
+        line-height: 45px;
+    }
+
+    .ratings h2 {
+        font-size: 24px;
+    }
+
+    .rating-breakdown .progress {
+        height: 6px;
+    }
+
+    .customer-photos img {
+        width: 80px;
+    }
+
+    .rating-box {
+        padding: 5px 10px;
+    }
+
+    .rating-box .rating-value {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 576px) {
+
+    /* Adjust layout on mobile screens */
+    .product-title {
+        font-size: 18px;
+    }
+
+    .product-subtitle {
+        font-size: 12px;
+    }
+
+    .pricing-section h4 {
+        font-size: 18px;
+    }
+
+    .carousel-inner img {
+        border-radius: 5px;
+    }
+
+    .size-circle {
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+    }
+
+    .size-selection h6 {
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .action-buttons a {
+        font-size: 14px;
+    }
+
+    .ratings h2 {
+        font-size: 22px;
+    }
+
+    .customer-photos img {
+        width: 70px;
+    }
+
+    .rating-box {
+        padding: 5px;
+    }
+
+    .rating-box .rating-value {
+        font-size: 14px;
+    }
+
+    .d-flex {
+        display: flex;
+    }
+
+    .justify-content-between {
+        justify-content: space-between;
+    }
+
+    .align-items-center {
+        align-items: center;
+    }
+
+    /* Optional styling for spacing */
+    h6 {
+        margin-bottom: 0;
+        /* Remove bottom margin for alignment */
+    }
+
+    /* Action Buttons */
+
+    .action-buttons {
+        display: flex;
+        /* Use flexbox to align buttons in a row */
+    }
+
+    .btn-add-to-bag {
+        background-color: #ff4081;
+        /* Pink background */
+        color: white;
+        /* White font color */
+        text-align: left;
+        /* Align text to the left */
+        padding: 15px;
+        /* Add some padding */
+        border-radius: 5px;
+        /* Optional: round corners */
+        flex: 1;
+        /* Make the button take equal space */
+    }
+
+    .btns-outline-secondary {
+        border: 1px solid #ccc;
+        /* Light black border */
+        background-color: transparent;
+        /* No background */
+        color: #333;
+        /* Default text color for outline button */
+        flex: 1;
+        /* Make the button take equal space */
+    }
+
+    /* Optional: hover effect for wishlist button */
+    .btns-outline-secondary:hover {
+        background-color: rgba(0, 0, 0, 0.1);
+        /* Light background on hover */
+    }
+
+    .btn-content {
+        display: flex;
+        flex-direction: column;
+        /* Stack text vertically */
+    }
+
+    .big-text {
+        font-size: 20px;
+        /* Big font size */
+        font-weight: bold;
+        /* Bold text */
+    }
+
+    .small-text {
+        font-size: 14px;
+        /* Smaller font size */
+        margin-top: 5px;
+        /* Space between lines */
+    }
+}

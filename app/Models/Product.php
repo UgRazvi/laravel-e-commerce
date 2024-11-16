@@ -14,6 +14,10 @@ class Product extends Model
     {
         return $this->hasMany(ProductImages::class);
     }
+    public function product_ratings()
+    {
+        return $this->hasMany(ProductRating::class)->whereStatus(1);
+    }
 
     public function subcategories()
     {

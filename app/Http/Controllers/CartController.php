@@ -325,8 +325,11 @@ public function cashFreeNotification(Request $request)
 
     public function checkout()
     {
+
+        // dd("Test 1");
         $user = Auth::user();
         $discount = 0;
+        // dd($user);
 
         // Check if the cart is empty
         if (Cart::count() == 0) {
@@ -349,7 +352,7 @@ public function cashFreeNotification(Request $request)
 
         // Fetch user's saved address
         $customerAddress = CustomerAddress::where('user_id', $user->id)->first();
-
+// dd($customerAddress);
         // Subtotal before discount
         $grandTotal = $subTotal = Cart::subtotal(2, '.', '');
 

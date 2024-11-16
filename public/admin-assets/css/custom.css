@@ -35,3 +35,24 @@
     margin-top: 5px;
     padding: 0 5px;
 }
+
+
+/* Sidebar hover effects */
+.nav-sidebar .nav-item .nav-link {
+    padding: 12px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.nav-sidebar .nav-item:hover .nav-link {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.nav-sidebar .nav-item .nav-link i {
+    transition: transform 0.3s ease;
+}
+
+.nav-sidebar .nav-item:hover .nav-link i {
+    transform: scale(1.1);
+}

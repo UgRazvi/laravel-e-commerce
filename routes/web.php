@@ -31,11 +31,15 @@ use App\Http\Controllers\CashfreePaymentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PayUMoneyController;
 use App\Http\Controllers\PaymentWebhookController;
+use App\Http\Controllers\RatingController;
 use App\Http\Controllers\UserController;
 
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
+
+// Route::view('/hello-chart', 'adminLTE/hello-chart');
 
 // Route For - Home Page
 Route::get('/', [FrontController::class, 'index'])->name('front.home');
@@ -66,6 +70,11 @@ Route::any('/payment/fail', [PaymentController::class, 'fail'])->name('front.pay
 Route::get('/thank/{txnId}/', [CartController::class, 'thank'])->name('front.thank');
 
 
+Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])->name('front.forgotPassword');
+Route::post('/process-forgot-password', [AuthController::class, 'processForgotPassword'])->name('front.processForgotPassword');
+Route::get('/reset-password/{token}', [AuthController::class, 'resetPassword'])->name('front.resetPassword');
+Route::post('/process-reset-password', [AuthController::class, 'processResetPassword'])->name('front.processResetPassword');
+Route::post('/save-ratings/{productId}', [ShopController::class, 'saveRatings'])->name('front.saveRatings');
 
 
 // For Testing Purposes Only
@@ -82,7 +91,7 @@ Route::get('/page/{slug}', [FrontController::class, 'page'])->name('front.page')
 
 
 
-Route::get('/checkout', [CartController::class, 'checkout'])->name('front.checkout');
+Route::any('/checkout', [CartController::class, 'checkout'])->name('front.checkout');
 // Route::get('/clone-mens-prod', [MensProdController::class, 'index'])->name('front.prods.mensprod'); // Clone
 Route::get('/shop/{categorySlug?}/{subCategorySlug?}', [ShopController::class, 'index'])->name('front.shop');
 Route::get('/product/{slug}', [ShopController::class, 'product'])->name('front.product');
@@ -116,7 +125,7 @@ Route::group(['prefix' => 'account'], function () {
         Route::post('/process-payment', [CartController::class, 'processPayment'])->name('front.processPayment');
 
 
-    
+
         Route::put('/address/{id}', [CustomerAddressController::class, 'update'])->name('address.update');
         Route::delete('/address/{id}', [CustomerAddressController::class, 'destroy'])->name('address.destroy');
 
@@ -164,9 +173,13 @@ Route::group(['prefix' => 'admin'], function () {
         Route::resource('/users', UserController::class);
         // Statis Pages
         Route::resource('/pages', PageController::class);
+        // Rating List
+        Route::resource('/rating', RatingController::class);
+        Route::post('/rating/{ratingId}/update-status', [RatingController::class, 'updateStatus'])->name('rating.updateStatus');
+
 
         Route::post('/product-images/update', [ProductImageController::class, 'update'])->name('product-images.update');
-        Route::delete('/product-images/', [ProductImageController::class, 'destroy'])->name('product-images.destroy');
+        Route::delete('/product-images', [ProductImageController::class, 'destroy'])->name('product-images.destroy');
 
         Route::get('/dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
         Route::get('/logout', [HomeController::class, 'logout'])->name('admin.logout');

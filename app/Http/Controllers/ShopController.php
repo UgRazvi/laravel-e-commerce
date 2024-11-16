@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\ProductRating;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ShopController extends Controller
 {
@@ -49,7 +51,7 @@ class ShopController extends Controller
         }
 
         if ($request->get('search') != '') {
-            $products = $products->where('title', 'like', '%'.$request->get('search').'%');
+            $products = $products->where('title', 'like', '%' . $request->get('search') . '%');
         }
 
 
@@ -87,9 +89,15 @@ class ShopController extends Controller
      */
     public function product($slug)
     {
-        // echo $slug;
-        $product = Product::where("slug", $slug)->with('product_images')->first();
-        // dd($product);
+        $product = Product::where('slug', $slug)
+            ->withCount('product_ratings') // to get the count of related product_ratings
+            ->withSum('product_ratings', 'rating') // Assuming 'rating' is the column you want to sum in product_ratings
+            ->withAvg('product_ratings', 'rating') // Assuming 'rating' is the column you want to avg in product_ratings
+            ->with('product_images', 'product_ratings') // eager load product images
+            ->first();
+
+        // dd($product); // Use dd() to debug if needed
+
         if ($product == null) {
             abort(404);
         }
@@ -103,48 +111,45 @@ class ShopController extends Controller
 
         return view('front.product', compact('product', 'relatedProducts'));
     }
-    public function create()
+
+    public function saveRatings($id, Request $request)
     {
-        //
+        // dd($id, $request->all());
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:4',
+            'email' => 'required|email',
+            'comment' => 'required|min:10',
+            'rating' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'false',
+                'errors' => $validator->errors()  // Use 'errors' (plural)
+            ]);
+        }
+
+        $count = ProductRating::where('email', $request->email)->count();
+        if($count > 0){
+        session()->flash("error","This Email <strong>( $request->email )</strong> is already used to rate this product.");
+            return response()->json([
+                'status' => 'true',
+            ]);
+        }
+        $productRating = new ProductRating();
+        $productRating->product_id = $id;
+        $productRating->username = $request->name;
+        $productRating->email = $request->email;
+        $productRating->comment = $request->comment;
+        $productRating->rating = $request->rating;
+        $productRating->status = 0;
+        $productRating->save();
+
+        session()->flash("success","Rating saved successfully");
+        return response()->json([
+            'status' => true,
+            'message' => 'Rating saved successfully'
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

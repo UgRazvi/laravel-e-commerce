@@ -109,102 +109,37 @@
                     <img src="{{ asset('front-assets/images/Login.jpg') }}" class="img-fluid" alt="Login Image" />
                 </div>
 
-                <form class="bg-white p-4 shadow" action="{{ route('account.authenticate') }}" method="post"
-                    name="loginForm" id="loginForm">
+                <form class="bg-white p-4 shadow" action="{{ route('front.processForgotPassword') }}" method="post"
+                    name="processForgotPasswordForm" id="processForgotPasswordForm">
                     @csrf
                     <div class="mt-4">
-                        <h4>Login <span> or </span> Signup</h4>
+                        <h4>FORGOT PASSWORD</h4>
                     </div>
 
-                    <!-- Mobile Number Input -->
+                    <!-- E - MAIL -->
                     <div class="mt-4">
-
                         <div class="input-group" style="border: 1px solid grey;">
-                            <span class="input-group-text bg-white border-0">+91 | </span>
-                            <input type="text" class="form-control @error('mobile_no') is-invalid @enderror border-0"
-                                id="mobile_no" name="mobile_no" placeholder="Enter Number" pattern="[1-9]{1}[0-9]{9}"
-                                title="Enter Correct Number" value="{{ old('mobile_no') }}">
+                            <input type="email" class="form-control @error('email') is-invalid @enderror border-0" id="email" name="email" placeholder="Enter E-Mail" title="Enter Correct E-Mail">
                         </div>
-                        @error('mobile_no')
-                            <p class="text-danger">{{ $message }}</p> <!-- Validation error for mobile number -->
+                        @error('email')
+                            <p class="text-danger">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    <!-- Password Input -->
-                    <div class="mt-4">
-
-                        <div class="input-group" style="border: 1px solid grey;">
-                            <input type="password" class="form-control border-0 @error('password') is-invalid @enderror"
-                                id="password" name="password" placeholder="Password" title="Password"
-                                value="{{ old('password') }}">
-                        </div>
-                        @error('password')
-                            <p class="text-danger">{{ $message }}</p> <!-- Validation error for password -->
-                        @enderror
-                    </div>
-
-                    <p class="text-muted mt-4" style="font-size: 10px;">
-                        By continuing, I agree to the <a href="#"
-                            class="text-decoration-none fw-bold text-danger">Terms of Use</a> &
-                        <a href="#" class="text-decoration-none fw-bold text-danger">Privacy Policy</a>
-                    </p>
-
+                  
                     <div class="d-grid mt-4">
                         <button type="submit" class="btn btn-danger">
-                            <p class="mb-0">CONTINUE</p>
+                            <p class="mb-0">SUBMIT</p>
                         </button>
                     </div>
                     
-                    <a href="{{route('front.forgotPassword')}}" class="text-danger fw-bold">Forgot Password ?</a>
-
-                    <p class="text-muted mt-4 pb-5" style="font-size: 10px;">Have trouble logging in?
-                        <a href="#" class="text-danger fw-bold">Get help</a>
-                    </p>
+                    <div class="d-flex align-items-center justify-content-center pt-5 pb-2">
+                        <a href="{{ route('account.login') }}" class="text-danger fw-bold">Login</a>
+                    </div>
+                    
                 </form>
+            
             </div>
         </div>
     </div>
 </main>
-
-{{-- <script>
-    $("#registrationForm").submit(function(event) {
-        event.preventDefault();
-        console.log('ffffffffff')
-
-        $.ajax({
-            url: "{{ route('account.authenticate') }}",
-            type: "post",
-            data: $(this).serializeArray(),
-            dataType: "json",
-            success: function(response) {
-                var errors = response.errors;
-
-                // Handle validation errors
-                if (response.status === false) {
-                    
-                    if (errors.mobile_no) {
-                        $("#mobile_no").addClass("is-invalid").next('.invalid-feedback').html(errors
-                            .mobile_no);
-                    } else {
-                        $("#mobile_no").removeClass("is-invalid").next('.invalid-feedback').html(
-                            "");
-                    }
-                    if (errors.password) {
-                        $("#password").addClass("is-invalid").next('.invalid-feedback').html(errors
-                            .password);
-                    } else {
-                        $("#password").removeClass("is-invalid").next('.invalid-feedback').html("");
-                    }
-                } else {
-                    // If no errors, clear inputs and redirect to login
-                    $("#mobile_no, #password").removeClass("is-invalid").next(
-                        '.invalid-feedback').html("");
-                    window.location.href = "{{ route('account.profile') }}";
-                }
-            },
-            error: function(jqXHR, exception) {
-                console.log("Something went wrong.");
-            }
-        });
-    });
-</script> --}}

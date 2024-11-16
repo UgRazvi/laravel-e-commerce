@@ -503,11 +503,17 @@
 </div>
 </div>
 
+@include('front.layouts.scripts')
+
 <script>
-    // 01 - Hideing Logic
-    $("#payments").hide();
-    $("#upi-details").hide();
-    $("#cod-details").hide();
+
+    $(document).ready(function() {
+    // Your code that uses $ here
+        // 01 - Hideing Logic
+        $("#payments").hide();
+        $("#upi-details").hide();
+        $("#cod-details").hide();
+    });
 
     // 01 - Show Hide Div's Based on Button Clicks
     $(document).ready(function() {
@@ -765,5 +771,3 @@
         });
     });
 </script>
-
-@include('front.layouts.scripts')
