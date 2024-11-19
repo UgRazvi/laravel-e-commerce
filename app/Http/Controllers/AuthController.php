@@ -290,7 +290,11 @@ class AuthController extends Controller
     public function wishlist()
     {
 
-        $wishlists = Wishlist::where('user_id', Auth::user()->id)->with('product')->get();
+        $user = Auth::User();
+        if($user === null){
+            return redirect()->route('account.login')->with("error", "Please Login First.");
+        }
+        $wishlists = Wishlist::where('user_id', $user->id)->with('product')->get();
         // dd($wishlist);
         return view("front.wishlist", compact('wishlists'));
     }

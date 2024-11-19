@@ -77,7 +77,7 @@
                     <div class="navbar-icons d-flex align-items-center">
 
                         <!-- Wishlist Icon -->
-                        <a href="#wishlist" class="nav-link me-2">
+                        <a href="{{route('front.wishlist')}}" class="nav-link me-2">
                             <i class="fas fa-heart text-primary"></i>
                         </a>
 
