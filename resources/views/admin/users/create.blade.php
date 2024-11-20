@@ -68,13 +68,26 @@
                             </div>
                         </div>
 
-                        <!-- Role -->
-                        <div class="col-md-6">
+                        <!-- Role {Old} -->
+                        {{-- <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="role">Role</label>
                                 <select name="role" id="role" class="form-control">
                                     <option value="2">Admin</option>
                                     <option value="1">User</option>
+                                </select>
+                            </div>
+                        </div> --}}
+                        
+                        <!-- Role {New} -->
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="roles">Roles</label>
+                                <select name="roles[]" id="roles" class="form-control" multiple>
+                                    <option value="">Select Roles</option>
+                                    @foreach ($roles as $role)
+                                    <option value="{{$role}}">{{$role}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>   

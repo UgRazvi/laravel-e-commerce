@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('image')->nullable()->after('password');
+        Schema::table("users", function (Blueprint $table) {
+            // Add role_id column to users table
+            $table->integer("role_id")->after('email')->nullable()->default(null);
         });
     }
 
@@ -22,7 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-        $table->dropColumn('image');
+            // Drop the role_id column
+            $table->dropColumn('role_id');
         });
     }
 };

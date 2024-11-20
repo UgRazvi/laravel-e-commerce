@@ -10,8 +10,8 @@
     <div class="sidebar">
         <!-- Sidebar Menu -->
         <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="true">
+
                 <!-- Dashboard -->
                 <li class="nav-item">
                     <a href="{{ route('admin.dashboard') }}" class="nav-link">
@@ -19,6 +19,29 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
+                
+                {{-- User Roles & Management --}}
+            
+                <li class="nav-item">
+                    <a href="{{ route('roles.index') }}" class="nav-link {{ request()->is('admin/roles*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-user-tag"></i>
+                        <p>Roles</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('permissions.index') }}" class="nav-link {{ request()->is('admin/permissions*') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-lock"></i>
+                        <p>Permissions</p>
+                    </a>
+                </li>
+
+                <!-- Users -->
+                <li class="nav-item">
+                    <a href="{{ route('users.index') }}" class="nav-link">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>Users</p>
+                    </a>
+                </li>   
 
                 <!-- Sections -->
                 <li class="nav-item">
@@ -54,7 +77,7 @@
 
                 <!-- Products -->
                 <li class="nav-item">
-                    <a href="{{route('products.index')}}" class="nav-link">
+                    <a href="{{ route('products.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-tag"></i>
                         <p>Products</p>
                     </a>
@@ -62,7 +85,7 @@
 
                 <!-- Orders -->
                 <li class="nav-item">
-                    <a href="{{route('orders.index')}}" class="nav-link">
+                    <a href="{{ route('orders.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-shopping-bag"></i>
                         <p>Orders</p>
                     </a>
@@ -70,23 +93,15 @@
 
                 <!-- Discounts -->
                 <li class="nav-item">
-                    <a href="{{route('coupon.index')}}" class="nav-link">
+                    <a href="{{ route('coupon.index') }}" class="nav-link">
                         <i class="nav-icon fa fa-percent"></i>
                         <p>Discount</p>
                     </a>
                 </li>
 
-                <!-- Users -->
-                <li class="nav-item">
-                    <a href="{{route('users.index')}}" class="nav-link">
-                        <i class="nav-icon fas fa-users"></i>
-                        <p>Users</p>
-                    </a>
-                </li>
-
                 <!-- Pages -->
                 <li class="nav-item">
-                    <a href="{{route('pages.index')}}" class="nav-link">
+                    <a href="{{ route('pages.index') }}" class="nav-link">
                         <i class="nav-icon far fa-file-alt"></i>
                         <p>Pages</p>
                     </a>
@@ -94,7 +109,7 @@
 
                 {{-- Ratings --}}
                 <li class="nav-item">
-                    <a href="{{route('rating.index')}}" class="nav-link">
+                    <a href="{{ route('rating.index') }}" class="nav-link">
                         <i class="nav-icon fa fa-star"></i>
                         <p>Ratings</p>
                     </a>
@@ -102,7 +117,5 @@
 
             </ul>
         </nav>
-        <!-- /.sidebar-menu -->
     </div>
-    <!-- /.sidebar -->
 </aside>

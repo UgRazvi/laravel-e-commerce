@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="no-js" lang="en_AU" />
+<html class="no-js" lang="en_AU">
 
 @include('front.layouts.head')
 

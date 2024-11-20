@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
     protected $guard = ["id"];
 
@@ -19,8 +21,8 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-   
-     // Allow mass assignment on these fields
+
+    // Allow mass assignment on these fields
     protected $fillable = [
         'name',
         'email',
@@ -62,6 +64,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(CustomerAddress::class, 'user_id');
     }
+    // User.php
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
 
     //mutator and accessor 
 }

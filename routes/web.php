@@ -31,13 +31,14 @@ use App\Http\Controllers\CashfreePaymentController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PayUMoneyController;
 use App\Http\Controllers\PaymentWebhookController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RatingController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-
 
 // Route::view('/hello-chart', 'adminLTE/hello-chart');
 
@@ -51,7 +52,6 @@ Route::get('/test-mail', function () {
 Route::get('/test-logs', function () {
     return nl2br(\Illuminate\Support\Facades\File::get(storage_path('logs/laravel.log')));
 });
-
 
 // Cashfree Payment Gateway Setup
 Route::any('cashfree/payments/create', [CashfreePaymentController::class, 'create'])->name('callback');
@@ -172,6 +172,13 @@ Route::group(['prefix' => 'admin'], function () {
     });
     Route::group(['middleware' => ['admin.auth']], function () {
 
+
+        Route::get('roles/{roleId}/give-permissions', [RoleController::class, 'addPermissionsToRole'])->name('roles.addPermissions');
+        Route::put('roles/{roleId}/update-permissions', [RoleController::class, 'updatePermissionsToRole'])->name('roles.updatePermissionsToRole');
+        // Users Roles % Permissions
+        Route::resource('roles', RoleController::class);
+        Route::resource('permissions', PermissionController::class);
+        
         // Users LISTING
         Route::resource('/users', UserController::class);
         // Statis Pages
