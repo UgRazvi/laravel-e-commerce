@@ -38,6 +38,7 @@ class User extends Authenticatable
         'birthday',
         'gender',
         'role',
+        'roles',
         'status',
         'image',
     ];
@@ -65,10 +66,10 @@ class User extends Authenticatable
         return $this->hasMany(CustomerAddress::class, 'user_id');
     }
     // User.php
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class);
-    }
+    // public function roles()
+    // {
+    //     return $this->belongsToMany(Role::class);
+    // }
 
 
     //mutator and accessor 

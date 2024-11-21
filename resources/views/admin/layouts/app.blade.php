@@ -56,11 +56,7 @@
 
                     {{-- @dd(Auth::guard('admin')->user()->image); --}}
                     <a class="nav-link p-0 pr-3" data-toggle="dropdown" href="#1">
-                        <!-- Display the user's profile image or default image -->
-                        {{-- <img src="{{ Auth::guard('admin')->user()->image ? asset('uploads/Users/' . Auth::guard('admin')->user()->id . '.jpg') : asset('admin-assets/img/avatar5.png') }}" 
-                             class="img-circle elevation-2"
-                             width="40" height="40" alt="{{ Auth::guard('admin')->user()->name }}"> --}}
-                             <img src="{{ getAdminImage(Auth::guard('admin')->user()->id) }}" class="img-circle elevation-2" width="40" height="40" alt="{{ Auth::guard('admin')->user()->name }}">
+                             <img src="{{ getAdminImage(Auth::guard('admin')->user()->id) }}" class="img-circle elevation-2" width="40" height="40" alt="{{ Auth::guard('admin')->user()->name }}" title="{{ Auth::guard('admin')->user()->name }}">
 
                     </a>
 

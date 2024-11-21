@@ -34,6 +34,7 @@ use App\Http\Controllers\PaymentWebhookController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UserController;
 
 // Route::get('/', function () {
@@ -112,6 +113,11 @@ Route::post('/apply-discount', [CartController::class, 'applyDiscount'])->name('
 
 Route::post('/remove-coupon', [CartController::class, 'removeCoupon'])->name('front.removeCoupon');
 
+
+Route::get('/mens-prod', [MensProdController::class, 'index'])->name('front.mensprod');
+Route::view('contactus', 'contactus');
+
+
 Route::group(['prefix' => 'account'], function () {
     Route::group(['middleware' => "guest"], function () {
         Route::any('/register', [AuthController::class, 'register'])->name('account.register');
@@ -162,8 +168,6 @@ Route::group(['prefix' => 'account'], function () {
     });
 });
 
-Route::get('/mens-prod', [MensProdController::class, 'index'])->name('front.mensprod');
-Route::view('contactus', 'contactus');
 
 Route::group(['prefix' => 'admin'], function () {
     Route::group(['middleware' => ['admin.guest']], function () {
@@ -171,112 +175,127 @@ Route::group(['prefix' => 'admin'], function () {
         Route::post('/authenticate', [AdminLoginController::class, 'authenticate'])->name('admin.authenticate');
     });
     Route::group(['middleware' => ['admin.auth']], function () {
-
-
-        Route::get('roles/{roleId}/give-permissions', [RoleController::class, 'addPermissionsToRole'])->name('roles.addPermissions');
-        Route::put('roles/{roleId}/update-permissions', [RoleController::class, 'updatePermissionsToRole'])->name('roles.updatePermissionsToRole');
-        // Users Roles % Permissions
-        Route::resource('roles', RoleController::class);
-        Route::resource('permissions', PermissionController::class);
         
-        // Users LISTING
-        Route::resource('/users', UserController::class);
-        // Statis Pages
-        Route::resource('/pages', PageController::class);
-        // Rating List
-        Route::resource('/rating', RatingController::class);
-        Route::post('/rating/{ratingId}/update-status', [RatingController::class, 'updateStatus'])->name('rating.updateStatus');
+        Route::group(['middleware' => ['role:Super Admin']], function () {
+            Route::get('roles/{roleId}/give-permissions', [RoleController::class, 'addPermissionsToRole'])->name('roles.addPermissions');
+            Route::put('roles/{roleId}/update-permissions', [RoleController::class, 'updatePermissionsToRole'])->name('roles.updatePermissionsToRole');
+            Route::resource('roles', RoleController::class);
+            Route::resource('permissions', PermissionController::class);
+            Route::resource('users', UserController::class); // Super Admin can manage users too
+        });
+
+        Route::group(['middleware' => ['role:Admin']], function () {
+            Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
+            Route::get('permissions', [PermissionController::class, 'index'])->name('permissions.index');
+            Route::resource('users', UserController::class)->only(['index', 'create', 'store', 'edit', 'update']);
+        });
+
+        // Super | Admin | Customer
+        Route::group(['middleware' => ['role:Super Admin|Admin']], function (){
+            // Statis Pages
+            Route::resource('/pages', PageController::class);
+            // Rating List
+            Route::resource('/rating', RatingController::class);
+            Route::post('/rating/{ratingId}/update-status', [RatingController::class, 'updateStatus'])->name('rating.updateStatus');
+
+            Route::get('/settings', [SettingController::class, 'edit'])->name('settings.edit');
+        
+            // Route to update the settings
+            Route::post('/settings', [SettingController::class, 'update'])->name('settings.update');
+
+            
+            Route::post('/product-images/update', [ProductImageController::class, 'update'])->name('product-images.update');
+            Route::delete('/product-images', [ProductImageController::class, 'destroy'])->name('product-images.destroy');
+
+            Route::get('/dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
+            Route::get('/logout', [HomeController::class, 'logout'])->name('admin.logout');
+
+            // Products Routes
+            Route::get('/get-products', [ProductController::class, 'getProducts'])->name('products.getProducts');
+            // To Save Product Images Permanently.
+
+            // Product Controller
+            Route::resource('/products', ProductController::class);
+
+            // Order Controller
+            Route::resource('/orders', OrderController::class);
+            Route::post('/orders/send-email/{id}', [OrderController::class, 'sendInvoiceEmail'])->name('orders.sendInvoiceEmail');
+            Route::post('/orders/update-payment-status/{id}', [OrderController::class, 'updatePaymentStatus'])->name('orders.updatePaymentStatus');
 
 
-        Route::post('/product-images/update', [ProductImageController::class, 'update'])->name('product-images.update');
-        Route::delete('/product-images', [ProductImageController::class, 'destroy'])->name('product-images.destroy');
+            // Coupons Route.
+            Route::resource('/coupon', DiscountCodeController::class);
 
+            // Products Sub Category Routes
+            Route::resource('/product-subcategories', ProductSubCategoryController::class);
+            Route::resource('/product-categories', ProductCategoryController::class);
+
+            //Sections
+            Route::resource('/sections', SectionController::class);
+
+            // Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+
+            // Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+            // Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+
+
+            // Route::get('/products/{product}/edit/', [ProductController::class, 'edit'])->name('products.edit');
+            // Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
+
+            // Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.delete');
+
+
+            // Brands Routes
+            Route::get('/brands', [BrandsController::class, 'index'])->name('brands.index');
+
+            Route::get('/brands/create', [BrandsController::class, 'create'])->name('brands.create');
+            Route::post('/brands', [BrandsController::class, 'store'])->name('brands.store');
+
+
+            Route::get('/brands/{brand}/edit/', [BrandsController::class, 'edit'])->name('brands.edit');
+            Route::put('/brands/{brand}', [BrandsController::class, 'update'])->name('brands.update');
+
+            Route::delete('/brands/{brand}', [BrandsController::class, 'destroy'])->name('brands.delete');
+
+            // Sub Category Routes
+            Route::get('/subcategories', [SubCategoryController::class, 'index'])->name('subcategories.index');
+
+            Route::get('/subcategories/create', [SubCategoryController::class, 'create'])->name('subcategories.create');
+            Route::post('/subcategories', [SubCategoryController::class, 'store'])->name('subcategories.store');
+
+            Route::get('/subcategories/{category}/edit/', [SubCategoryController::class, 'edit'])->name('subcategories.edit');
+            Route::put('/subcategories/{category}', [SubCategoryController::class, 'update'])->name('subcategories.update');
+
+            Route::delete('/subcategories/{category}', [SubCategoryController::class, 'destroy'])->name('subcategories.delete');
+
+            // Category Routes
+            Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
+
+            Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
+            Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
+
+            Route::get('/categories/{category}/edit/', [CategoryController::class, 'edit'])->name('categories.edit');
+            Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
+
+            Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.delete');
+
+
+            // Image Route
+            Route::post('/upload-temp-image', [TempImagesController::class, 'create'])->name('temp-images.create');
+
+            // Slug Route
+            Route::get('/getSlug', function (Request $request) {
+                $slug = '';
+                if (!empty($request->title)) {
+                    $slug = Str::slug($request->title);
+                }
+                return response()->json([
+                    'status' => true,
+                    'slug' => $slug
+                ]);
+            })->name('get.slug');
+        });
         Route::get('/dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
         Route::get('/logout', [HomeController::class, 'logout'])->name('admin.logout');
-
-        // Products Routes
-        Route::get('/get-products', [ProductController::class, 'getProducts'])->name('products.getProducts');
-        // To Save Product Images Permanently.
-
-        // Product Controller
-        Route::resource('/products', ProductController::class);
-
-        // Order Controller
-        Route::resource('/orders', OrderController::class);
-        Route::post('/orders/send-email/{id}', [OrderController::class, 'sendInvoiceEmail'])->name('orders.sendInvoiceEmail');
-        Route::post('/orders/update-payment-status/{id}', [OrderController::class, 'updatePaymentStatus'])->name('orders.updatePaymentStatus');
-
-
-        // Coupons Route.
-        Route::resource('/coupon', DiscountCodeController::class);
-
-        // Products Sub Category Routes
-        Route::resource('/product-subcategories', ProductSubCategoryController::class);
-        Route::resource('/product-categories', ProductCategoryController::class);
-
-        //Sections
-        Route::resource('/sections', SectionController::class);
-
-        // Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-
-        // Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-        // Route::post('/products', [ProductController::class, 'store'])->name('products.store');
-
-
-        // Route::get('/products/{product}/edit/', [ProductController::class, 'edit'])->name('products.edit');
-        // Route::put('/products/{product}', [ProductController::class, 'update'])->name('products.update');
-
-        // Route::delete('/products/{product}', [ProductController::class, 'destroy'])->name('products.delete');
-
-
-        // Brands Routes
-        Route::get('/brands', [BrandsController::class, 'index'])->name('brands.index');
-
-        Route::get('/brands/create', [BrandsController::class, 'create'])->name('brands.create');
-        Route::post('/brands', [BrandsController::class, 'store'])->name('brands.store');
-
-
-        Route::get('/brands/{brand}/edit/', [BrandsController::class, 'edit'])->name('brands.edit');
-        Route::put('/brands/{brand}', [BrandsController::class, 'update'])->name('brands.update');
-
-        Route::delete('/brands/{brand}', [BrandsController::class, 'destroy'])->name('brands.delete');
-
-        // Sub Category Routes
-        Route::get('/subcategories', [SubCategoryController::class, 'index'])->name('subcategories.index');
-
-        Route::get('/subcategories/create', [SubCategoryController::class, 'create'])->name('subcategories.create');
-        Route::post('/subcategories', [SubCategoryController::class, 'store'])->name('subcategories.store');
-
-        Route::get('/subcategories/{category}/edit/', [SubCategoryController::class, 'edit'])->name('subcategories.edit');
-        Route::put('/subcategories/{category}', [SubCategoryController::class, 'update'])->name('subcategories.update');
-
-        Route::delete('/subcategories/{category}', [SubCategoryController::class, 'destroy'])->name('subcategories.delete');
-
-        // Category Routes
-        Route::get('/categories', [CategoryController::class, 'index'])->name('categories.index');
-
-        Route::get('/categories/create', [CategoryController::class, 'create'])->name('categories.create');
-        Route::post('/categories', [CategoryController::class, 'store'])->name('categories.store');
-
-        Route::get('/categories/{category}/edit/', [CategoryController::class, 'edit'])->name('categories.edit');
-        Route::put('/categories/{category}', [CategoryController::class, 'update'])->name('categories.update');
-
-        Route::delete('/categories/{category}', [CategoryController::class, 'destroy'])->name('categories.delete');
-
-
-        // Image Route
-        Route::post('/upload-temp-image', [TempImagesController::class, 'create'])->name('temp-images.create');
-
-        // Slug Route
-        Route::get('/getSlug', function (Request $request) {
-            $slug = '';
-            if (!empty($request->title)) {
-                $slug = Str::slug($request->title);
-            }
-            return response()->json([
-                'status' => true,
-                'slug' => $slug
-            ]);
-        })->name('get.slug');
-    });
+    });  
 });

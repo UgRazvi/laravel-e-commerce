@@ -83,14 +83,14 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="roles">Roles</label>
-                                <select name="roles[]" id="roles" class="form-control" multiple>
-                                    <option value="">Select Roles</option>
+                                <select name="roles[]" id="roles" class="form-control select2" multiple>
                                     @foreach ($roles as $role)
-                                    <option value="{{$role}}">{{$role}}</option>
+                                        <option value="{{ $role }}">{{ $role }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                        </div>   
+                        </div>
+                           
 
                         <!-- Password -->
                         <div class="col-md-6">
@@ -232,6 +232,12 @@
                 $("#image_id").val(response.image_id);
                 console.log(response)
             }
+        });
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "Select Roles",
+                allowClear: true
+            });
         });
 </script>
 

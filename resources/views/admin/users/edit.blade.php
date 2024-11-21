@@ -70,16 +70,23 @@
                             </div>
                         </div>
 
-                        <!-- Role -->
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label for="role">Role</label>
-                                <select name="role" id="role" class="form-control">
-                                    <option value="2" {{ old('role', $user->role) == 2 ? 'selected' : '' }}>Admin</option>
-                                    <option value="1" {{ old('role', $user->role) == 1 ? 'selected' : '' }}>User</option>
-                                </select>
-                            </div>
-                        </div>   
+                    <!-- Role {Edit} -->
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="roles">Roles</label>
+                            <select name="roles[]" id="roles" class="form-control select2" multiple>
+                                @foreach ($roles as $role)
+                                    <option value="{{ $role }}" 
+                                        {{ in_array($role, $userRoles) ? 'selected' : '' }}>
+                                        {{ $role }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+
+
 
                         <!-- Password -->
                         <div class="col-md-6">
@@ -130,8 +137,9 @@
                             </div>
                             {{-- @dd($user); --}}
                             @if (!empty($user->image))
+                            {{-- @dd($user->image) --}}
                                 <div class="show-img-if-present">
-                                    <img src="{{ asset('uploads/Users/' . $user->id . '.jpeg') }}" alt="Your Image">
+                                    <img src="{{ asset('uploads/Users/' . $user->image) }}" alt="User Image - {{$user->id}}">
                                 </div>
                             @endif
                         </div>
@@ -231,6 +239,13 @@
                 $("#image_id").val(response.image_id);
                 console.log(response)
             }
-});
+    });
+
+    $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "Select Roles",
+                allowClear: true
+            });
+    });
 </script>
 @endsection

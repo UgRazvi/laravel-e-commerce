@@ -26,9 +26,14 @@ class HomeController extends Controller
 
         // $totalOrders = Order::count();
         $totalOrders = Order::whereIn('order_status', ['pending', 'shipped', 'delivered'])->count();
-
-        $totalCustomers = User::where('role', 1)->whereStatus(1)->count();
-        $totalAdmins = User::where('role', 2)->whereStatus(1)->count();
+        $totalCustomers = User::whereHas('roles', function ($query) {
+            $query->where('name', 'User');
+        })->whereStatus(1)->count();
+        
+        $totalAdmins = User::whereHas('roles', function ($query) {
+            $query->where('name', 'Admin');
+        })->whereStatus(1)->count();
+        
         $totalProducts = Product::count();
 
         $totalSales = Order::where('order_status', '!=', 'pending')->sum('grand_total');

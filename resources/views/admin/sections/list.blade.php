@@ -1,3 +1,5 @@
+
+
 @extends('admin.layouts.app')
 @section('dyn-content')
     {{-- <!-- Content Header (Page header) --> --}}
@@ -126,41 +128,41 @@
 @endsection
 
 @section('customJs')
-<script>
-    function deleteCategory(id) {
-        var url = '{{ route('sections.destroy', 'ID') }}';
-        // alert(url);
-        var newUrl = url.replace("ID", id);
-        // alert(newUrl);
-        // return false;
+    <script>
+        function deleteCategory(id) {
+            var url = '{{ route('sections.destroy', 'ID') }}';
+            // alert(url);
+            var newUrl = url.replace("ID", id);
+            // alert(newUrl);
+            // return false;
 
-        if (confirm("Do You Really Wanna Delete This Section ?")) {
-            $.ajax({
-                url: newUrl, // JS variable - It Contains Delete Route and category Id.
-                type: 'delete',
-                data: {},
-                dataType: 'json',
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                success: function(response) {
-                    if (response["status"]) {
-                        // Show a response message before redirecting
-                        alert(response["message"] || "Section deleted successfully!");
+            if (confirm("Do You Really Wanna Delete This Section ?")) {
+                $.ajax({
+                    url: newUrl, // JS variable - It Contains Delete Route and category Id.
+                    type: 'delete',
+                    data: {},
+                    dataType: 'json',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response["status"]) {
+                            // Show a response message before redirecting
+                            alert(response["message"] || "Section deleted successfully!");
 
-                        // Redirect to the categories index page
-                        window.location.href = "{{ route('sections.index') }}";
-                    } else {
-                        // Show an error message if the deletion failed
-                        alert(response["message"] || "An error occurred. Please try again.");
-                    }
-                }, error: function(jqXHR) {
-            // Handle any unexpected errors
-            alert("An unexpected error occurred.");
+                            // Redirect to the categories index page
+                            window.location.href = "{{ route('sections.index') }}";
+                        } else {
+                            // Show an error message if the deletion failed
+                            alert(response["message"] || "An error occurred. Please try again.");
+                        }
+                    }, error: function(jqXHR) {
+                // Handle any unexpected errors
+                alert("An unexpected error occurred.");
+            }
+                });
+            }
         }
-            });
-        }
-    }
-   
-</script>
+    
+    </script>
 @endsection
