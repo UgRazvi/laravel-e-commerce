@@ -14,44 +14,53 @@ class OrderController extends Controller
     /**
      * Display a listing of the resource.
      */
+
     public function index(Request $request)
-    {
-        // Start with the base query for orders
-        $orders = Order::with(["orderItems", 'orderItems.product', 'orderItems.product.product_images'])->orderBy('id', 'ASC');
+{
+    // Start with the base query for orders
+    $orders = Order::with(["orderItems", 'orderItems.product', 'orderItems.product.product_images'])
+                   ->orderBy('id', 'ASC');
 
-        // dd($orders->first()->orderItems()->first()->product->product_images()->first());
+        // if ($keyword = $request->get("keyword")) 
+        // {    $orders->where(function ($query) use ($keyword) {
+        //         // Existing search criteria for orders table
+        //         $query->where("orders.name", "like", "%{$keyword}%")
+        //             ->orWhere("orders.subtotal", "like", "%{$keyword}%")
+        //             ->orWhere("orders.coupon_code", "like", "%{$keyword}%")
+        //             ->orWhere("orders.mobile_no", "like", "%{$keyword}%")
+        //             ->orWhere("orders.address", "like", "%{$keyword}%")
+        //             ->orWhere("orders.locality_town", "like", "%{$keyword}%")
+        //             ->orWhere("orders.city", "like", "%{$keyword}%")
+        //             ->orWhere("orders.state", "like", "%{$keyword}%")
+        //             ->orWhere("orders.pincode", "like", "%{$keyword}%")
+        //             ->orWhere("orders.order_status", "like", "%{$keyword}%")
+        //             ->orWhere("orders.payment_status", "like", "%{$keyword}%")
+        //             ->orWhere("orders.transaction_id", "like", "%{$keyword}%")
+        //             ->orWhere("orders.grand_total", "like", "%{$keyword}%");
 
-        // If there is a search keyword, apply it to the query
-        if ($keyword = $request->get("keyword")) {
-            $orders->where(function ($query) use ($keyword) {
-                // Existing search criteria for orders table
-                $query->where("orders.name", "like", "%{$keyword}%")
-                    ->orWhere("orders.subtotal", "like", "%{$keyword}%")
-                    ->orWhere("orders.coupon_code", "like", "%{$keyword}%")
-                    ->orWhere("orders.mobile_no", "like", "%{$keyword}%")
-                    ->orWhere("orders.address", "like", "%{$keyword}%")
-                    ->orWhere("orders.locality_town", "like", "%{$keyword}%")
-                    ->orWhere("orders.city", "like", "%{$keyword}%")
-                    ->orWhere("orders.state", "like", "%{$keyword}%")
-                    ->orWhere("orders.pincode", "like", "%{$keyword}%")
-                    ->orWhere("orders.order_status", "like", "%{$keyword}%")
-                    ->orWhere("orders.payment_status", "like", "%{$keyword}%")
-                    ->orWhere("orders.transaction_id", "like", "%{$keyword}%")
-                    ->orWhere("orders.grand_total", "like", "%{$keyword}%");
+        //         // Join with order_items table and add search criteria for it
+        //         $query->orWhereHas('orderItems', function ($subQuery) use ($keyword) {
+        //             $subQuery->where("order_items.name", "like", "%{$keyword}%");
+        //         });
+        //     });
+        // }
 
-                // Join with order_items table and add search criteria for it
-                $query->orWhereHas('orderItems', function ($subQuery) use ($keyword) {
-                    $subQuery->where("order_items.name", "like", "%{$keyword}%");
-                });
-            });
-        }
+    // Check if start_date and end_date are provided in the request
+    if ($request->has('start_date') && $request->has('end_date')) {
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
 
-
-        // Apply pagination on the query and fetch the results
-        $orders = $orders->get();
-
-        return view("admin.orders.list", compact("orders"));
+        // Filter orders within the given date range (ensure proper date format)
+        $orders = $orders->whereBetween('created_at', [$startDate, $endDate]);
     }
+
+    // Apply pagination if necessary
+    $orders = $orders->get();
+
+    // Return the filtered orders to the view
+    return view("admin.orders.list", compact("orders"));
+}
+
 
     public function sendInvoiceEmail(Request $request, $orderId)
     {

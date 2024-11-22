@@ -26,13 +26,15 @@
 
 <section class="content-header">
     <div class="container-fluid">
-        <div class="row mb-2">
-            <div class="col-sm-6">
-                <h1>Dashboard</h1>
-            </div>
-            <div class="col-sm-6">
-
-            </div>
+        <div class="pt-4  card-header bg-dark text-white">
+            <h4 class="d-flex justify-content-between align-items-center">
+                <span>Dashboard</span>
+                {{-- @can('Create Roles') --}}
+                    <a href="{{ route('themes.index') }}" class="btn btn-light">
+                        <i class="bi bi-plus-circle"></i> THEME CENTER
+                    </a>
+                {{-- @endcan --}}
+            </h4>
         </div>
     </div>
     <!-- /.container-fluid -->

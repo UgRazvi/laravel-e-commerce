@@ -1,18 +1,45 @@
+<?php
+// header("Content-Type: text/css");
+
+// Include the helper file to make sure getTheme() is available
+include_once '../../app/Helpers/helper.php';
+
+// Call the getTheme function to fetch the theme color from the database
+// dd(getTheme());
+$theme_clr = getTheme() ?: "red"; // Default to "red" if no theme is found
+
+// Define other colors
+$bs_white = "#fff";
+$bs_gray = "#6c757d";
+$bs_secondary = "#6c757d";
+$bs_success = "#198754";
+$bs_info = "#0dcaf0";
+$bs_warning = "#ffc107";
+$bs_danger = "#dc3545";
+$bs_light = "#f8f9fa";
+$bs_dark = "#212529";
+$clr_yellow = $theme_clr;
+
+?>
+
+<style>
+
+
 @charset "UTF-8";
 .container {
     /* max-width: 1400px; */
     max-width: 100%;
 }
 :root {
-    --bs-white: <?= $bs_white ?>;
-    --bs-gray: <?= $bs_gray ?>;
-    --bs-secondary: <?= $bs_secondary ?>;
-    --bs-success: <?= $bs_success ?>;
-    --bs-info: <?= $bs_info ?>;
-    --bs-warning: <?= $bs_warning ?>;
-    --bs-danger: <?= $bs_danger ?>;
-    --bs-light: <?= $bs_light ?>;
-    --bs-dark: <?= $bs_dark ?>;
+    --bs-white: <?php $bs_white ?>;
+    --bs-gray: <?php $bs_gray ?>;
+    --bs-secondary: <?php $bs_secondary ?>;
+    --bs-success: <?php $bs_success ?>;
+    --bs-info: <?php $bs_info ?>;
+    --bs-warning: <?php $bs_warning ?>;
+    --bs-danger: <?php $bs_danger ?>;
+    --bs-light: <?php $bs_light ?>;
+    --bs-dark: <?php $bs_dark ?>;
 
     --bs-secondary-rgb: 108, 117, 125;
     --bs-success-rgb: 25, 135, 84;
@@ -2448,7 +2475,7 @@ fieldset:disabled .btn {
     margin-bottom: 0;
     font-size: 0.875rem;
     /* color: #6c757d; */
-    color: <?= $theme_clr ?>;
+    color: <?php $theme_clr ?>;
     white-space: nowrap;
 }
 .dropdown-item-text {
@@ -9779,7 +9806,7 @@ body {
     background-color: #f1f1f1;
 }
 .breadcrumb a {
-    color: <?= $clr_yellow ?>;
+    color: <?php $clr_yellow ?>;
 }
 figure,
 pre,
@@ -9809,7 +9836,7 @@ h6 span {
     display: inline-block;
 }
 .main-color {
-    color: <?= $clr_yellow ?>;
+    color: <?php $clr_yellow ?>;
 }
 .navbar-toggler {
     margin-top: 5px;
@@ -9830,7 +9857,7 @@ ul li {
     list-style: none;
 }
 .text-primary {
-    /* color: <?= $clr_yellow ?> !important; */
+    /* color: <?php $clr_yellow ?> !important; */
     color: #000 !important;
 }
 .text-secondary {
@@ -9843,7 +9870,7 @@ a.link {
     color: #001d3d;
 }
 a.link:hover {
-    color: <?= $clr_yellow ?>;
+    color: <?php $clr_yellow ?>;
 }
 .btn-dark {
     padding: 10px 20px;
@@ -9851,8 +9878,8 @@ a.link:hover {
     border-radius: 0px;
 }
 .btn-dark:hover {
-    background-color: <?= $clr_yellow ?>;
-    border-color: <?= $clr_yellow ?>;
+    background-color: <?php $clr_yellow ?>;
+    border-color: <?php $clr_yellow ?>;
 }
 .logo a span {
     /* font-family: "Roboto"; */
@@ -9860,7 +9887,7 @@ a.link:hover {
     font-weight: bold;
 }
 .top-header form .input-group span {
-    color: <?= $clr_yellow ?>;
+    color: <?php $clr_yellow ?>;
 }
 header .navbar .nav-link {
     color: #000;
@@ -9869,10 +9896,10 @@ header .navbar .nav-link {
     font-family: "Assistant";
 }
 header .navbar .nav-link:hover {
-    color: <?= $clr_yellow ?>;
+    color: <?php $clr_yellow ?>;
 }
 header .navbar .dropdown-item:focus {
-    color: <?= $clr_yellow ?>;
+    color: <?php $clr_yellow ?>;
     background-color: rgba(255, 255, 255, 0.15);
 }
 header .right-nav {
@@ -9887,19 +9914,19 @@ header .btn-dark {
 }
 header .btn-dark:hover {
     background-color: transparent;
-    color: <?= $clr_yellow ?>;
+    color: <?php $clr_yellow ?>;
     outline: none;
     box-shadow: none;
 }
 header .btn-dark:active {
     background-color: transparent;
-    color: <?= $clr_yellow ?>;
+    color: <?php $clr_yellow ?>;
     outline: none;
     box-shadow: none;
 }
 header .btn-dark:focus {
     background-color: transparent;
-    color: <?= $clr_yellow ?>;
+    color: <?php $clr_yellow ?>;
     outline: none;
     box-shadow: none;
 }
@@ -9919,7 +9946,7 @@ main {
     content: "";
     width: 70px;
     height: 5px;
-    background-color: <?= $clr_yellow ?>;
+    background-color: <?php $clr_yellow ?>;
     left: 0;
     bottom: 0px;
 }
@@ -9930,7 +9957,7 @@ main {
     text-transform: uppercase;
     font-weight: bold;
     color: #3d464d;
-    /* color: <?= $theme_clr ?>; */
+    /* color: <?php $theme_clr ?>; */
     background-color: #f1f1f1;
 }
 .sub-title {
@@ -9943,7 +9970,7 @@ main {
     content: "";
     width: 70px;
     height: 5px;
-    background-color: <?= $clr_yellow ?>;
+    background-color: <?php $clr_yellow ?>;
     left: 0;
     bottom: 0px;
 }
@@ -10002,7 +10029,7 @@ footer h3:after {
     content: "";
     width: 70px;
     height: 5px;
-    background-color: <?= $clr_yellow ?>;
+    background-color: <?php $clr_yellow ?>;
     left: 0;
     bottom: 0px;
 }
@@ -10013,7 +10040,7 @@ footer a {
     font-size: 16px;
 }
 footer a:hover {
-    color: <?= $clr_yellow ?>;
+    color: <?php $clr_yellow ?>;
 }
 .section-2 {
     margin: 60px 0;
@@ -10056,13 +10083,13 @@ footer a:hover {
     font-size: 0.9em;
     padding-bottom: 0;
     margin: 0;
-    /* color: <?= $clr_yellow ?>;  */
-    color: <?= $theme_clr ?>;
+    /* color: <?php $clr_yellow ?>;  */
+    color: <?php $theme_clr ?>;
 }
 .section-3 .cat-card .right:hover {
-    /* background-color: <?= $clr_yellow ?>; */
+    /* background-color: <?php $clr_yellow ?>; */
     /*  Yellow Color */
-    background-color: <?= $theme_clr ?>; /* Pink Color */
+    background-color: <?php $theme_clr ?>; /* Pink Color */
     color: #fff;
 }
 .section-3 .cat-card .right:hover p {
@@ -10111,7 +10138,7 @@ footer a:hover {
     color: #001d3d;
 }
 .section-4 .product-card:hover .whishlist:hover {
-    color: <?= $clr_yellow ?>;
+    color: <?php $clr_yellow ?>;
 }
 .section-6 .product-card {
     margin-bottom: 25px;
@@ -10156,7 +10183,7 @@ footer a:hover {
     color: #001d3d;
 }
 .section-6 .product-card:hover .whishlist:hover {
-    color: <?= $clr_yellow ?>;
+    color: <?php $clr_yellow ?>;
 }
 .section-6 .sidebar .accordion-button {
     padding: 10px 15px;
@@ -10166,7 +10193,7 @@ footer a:hover {
     background-color: transparent;
 }
 .section-6 .sidebar .accordion-button:hover {
-    color: <?= $clr_yellow ?>;
+    color: <?php $clr_yellow ?>;
 }
 .section-6 .sidebar .accordion-item {
     border: none;
@@ -10186,13 +10213,13 @@ footer a:hover {
     color: #001d3d;
 }
 .section-6 .sidebar .accordion-item .nav-link:hover {
-    color: <?= $clr_yellow ?>;
+    color: <?php $clr_yellow ?>;
 }
 .section-6 .sidebar .nav-link {
     color: #001d3d;
 }
 .section-6 .sidebar .nav-link:hover {
-    color: <?= $clr_yellow ?>;
+    color: <?php $clr_yellow ?>;
 }
 .section-7 .right {
     padding-right: 70px;
@@ -10284,7 +10311,7 @@ footer a:hover {
     color: #001d3d;
 }
 .section-8 .product-card:hover .whishlist:hover {
-    color: <?= $clr_yellow ?>;
+    color: <?php $clr_yellow ?>;
 }
 .section-9 .apply-coupan .form-control {
     border-radius: 0px;
@@ -10309,7 +10336,7 @@ footer a:hover {
     background-color: #fff;
 }
 .section-9 .table thead {
-    background-color: <?= $clr_yellow ?>;
+    background-color: <?php $clr_yellow ?>;
     color: #fff;
 }
 .section-9 #cart h2 {
@@ -10388,7 +10415,7 @@ footer a:hover {
     color: #001d3d;
 }
 .section-10 .login-form a:hover {
-    color: <?= $clr_yellow ?>;
+    color: <?php $clr_yellow ?>;
 }
 .section-11 .nav-item .nav-link {
     background-color: #001d3d;
@@ -10396,7 +10423,7 @@ footer a:hover {
     margin-bottom: 5px;
 }
 .section-11 .active .nav-link {
-    background-color: <?= $clr_yellow ?>;
+    background-color: <?php $clr_yellow ?>;
 }
 .section-11 .card {
     border: none;
@@ -10413,20 +10440,20 @@ footer a:hover {
     color: #001d3d;
 }
 .section-11 .card table a:hover {
-    color: <?= $clr_yellow ?>;
+    color: <?php $clr_yellow ?>;
 }
 .section-11 .card .product-title a {
     color: #001d3d;
     font-size: 24px;
 }
 .section-11 .card .product-title a:hover {
-    color: <?= $clr_yellow ?>;
+    color: <?php $clr_yellow ?>;
 }
 .section-11 #account-panel i {
     width: 25px;
 }
 .section-11 #account-panel .nav-link:hover {
-    background-color: <?= $clr_yellow ?>;
+    background-color: <?php $clr_yellow ?>;
 }
 .checkout-form {
     padding: 30px;
@@ -10471,3 +10498,5 @@ footer a:hover {
         width: auto;
     }
 }
+
+</style>
