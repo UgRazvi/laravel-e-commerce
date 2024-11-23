@@ -1,5 +1,3 @@
-
-
 @extends('admin.layouts.app')
 @section('dyn-content')
     <section class="content-header">
@@ -13,7 +11,7 @@
     </section>
     <section class="content">
         <div class="container-fluid">
-        @include('admin.message')
+            @include('admin.message')
             <div class="card shadow-sm border-light">
 
                 <form action="{{ route('orders.index') }}" method="GET" class="pt-3">
@@ -81,8 +79,14 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-            
+                
+                {{-- Pagination Logic --}}
+                {{-- <div class="card-footer clearfix">
+                    {{ $orders->links('pagination::bootstrap-5') }}
+                </div> --}}
+            </div>  
+           
+        
         </div>
     </section>
 @endsection
@@ -91,8 +95,7 @@
     <script>
         $(document).ready(function() {
             // alert("Test 1");
-            $('.table').DataTable({
-                "order": [[0, 'DESC']], // Default ordering by first column
+            $('#table').DataTable({
                 "paging": true,  // Enable pagination
                 "ordering": true, // Enable sorting
                 "info": true,  // Show table information

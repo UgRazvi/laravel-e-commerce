@@ -37,6 +37,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Artisan;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -46,6 +47,18 @@ use App\Http\Controllers\UserController;
 
 // Route For - Home Page
 Route::get('/', [FrontController::class, 'index'])->name('front.home');
+
+Route::get('/optimize', function() {
+    // Clear all caches
+    Artisan::call('config:cache');
+    Artisan::call('route:cache');
+    Artisan::call('view:cache');
+    
+    // Optionally, clear old cached data
+    Artisan::call('optimize:clear');
+    
+    return 'Optimization completed successfully.';
+});
 
 Route::get('/test-mail', function () {
     orderEmail('673474a51e39d', 'customer');

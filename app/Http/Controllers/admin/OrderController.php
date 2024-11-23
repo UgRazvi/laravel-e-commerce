@@ -55,8 +55,9 @@ class OrderController extends Controller
     }
 
     // Apply pagination if necessary
+    // $orders = $orders->paginate();
     $orders = $orders->get();
-
+    // dd("HELLO");
     // Return the filtered orders to the view
     return view("admin.orders.list", compact("orders"));
 }

@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="{{ asset('admin-assets/plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('admin-assets/css/custom.css ') }} ">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
-    
+    <link rel="shortcut icon" href="{{ getAdminImage(Auth::guard('admin')->user()->id) }}" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.6.7/dist/sweetalert2.min.css" rel="stylesheet">
 
 </head>
