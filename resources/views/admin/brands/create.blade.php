@@ -45,8 +45,12 @@
 
                                     <label for="status">Status</label>
                                     <select name="status" id="status" class="form-control">
-                                        <option value="1">Active</option>
-                                        <option value="0">Block</option>
+                                        {{-- <option value="1">Active</option>
+                                        <option value="0">Block</option> --}}
+                                        @foreach(config('myntra_credentials.status') as $key=>$value)
+                                            <option value="{{$value}}">{{$key}}</option>
+                                        @endforeach
+                                    
                                     </select>
                                 </div>
                             </div>

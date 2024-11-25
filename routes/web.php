@@ -39,6 +39,7 @@ use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Artisan;
 
+// For Testing Purposes Only - Starts
 
 // Optimization Via Artisan Command From Route - For Testing Purpose Only
 Route::get('/optimize', function() {
@@ -66,7 +67,7 @@ Route::get('pay-u-response', [PayUMoneyController::class, 'payUResponse'])->name
 Route::get('pay-u-cancel', [PayUMoneyController::class, 'payUCancel'])->name('pay.u.cancel');
 /** Usman PayU Ends */
 
-// For Testing Purposes Only
+// For Testing Purposes Only - Ends
 
 
 
@@ -77,6 +78,7 @@ Route::get('/mens-prod', [MensProdController::class, 'index'])->name('front.mens
 Route::get('/page/{slug}', [FrontController::class, 'page'])->name('front.page');
 
 Route::group(['prefix' => 'account'], function () {
+   
     Route::group(['middleware' => "guest"], function () {
         Route::any('/register', [AuthController::class, 'register'])->name('account.register');
         Route::post('/process-register', [AuthController::class, 'processRegister'])->name('account.processRegister');
@@ -84,6 +86,7 @@ Route::group(['prefix' => 'account'], function () {
         Route::get('/login', [AuthController::class, 'login'])->name('account.login');
         Route::post('/login', [AuthController::class, 'authenticate'])->name('account.authenticate');
     });
+
     Route::group(['middleware' => "auth"], function () {
         // Route::get('/profile', [AuthController::class, 'profile'])->name("account.profile");
         Route::get('/logout', [AuthController::class, 'logout'])->name('account.logout');
@@ -170,6 +173,7 @@ Route::group(['prefix' => 'account'], function () {
         Route::post('/remove-coupon', [CartController::class, 'removeCoupon'])->name('front.removeCoupon');
 
     });
+
 });
 
 
@@ -195,7 +199,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::resource('users', UserController::class)->only(['index', 'create', 'store', 'edit', 'update']);
         });
 
-        // Super | Admin | Customer
+        // Super | Admin / Customer
         Route::group(['middleware' => ['role:Super Admin|Admin']], function (){
             // Statis Pages
             Route::resource('/pages', PageController::class);
@@ -300,7 +304,9 @@ Route::group(['prefix' => 'admin'], function () {
                 ]);
             })->name('get.slug');
         });
+
         Route::get('/dashboard', [HomeController::class, 'index'])->name('admin.dashboard');
         Route::get('/logout', [HomeController::class, 'logout'])->name('admin.logout');
+
     });  
 });
