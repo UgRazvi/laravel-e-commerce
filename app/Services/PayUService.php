@@ -18,8 +18,8 @@ class PayUService
         $user = Auth::user();
         $transactionId = uniqid();
 
-        $merchantKey = env('PAYU_MERCHANT_KEY');
-        $merchantSalt = env('PAYU_MERCHANT_SALT');
+        $merchantKey = config('myntra_credentials.payU_credentials.PAYU_MERCHANT_KEY');
+        $merchantSalt = config('myntra_credentials.payU_credentials.PAYU_MERCHANT_SALT');
 
         $subTotal = Cart::subtotal(2, '.', '');
         $discount = 0;

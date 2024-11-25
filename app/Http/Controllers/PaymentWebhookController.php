@@ -52,7 +52,7 @@ class PaymentWebhookController extends Controller
         $udf4 = $data['udf4'] ?? '';
         $udf5 = $data['udf5'] ?? '';
 
-        $merchantSalt = env('PAYU_MERCHANT_SALT');
+        $merchantSalt = config('myntra_credentials.payU_credentials.AYU_MERCHANT_SALT');
 
         // sha512(SALT|status||||||udf5|udf4|udf3|udf2|udf1|email|firstname|productinfo|amount|txnid|key)
 

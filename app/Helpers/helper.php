@@ -78,7 +78,7 @@ function orderEmail($orderId, $userType)
 
     } else if ($userType == "admin") {
         $subject = "You've got an order !!!";
-        $email = env('ADMIN_EMAIL');
+        $email = config('myntra_credentials.user_credentials.ADMIN_EMAIL');
         Log::info('USER - TYPE : ' . $userType . ' SUBJECT : ' . $subject . ' EMAIL : ' . $email);
     }
 

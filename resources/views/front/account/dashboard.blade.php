@@ -11,8 +11,11 @@
             </div>
             <div class="col-12 col-md-3 pb-3 align-start">
                 <!-- Profile Image -->
-                <img src="{{ asset('front-assets/images/PersonImage.png') }}" alt="Profile Image"
-                    class="img-fluid w-100 mx-auto d-block">
+                @if ($user)
+                    <img src="{{ asset('uploads/Users/'.$user->image) }}" alt="{{$user->image}}" title="{{$user->image}}">
+                @else
+                    <img src="{{ asset('front-assets/images/PersonImage.png') }}" alt="Profile Image" class="img-fluid w-100 mx-auto d-block">
+                @endif
             </div>
         </div>
         
@@ -23,7 +26,7 @@
                     <div class="row">
                         <div class="col-lg-4 col-md-12 col-sm-12 mt-4 ">
                             <div class="card card-hover p-4 text-center">
-                                <a href="#">
+                                <a href="{{route('account.myOrders')}}">
                                     <img class="w-25 mx-auto"
                                         src="{{asset('myProfile/profile-orders.png')}}"
                                         alt="Orders">
@@ -35,7 +38,7 @@
 
                         <div class="col-lg-4 col-md-12 col-sm-12 mt-4 ">
                             <div class="card card-hover p-4 text-center">
-                                <a href="/my/savedvpa">
+                                <a href="#?">
                                     <img class="w-25 mx-auto"
                                         src="{{asset('myProfile/upiIcon.png')}}"
                                         alt="Saved UPI">
@@ -47,7 +50,7 @@
 
                         <div class="col-lg-4 col-md-12 col-sm-12 mt-4 ">
                             <div class="card card-hover p-4 text-center">
-                                <a href="/my/profile/edit">
+                                <a href="{{route('account.profile')}}">
                                     <img class="w-25 mx-auto"
                                         src="{{asset('myProfile/profile-edit.png')}}"
                                         alt="Profile Details">
@@ -59,19 +62,7 @@
 
                         <div class="col-lg-4 col-md-12 col-sm-12 mt-4 ">
                             <div class="card card-hover p-4 text-center">
-                                <a href="#">
-                                    <img class="w-25 mx-auto"
-                                        src="{{asset('myProfile/profile-myntra-credit.png')}}"
-                                        alt="Myntra Credit">
-                                    <p class="mt-2 mb-0 text-dark"><strong>Myntra Credit</strong></p>
-                                    <p class="text-muted">Manage all your refunds & gift cards</p>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 col-md-12 col-sm-12 mt-4 ">
-                            <div class="card card-hover p-4 text-center">
-                                <a href="/my/savedcards">
+                                <a href="#?">
                                     <img class="w-25 mx-auto"
                                         src="{{asset('myProfile/profile-cards.png')}}"
                                         alt="Saved Cards">
@@ -83,7 +74,19 @@
 
                         <div class="col-lg-4 col-md-12 col-sm-12 mt-4 ">
                             <div class="card card-hover p-4 text-center">
-                                <a href="/my/savedwalletsbnpl">
+                                <a href="{{route('account.mynCredit')}}">
+                                    <img class="w-25 mx-auto"
+                                        src="{{asset('myProfile/profile-myntra-credit.png')}}"
+                                        alt="Myntra Credit">
+                                    <p class="mt-2 mb-0 text-dark"><strong>Myntra Credit</strong></p>
+                                    <p class="text-muted">Manage all your refunds & gift cards</p>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-12 col-sm-12 mt-4 ">
+                            <div class="card card-hover p-4 text-center">
+                                <a href="#?">
                                     <img class="w-25 mx-auto"
                                         src="{{asset('myProfile/wallets_bnpl.png')}}"
                                         alt="Wallets/BNPL">
@@ -95,7 +98,7 @@
 
                         <div class="col-lg-4 col-md-12 col-sm-12 mt-4 ">
                             <div class="card card-hover p-4 text-center">
-                                <a href="/my/address">
+                                <a href="{{route('account.myAddress')}}">
                                     <img class="w-25 mx-auto"
                                         src="{{asset('myProfile/profile-address.png')}}"
                                         alt="Addresses">
@@ -107,19 +110,7 @@
 
                         <div class="col-lg-4 col-md-12 col-sm-12 mt-4 ">
                             <div class="card card-hover p-4 text-center">
-                                <a href="/my/coupons">
-                                    <img class="w-25 mx-auto"
-                                        src="{{asset('myProfile/profile-coupons.png')}}"
-                                        alt="Coupons">
-                                    <p class="mt-2 mb-0 text-dark"><strong>Coupons</strong></p>
-                                    <p class="text-muted">Manage coupons for additional discounts</p>
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-4 col-md-12 col-sm-12 mt-4 ">
-                            <div class="card card-hover p-4 text-center">
-                                <a href="#">
+                                <a href="#?">
                                     <img class="w-25 mx-auto"
                                         src="{{asset('myProfile/profile-collections.png')}}"
                                         alt="Collection & Wishlist">
@@ -131,7 +122,19 @@
 
                         <div class="col-lg-4 col-md-12 col-sm-12 mt-4 ">
                             <div class="card card-hover p-4 text-center">
-                                <a href="/my/myntrapoints">
+                                <a href="{{route('account.mynCoupon')}}">
+                                    <img class="w-25 mx-auto"
+                                        src="{{asset('myProfile/profile-coupons.png')}}"
+                                        alt="Coupons">
+                                    <p class="mt-2 mb-0 text-dark"><strong>Coupons</strong></p>
+                                    <p class="text-muted">Manage coupons for additional discounts</p>
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-12 col-sm-12 mt-4 ">
+                            <div class="card card-hover p-4 text-center">
+                                <a href="{{route('account.mynCash')}}">
                                     <img class="w-25 mx-auto"
                                         src="{{asset('myProfile/profile-myntrapoints.png')}}"
                                         alt="MynCash">

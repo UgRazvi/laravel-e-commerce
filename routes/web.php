@@ -39,98 +39,42 @@ use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Artisan;
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
-// Route::view('/hello-chart', 'adminLTE/hello-chart');
-
-// Route For - Home Page
-Route::get('/', [FrontController::class, 'index'])->name('front.home');
-
+// Optimization Via Artisan Command From Route - For Testing Purpose Only
 Route::get('/optimize', function() {
+    // Optionally, clear old cached data
+    Artisan::call('optimize:clear');
+
     // Clear all caches
     Artisan::call('config:cache');
     Artisan::call('route:cache');
     Artisan::call('view:cache');
     
-    // Optionally, clear old cached data
-    Artisan::call('optimize:clear');
-    
     return 'Optimization completed successfully.';
 });
-
+/** Test Mails */
 Route::get('/test-mail', function () {
     orderEmail('673474a51e39d', 'customer');
 });
-
+/** Test Logs */
 Route::get('/test-logs', function () {
     return nl2br(\Illuminate\Support\Facades\File::get(storage_path('logs/laravel.log')));
 });
-
-// Cashfree Payment Gateway Setup
-Route::any('cashfree/payments/create', [CashfreePaymentController::class, 'create'])->name('callback');
-Route::post('cashfree/payments/store', [CashfreePaymentController::class, 'store'])->name('store');
-Route::any('cashfree/payments/success', [CashfreePaymentController::class, 'success'])->name('success');
-
-
-
-Route::get('/payment', [CartController::class, 'payment'])->name('front.payment');
-
-
-
-Route::post('/payu/pay', [PaymentController::class, 'pay'])->name('payment.process');
-
-Route::any('/payment/success', [PaymentController::class, 'success'])->name('front.payment.success');
-Route::any('/payment/fail', [PaymentController::class, 'fail'])->name('front.payment.fail');
-
-Route::get('/thank/{txnId}/', [CartController::class, 'thank'])->name('front.thank');
-
-
-
-Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])->name('front.forgotPassword');
-Route::post('/process-forgot-password', [AuthController::class, 'processForgotPassword'])->name('front.processForgotPassword');
-Route::get('/reset-password/{token}', [AuthController::class, 'resetPassword'])->name('front.resetPassword');
-Route::post('/process-reset-password', [AuthController::class, 'processResetPassword'])->name('front.processResetPassword');
-Route::post('/save-ratings/{productId}', [ShopController::class, 'saveRatings'])->name('front.saveRatings');
-
-
-// For Testing Purposes Only
 /** Usman PayU Starts */
 Route::get('/payU', [PayUMoneyController::class, 'payUMoneyView']);
 Route::get('pay-u-response', [PayUMoneyController::class, 'payUResponse'])->name('pay.u.response');
 Route::get('pay-u-cancel', [PayUMoneyController::class, 'payUCancel'])->name('pay.u.cancel');
 /** Usman PayU Ends */
 
-
-Route::get('/wishlist', [AuthController::class, 'wishlist'])->name('front.wishlist');
-Route::post('/add-to-wishlist', [FrontController::class, 'addToWishList'])->name('front.addToWishList');
-Route::get('/page/{slug}', [FrontController::class, 'page'])->name('front.page');
+// For Testing Purposes Only
 
 
 
-Route::any('/checkout', [CartController::class, 'checkout'])->name('front.checkout');
-// Route::get('/clone-mens-prod', [MensProdController::class, 'index'])->name('front.prods.mensprod'); // Clone
-Route::get('/shop/{categorySlug?}/{subCategorySlug?}', [ShopController::class, 'index'])->name('front.shop');
-Route::get('/product/{slug}', [ShopController::class, 'product'])->name('front.product');
-Route::get('/cart', [CartController::class, 'cart'])->name('front.cart');
-Route::post('/add-to-cart', [CartController::class, 'addToCart'])->name('front.addToCart');
-Route::post('/update-cart', [CartController::class, 'updateCart'])->name('front.updateCart');
-Route::post('/delete-item', [CartController::class, 'deleteItem'])->name('front.deleteItem.cart');
-// Route::post('/delete-multiple-items.', [CartController::class, 'deleteMultipleItems'])->name('front.deleteMultipleItems.cart');
-Route::post('/cart/delete-multiple-items', [CartController::class, 'deleteMultipleItems'])->name('front.deleteMultipleItems.cart');
-
-// Route::get('/thank/{orderId}', [CartController::class, 'thank'])->name('front.thank');
-
-Route::post('/get-order-summary', [CartController::class, 'getOrderSummary'])->name('front.getOrderSummary');
-Route::post('/apply-discount', [CartController::class, 'applyDiscount'])->name('front.applyDiscount');
-
-Route::post('/remove-coupon', [CartController::class, 'removeCoupon'])->name('front.removeCoupon');
-
+// Route For - Home Page
+Route::get('/', [FrontController::class, 'index'])->name('front.home');
 
 Route::get('/mens-prod', [MensProdController::class, 'index'])->name('front.mensprod');
-Route::view('contactus', 'contactus');
-
+Route::get('/page/{slug}', [FrontController::class, 'page'])->name('front.page');
 
 Route::group(['prefix' => 'account'], function () {
     Route::group(['middleware' => "guest"], function () {
@@ -148,11 +92,10 @@ Route::group(['prefix' => 'account'], function () {
         Route::post('/process-payment', [CartController::class, 'processPayment'])->name('front.processPayment');
 
 
-
         Route::put('/address/{id}', [CustomerAddressController::class, 'update'])->name('address.update');
         Route::delete('/address/{id}', [CustomerAddressController::class, 'destroy'])->name('address.destroy');
 
-        Route::get('/my-orders', [AuthController::class, 'myOrders'])->name("account.myOrders"); // (To work on 15 October 2024).
+        Route::get('/my-orders', [AuthController::class, 'myOrders'])->name("account.myOrders");
         Route::get('/orders/filter', [AuthController::class, 'filter'])->name('orders.filter');
         Route::get('/item-details', [AuthController::class, 'filter'])->name('order.itemDetails');
 
@@ -179,6 +122,53 @@ Route::group(['prefix' => 'account'], function () {
         Route::get("/privacy-policy", [UserProfileController::class, 'privacyPolicy'])->name("account.policy");
 
         Route::post("/remove-wishlist-product", [AuthController::class, 'removeProductFromWishlist'])->name("account.removeWishlistProduct");
+
+
+        // Cashfree Payment Gateway Setup
+        Route::any('cashfree/payments/create', [CashfreePaymentController::class, 'create'])->name('callback');
+        Route::post('cashfree/payments/store', [CashfreePaymentController::class, 'store'])->name('store');
+        Route::any('cashfree/payments/success', [CashfreePaymentController::class, 'success'])->name('success');
+
+
+        // PAYU Payment Gateway Setup
+        Route::post('/payu/pay', [PaymentController::class, 'pay'])->name('payment.process');
+        Route::any('/payment/success', [PaymentController::class, 'success'])->name('front.payment.success');
+        Route::any('/payment/fail', [PaymentController::class, 'fail'])->name('front.payment.fail');
+
+        // Test Payment & Thank Routes
+        Route::get('/payment', [CartController::class, 'payment'])->name('front.payment');
+        Route::get('/thank/{txnId}/', [CartController::class, 'thank'])->name('front.thank');
+
+
+        // Authorized Access ( Profile Updation & Ratings )
+        Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])->name('front.forgotPassword');
+        Route::post('/process-forgot-password', [AuthController::class, 'processForgotPassword'])->name('front.processForgotPassword');
+        Route::get('/reset-password/{token}', [AuthController::class, 'resetPassword'])->name('front.resetPassword');
+        Route::post('/process-reset-password', [AuthController::class, 'processResetPassword'])->name('front.processResetPassword');
+        Route::post('/save-ratings/{productId}', [ShopController::class, 'saveRatings'])->name('front.saveRatings');
+
+
+        Route::get('/wishlist', [AuthController::class, 'wishlist'])->name('front.wishlist');
+        Route::post('/add-to-wishlist', [FrontController::class, 'addToWishList'])->name('front.addToWishList');
+
+
+
+        Route::any('/checkout', [CartController::class, 'checkout'])->name('front.checkout');
+       // Cart Page Is Also Authorized
+        Route::get('/shop/{categorySlug?}/{subCategorySlug?}', [ShopController::class, 'index'])->name('front.shop');
+        Route::get('/product/{slug}', [ShopController::class, 'product'])->name('front.product');
+        Route::get('/cart', [CartController::class, 'cart'])->name('front.cart');
+        Route::post('/add-to-cart', [CartController::class, 'addToCart'])->name('front.addToCart');
+        Route::post('/update-cart', [CartController::class, 'updateCart'])->name('front.updateCart');
+        Route::post('/delete-item', [CartController::class, 'deleteItem'])->name('front.deleteItem.cart');
+
+        Route::post('/cart/delete-multiple-items', [CartController::class, 'deleteMultipleItems'])->name('front.deleteMultipleItems.cart');
+
+        Route::post('/get-order-summary', [CartController::class, 'getOrderSummary'])->name('front.getOrderSummary');
+        Route::post('/apply-discount', [CartController::class, 'applyDiscount'])->name('front.applyDiscount');
+
+        Route::post('/remove-coupon', [CartController::class, 'removeCoupon'])->name('front.removeCoupon');
+
     });
 });
 

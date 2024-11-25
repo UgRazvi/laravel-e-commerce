@@ -13,9 +13,9 @@ class CashfreeService
 
     public function __construct()
     {
-        $this->appId = config('cashfree.app_id');
-        $this->secretKey = config('cashfree.secret_key');
-        $this->baseUrl = config('cashfree.env') === 'production'
+        $this->appId = config('myntra_credentials.cashfree.app_id');
+        $this->secretKey = config('myntra_credentials.cashfree.secret_key');
+        $this->baseUrl = config('myntra_credentials.cashfree.env') === 'production'
             ? 'https://api.cashfree.com'
             : 'https://sandbox.cashfree.com';
     }

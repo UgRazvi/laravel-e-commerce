@@ -104,9 +104,10 @@ class CashfreePaymentController extends Controller
         }
 
         // PayU configuration
-        $MERCHANT_KEY = env('PAYU_MERCHANT_KEY');
-        $SALT = env('PAYU_MERCHANT_SALT');
-        $PAYU_BASE_URL = "https://test.payu.in";  // Use production URL for live
+        $MERCHANT_KEY = config('myntra_credentials.payU_credentials.PAYU_MERCHANT_KEY');
+        $SALT = config('myntra_credentials.payU_credentials.PAYU_MERCHANT_SALT');
+        $PAYU_BASE_URL = config('myntra_credentials.payU_credentials.PAYU_BASE_URL');
+        // $PAYU_BASE_URL = "https://test.payu.in";  // Use production URL for live
 
         $name = $user->name;
         $successURL = route('pay.u.response');
@@ -187,16 +188,18 @@ class CashfreePaymentController extends Controller
             'txnid' => 'required'
         ]);
     
-        $url = "https://sandbox.cashfree.com/pg/orders";
-    
+        // $url = "https://sandbox.cashfree.com/pg/orders";
+        $url = config('myntra_credentials.cashfree_credentials.CF_URL');
+    // dd($url);
+    // dd(config('myntra_credentials.cashfree_credentials.CF_APP_ID'));
         $headers = [
             "Content-Type: application/json",
             "x-api-version: 2022-01-01",  // Ensure this is the correct version
-            "x-client-id: " . env('CASHFREE_APP_ID'),
-            "x-client-secret: " . env('CASHFREE_SECRET_KEY')
+            "x-client-id: " . config('myntra_credentials.cashfree_credentials.CF_APP_ID'),
+            "x-client-secret: " . config('myntra_credentials.cashfree_credentials.CF_SECRET_KEY')
         ];
+    // dd($headers);
         
-    
         $data = json_encode([
             // 'order_id' => 'order_' . rand(1111111111, 9999999999),
             'order_id' => $request->get('txnid'),
@@ -209,12 +212,15 @@ class CashfreePaymentController extends Controller
                 "customer_phone" => $validated['mobile'],
             ],
             "order_meta" => [
-                "return_url" => 'http://127.0.0.1:8000/cashfree/payments/success/?order_id={order_id}&order_token={order_token}'
-            ]
+                "return_url" => route('success') . '/?order_id={order_id}&order_token={order_token}',
+            ],
         ]);
+
+            // $dataArray = json_decode($data, true);
+            // dd($dataArray['order_meta']);
     
         $curl = curl_init($url);
-    
+// dd($curl);    
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);

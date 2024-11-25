@@ -78,16 +78,18 @@
                                                 @if ($item->product && $item->product->product_images->first())
                                                     <img src="{{ asset('uploads/Products/' . $item->product->product_images->first()->image) }}"
                                                         alt="{{ $item->product->product_images->first()->image }}"
-                                                        class="img-fluid w-50 mt-3" />
+                                                        class=" w-100 mt-3" />
                                                 @else
                                                     <span>No Image</span>
                                                 @endif
                                             </div>
                                             <div class="col-10 mt-3">
                                                 <span class="">
-                                                    <strong>{{ $item->name ?? 'No Names Available' }}</strong>
+                                                    <strong>{{ $item->name ?? 'No Names Available' }} -  ₹ {{$item->price }}/- </strong>
                                                 </span>
                                                 <span class=""> {!! $item->product->short_description ?? 'No Description Available' !!} </span>
+                                                {{-- <br> --}}
+                                                <span>{{ $item->order_id }}</span>
                                                 <br>
                                                 <span class=""> {{ $item->size ?? 'No Sizes Available' }} </span>
                                             </div>

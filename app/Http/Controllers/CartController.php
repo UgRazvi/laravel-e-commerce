@@ -368,9 +368,11 @@ public function cashFreeNotification(Request $request)
         }
 
         // PayU configuration
-        $MERCHANT_KEY = env('PAYU_MERCHANT_KEY');
-        $SALT = env('PAYU_MERCHANT_SALT');
-        $PAYU_BASE_URL = "https://test.payu.in";  // Use production URL for live
+        $MERCHANT_KEY = config('myntra_credentials.payU_credentials.PAYU_MERCHANT_KEY');
+        $SALT = config('myntra_credentials.payU_credentials.PAYU_MERCHANT_SALT');
+        $PAYU_BASE_URL = config('myntra_credentials.payU_credentials.PAYU_BASE_URL');
+        
+        // $PAYU_BASE_URL = "https://test.payu.in";  // Use production URL for live
 
         $name = $user->name;
         $successURL = route('pay.u.response');

@@ -1,7 +1,13 @@
 @extends('admin.layouts.app')
 
 @section('dyn-content')
-    
+
+
+{{-- @dd(
+    "CF CRedential : ", config('myntra_credentials.payU_credentials.PAYU_URL'),
+    "PAYU CRedential : ", config('myntra_credentials.cashfree_credentials.CF_APP_ID'),
+) --}}
+
 <!-- Content Header (Page header) -->
 <section class="content-header">					
     <div class="container-fluid my-2">
@@ -146,8 +152,9 @@
                             <div class="mb-3">
                                 <label for="status">Status</label>
                                 <select name="status" id="status" class="form-control">
-                                    <option value="1">Active</option>
-                                    <option value="0">Inactive</option>
+                                    @foreach(config('myntra_credentials.status') as $key=>$value)
+                                    <option value="{{$value}}">{{$key}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>

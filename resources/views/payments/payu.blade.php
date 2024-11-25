@@ -6,7 +6,7 @@
 </head>
 
 <body>
-    <form action="{{ env('PAYU_URL') }}" method="POST" name="payuPaymentForm">
+    <form action="{{ config('myntra_credentials.payU_credentials.PAYU_URL') }}" method="POST" name="payuPaymentForm">
         {{-- @dd(env('PAYU_URL'), $data); --}}
         @csrf
         @foreach ($data as $key => $value)

@@ -10,9 +10,10 @@ class PayUMoneyController extends Controller
     {
         $user = Auth::user();
 
-        $MERCHANT_KEY = env('PAYU_MERCHANT_KEY');
-        $SALT = env('PAYU_MERCHANT_SALT');
-        $PAYU_BASE_URL = "https://test.payu.in";
+        $MERCHANT_KEY = config('myntra_credentials.payU_credentials.PAYU_MERCHANT_KEY');
+        $SALT = config('myntra_credentials.payU_credentials.PAYU_MERCHANT_SALT');
+        $PAYU_BASE_URL = config('myntra_credentials.payU_credentials.PAYU_BASE_URL');
+        // $PAYU_BASE_URL = "https://test.payu.in";
 
         $name = $request->name;
         $successURL = route('pay.u.response');
