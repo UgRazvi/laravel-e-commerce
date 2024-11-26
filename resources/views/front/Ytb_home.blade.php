@@ -14,18 +14,13 @@
          }
      </style>
 
-     {{-- First Image : Discount Coupons --}}
+        <h1 class="bg-white text-center mt-3 m-2 alert alert-success"> <strong> {{ __('message.welcome') }} </strong> </h1>
+
      <img src="{{ getDiscountCoupon() }}" alt="Discount Coupon" />
      <img src="{{ getHeroImage() }}" alt="Hero Image" />
      <img src="{{ getCouponCorner() }}" alt="Coupon Corner" />
      <img src="{{ getCoupons() }}" alt="Coupons" />
-     {{-- <img src="{{ asset('front-assets/images/DiscountCoupon.jpg') }}" alt="Discount Coupon"> --}}
-     {{-- Second Image : Hero Image --}}
-     {{-- <img src="{{ asset('front-assets/images/home.png') }}" alt="Hero Image"> --}}
-     {{-- Third Image : Coupon Corner --}}
-     {{-- <img src="{{ asset('front-assets/images/CouponCorner.jpg') }}" alt="Coupon Corner"> --}}
-     {{-- Fourth Image : Coupons --}}
-     {{-- <img src="{{ asset('front-assets/images/coupons.jpg') }}" alt="Coupons"> --}}
+
 
      <!-- Main Content (Featured Products) -->
      <section class="section-2">
@@ -187,11 +182,11 @@
 
             @if (!empty(getCategories()))
                 <div class="row pb-3">
-                    @foreach (getCategories() as $subcategory)
+                    @foreach (getCategories() as $category)
                         <div class="col-lg-3">
                             <div class="cat-card">
                                 <div class="left">
-                                    @if ($subcategory->image != '')
+                                    @if ($category->image != '')
                                         <img src="{{ asset('uploads/category/' . $category->image) }}"
                                             alt="" class="img-fluid category-images"
                                             style="height: 100px; object-fit: cover; padding: 5px;">
@@ -199,7 +194,7 @@
                                 </div>
                                 <div class="right">
                                     <div class="cat-data">
-                                        <h2>{{ $subcategory->name }}</h2>
+                                        <h2>{{ $category->name }}</h2>
                                     </div>
                                 </div>
                             </div>

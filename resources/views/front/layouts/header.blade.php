@@ -4,8 +4,8 @@
 
             <!-- Brand Logo -->
             <a href="{{route('front.home')}}" class="navbar-brand">
-        {{-- <img class="myntra_home" src="{{ asset('front-assets/images/Myntra_logo.webp') }}" alt="Myntra Home ( Logo )" /> --}}
-        <img class="myntra_home" src="{{ getLogo() }}" alt="Myntra Home ( Logo )" />
+            {{-- <img class="myntra_home" src="{{ asset('front-assets/images/Myntra_logo.webp') }}" alt="Myntra Home ( Logo )" /> --}}
+            <img class="myntra_home" src="{{ getLogo() }}" alt="Myntra Home ( Logo )" />
             </a>
 
             <!-- Toggler for Mobile -->
@@ -21,9 +21,10 @@
                     @if (!empty(getSections()))
                         @foreach (getSections() as $section)
                             <li class="nav-item dropdown mega-dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
-                                    aria-expanded="false"> {{ $section->name }} </a>
-
+                                <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {{ $section->name }}
+                                </a>
+            
                                 <!-- Dropdown Menu -->
                                 @if ($section->categories->isNotEmpty())
                                     <div class="dropdown-menu mega-menu p-3">
@@ -59,42 +60,75 @@
                         @endforeach
                     @endif
                 </ul>
-
+            
                 <!-- Search Bar with Icons -->
                 <div class="d-flex align-items-center">
-                    <form action="{{route('front.shop')}}" class="d-flex me-3" >
+                    <form action="{{route('front.shop')}}" class="d-flex me-3">
                         <div class="input-group">
-                            <input type="text" placeholder="Search For Products" class="form-control"
+                            <input type="text" placeholder="Search For Products" class="form-control" 
                             name="search" id="search" value="{{Request::get('search')}}">
-                            <button type="submit" class="btn btn-outline-secondary" type="submit">
+                            <button type="submit" class="btn btn-outline-secondary">
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
                     </form>
-
+            
                     <!-- Additional Icons after the Search Bar -->
                     <div class="navbar-icons d-flex align-items-center">
                         <!-- Profile Icon -->
                         <a href="{{route('account.login')}}" class="nav-link me-2">
                             <i class="fas fa-user text-primary"></i>
                         </a>
-
+            
                         <!-- Wishlist Icon -->
                         <a href="{{route('front.wishlist')}}" class="nav-link me-2">
                             <i class="fas fa-heart text-primary"></i>
                         </a>
-
+            
                         <!-- Shop Icon -->
                         <a href="{{route('front.shop')}}" class="nav-link me-2">
                             <i class="fas fa-store text-primary"></i>
                         </a>
-
+            
                         <!-- Shopping Cart Icon -->
                         <a href="{{ route('front.cart') }}" class="nav-link me-2">
                             <i class="fas fa-shopping-cart text-primary"></i>
                         </a>
                     </div>
                 </div>
+                <ul class="d-none">
+                    <li>
+                        <a class="dropdown-item" href="{{ url('/lang/en') }}">
+                            English
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ url('/lang/hi') }}">
+                            हिंदी
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{{ url('/lang/ur') }}">
+                            اردو
+                        </a>
+                    </li>
+                </ul>
+                {{-- {{ Session()->get('locale') }} --}}
+
+                <ul class="navbar-nav">
+                   <li class="nav-item dropdown mega-dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">LANG</a>
+
+                        <div class="dropdown-menu lang-menu" style="width: auto; padding-right: 0; min-width: auto;">
+                            <ul class="">
+                                <li><a class="dropdown-item" href="{{ url('/lang/en') }}">ENGLISH</a></li>
+                                <li><a class="dropdown-item" href="{{ url('/lang/hi') }}">HINDI</a></li>
+                                <li><a class="dropdown-item" href="{{ url('/lang/ur') }}">URDU</a></li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+             
             </div>
         </nav>
     </div>

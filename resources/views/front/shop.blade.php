@@ -196,7 +196,12 @@
                                                     class="card-img-top cardImages"
                                                     style="height: 300px; object-fit: cover; padding: 5px;"
                                                     alt="Product Image {{ $product->id }}">
-                                            @endif
+                                                @else
+                                                <img src="{{ asset('tempImgs/1731570704.jpeg') }}"
+                                                    class="card-img-top cardImages"
+                                                    style="height: 300px; object-fit: cover; padding: 5px;"
+                                                    alt="Product Image {{ $product->id }}">
+                                                @endif
                                         </a>
 
                                         <!-- Rating Box -->

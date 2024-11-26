@@ -209,7 +209,7 @@ $clr_yellow = $theme_clr;
         top: -0.5em;
     }
     a {
-        color: #0d6efd;
+        color: <?php echo $bs_primary ?>;
         text-decoration: none;
     }
     a:hover {
@@ -1171,8 +1171,8 @@ $clr_yellow = $theme_clr;
         box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
     }
     .form-check-input:checked {
-        background-color: #0d6efd;
-        border-color: #0d6efd;
+        background-color: <?php echo $bs_primary ?>;
+        border-color: <?php echo $bs_primary ?>;
     }
     .form-check-input:checked[type="checkbox"] {
         background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
@@ -1181,8 +1181,8 @@ $clr_yellow = $theme_clr;
         background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23fff'/%3e%3c/svg%3e");
     }
     .form-check-input[type="checkbox"]:indeterminate {
-        background-color: #0d6efd;
-        border-color: #0d6efd;
+        background-color: <?php echo $bs_primary ?>;
+        border-color: <?php echo $bs_primary ?>;
         background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10h8'/%3e%3c/svg%3e");
     }
     .form-check-input:disabled {
@@ -1252,7 +1252,7 @@ $clr_yellow = $theme_clr;
         width: 1rem;
         height: 1rem;
         margin-top: -0.25rem;
-        background-color: #0d6efd;
+        background-color: <?php echo $bs_primary ?>;
         border: 0;
         border-radius: 1rem;
         -webkit-transition: background-color 0.15s ease-in-out,
@@ -1277,7 +1277,7 @@ $clr_yellow = $theme_clr;
     .form-range::-moz-range-thumb {
         width: 1rem;
         height: 1rem;
-        background-color: #0d6efd;
+        background-color: <?php echo $bs_primary ?>;
         border: 0;
         border-radius: 1rem;
         -moz-transition: background-color 0.15s ease-in-out,
@@ -1674,8 +1674,8 @@ $clr_yellow = $theme_clr;
     }
     .btn-primary {
         color: #fff;
-        background-color: #0d6efd;
-        border-color: #0d6efd;
+        background-color: <?php echo $bs_primary ?>;
+        border-color: <?php echo $bs_primary ?>;
     }
     .btn-primary:hover {
         color: #fff;
@@ -1712,8 +1712,8 @@ $clr_yellow = $theme_clr;
     .btn-primary:disabled,
     .btn-primary.disabled {
         color: #fff;
-        background-color: #0d6efd;
-        border-color: #0d6efd;
+        background-color: <?php echo $bs_primary ?>;
+        border-color: <?php echo $bs_primary ?>;
     }
     .btn-secondary {
         color: #fff;
@@ -1989,13 +1989,13 @@ $clr_yellow = $theme_clr;
         border-color: #212529;
     }
     .btn-outline-primary {
-        color: #0d6efd;
-        border-color: #0d6efd;
+        color: <?php echo $bs_primary ?>;
+        border-color: <?php echo $bs_primary ?>;
     }
     .btn-outline-primary:hover {
         color: #fff;
-        background-color: #0d6efd;
-        border-color: #0d6efd;
+        background-color: <?php echo $bs_primary ?>;
+        border-color: <?php echo $bs_primary ?>;
     }
     .btn-check:focus + .btn-outline-primary,
     .btn-outline-primary:focus {
@@ -2007,8 +2007,8 @@ $clr_yellow = $theme_clr;
     .btn-outline-primary.active,
     .btn-outline-primary.dropdown-toggle.show {
         color: #fff;
-        background-color: #0d6efd;
-        border-color: #0d6efd;
+        background-color: <?php echo $bs_primary ?>;
+        border-color: <?php echo $bs_primary ?>;
     }
     .btn-check:checked + .btn-outline-primary:focus,
     .btn-check:active + .btn-outline-primary:focus,
@@ -2019,7 +2019,7 @@ $clr_yellow = $theme_clr;
     }
     .btn-outline-primary:disabled,
     .btn-outline-primary.disabled {
-        color: #0d6efd;
+        color: <?php echo $bs_primary ?>;
         background-color: transparent;
     }
     .btn-outline-secondary {
@@ -2262,7 +2262,7 @@ $clr_yellow = $theme_clr;
     }
     .btn-link {
         font-weight: 400;
-        color: #0d6efd;
+        color: <?php echo $bs_primary ?>;
         text-decoration: underline;
     }
     .btn-link:hover {
@@ -2462,7 +2462,7 @@ $clr_yellow = $theme_clr;
     .dropdown-item:active {
         color: #fff;
         text-decoration: none;
-        background-color: #0d6efd;
+        background-color: <?php echo $bs_primary ?>;
     }
     .dropdown-item.disabled,
     .dropdown-item:disabled {
@@ -2503,7 +2503,7 @@ $clr_yellow = $theme_clr;
     .dropdown-menu-dark .dropdown-item.active,
     .dropdown-menu-dark .dropdown-item:active {
         color: #fff;
-        background-color: #0d6efd;
+        background-color: <?php echo $bs_primary ?>;
     }
     .dropdown-menu-dark .dropdown-item.disabled,
     .dropdown-menu-dark .dropdown-item:disabled {
@@ -2621,7 +2621,7 @@ $clr_yellow = $theme_clr;
     .nav-link {
         display: block;
         padding: 0.5rem 1rem;
-        color: #0d6efd;
+        color: <?php echo $bs_primary ?>;
         text-decoration: none;
         transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
             border-color 0.15s ease-in-out;
@@ -2675,7 +2675,7 @@ $clr_yellow = $theme_clr;
     .nav-pills .nav-link.active,
     .nav-pills .show > .nav-link {
         color: #fff;
-        background-color: #0d6efd;
+        background-color: <?php echo $bs_primary ?>;
     }
     .nav-fill > .nav-link,
     .nav-fill .nav-item {
@@ -2757,6 +2757,19 @@ $clr_yellow = $theme_clr;
         position: static !important;
     }
 
+    .lang-menu {
+        position: absolute;
+        right: 0;
+        width: 100%;
+        background-color: #fff;
+        z-index: 1000;
+        display: none;
+        flex-wrap: wrap;
+    }
+
+    .mega-dropdown:hover .lang-menu {
+        display: flex;
+    }
     .mega-menu {
         position: absolute;
         left: 0;
@@ -3191,7 +3204,7 @@ $clr_yellow = $theme_clr;
     .page-link {
         position: relative;
         display: block;
-        color: #0d6efd;
+        color: <?php echo $bs_primary ?>;
         text-decoration: none;
         background-color: #fff;
         border: 1px solid #dee2e6;
@@ -3219,8 +3232,8 @@ $clr_yellow = $theme_clr;
     .page-item.active .page-link {
         z-index: 3;
         color: #fff;
-        background-color: #0d6efd;
-        border-color: #0d6efd;
+        background-color: <?php echo $bs_primary ?>;
+        border-color: <?php echo $bs_primary ?>;
     }
     .page-item.disabled .page-link {
         color: #6c757d;
@@ -3395,7 +3408,7 @@ $clr_yellow = $theme_clr;
         color: #fff;
         text-align: center;
         white-space: nowrap;
-        background-color: #0d6efd;
+        background-color: <?php echo $bs_primary ?>;
         transition: width 0.6s ease;
     }
     .progress-bar-striped {
@@ -3472,8 +3485,8 @@ $clr_yellow = $theme_clr;
     .list-group-item.active {
         z-index: 2;
         color: #fff;
-        background-color: #0d6efd;
-        border-color: #0d6efd;
+        background-color: <?php echo $bs_primary ?>;
+        border-color: <?php echo $bs_primary ?>;
     }
     .list-group-item + .list-group-item {
         border-top-width: 0;
@@ -4447,7 +4460,7 @@ $clr_yellow = $theme_clr;
         content: "";
     }
     .link-primary {
-        color: #0d6efd;
+        color: <?php echo $bs_primary ?>;
     }
     .link-primary:hover,
     .link-primary:focus {
@@ -4785,7 +4798,7 @@ $clr_yellow = $theme_clr;
         border-left: 0 !important;
     }
     .border-primary {
-        border-color: #0d6efd !important;
+        border-color: <?php echo $bs_primary ?> !important;
     }
     .border-secondary {
         border-color: #6c757d !important;

@@ -74,6 +74,13 @@ Route::get('pay-u-cancel', [PayUMoneyController::class, 'payUCancel'])->name('pa
 // Route For - Home Page
 Route::get('/', [FrontController::class, 'index'])->name('front.home');
 
+Route::get('/lang/{locale}', function ($locale) {
+    if (in_array($locale, ['en', 'hi', 'ur'])) {
+        session(['locale' => $locale]);
+    }
+    return redirect()->back();
+});
+
 Route::get('/mens-prod', [MensProdController::class, 'index'])->name('front.mensprod');
 Route::get('/page/{slug}', [FrontController::class, 'page'])->name('front.page');
 
