@@ -15,13 +15,17 @@
      </style>
 
      {{-- First Image : Discount Coupons --}}
-     <img src="{{ asset('front-assets/images/DiscountCoupon.jpg') }}" alt="Discount Coupon">
+     <img src="{{ getDiscountCoupon() }}" alt="Discount Coupon" />
+     <img src="{{ getHeroImage() }}" alt="Hero Image" />
+     <img src="{{ getCouponCorner() }}" alt="Coupon Corner" />
+     <img src="{{ getCoupons() }}" alt="Coupons" />
+     {{-- <img src="{{ asset('front-assets/images/DiscountCoupon.jpg') }}" alt="Discount Coupon"> --}}
      {{-- Second Image : Hero Image --}}
-     <img src="{{ asset('front-assets/images/home.png') }}" alt="Hero Image">
+     {{-- <img src="{{ asset('front-assets/images/home.png') }}" alt="Hero Image"> --}}
      {{-- Third Image : Coupon Corner --}}
-     <img src="{{ asset('front-assets/images/CouponCorner.jpg') }}" alt="Coupon Corner">
+     {{-- <img src="{{ asset('front-assets/images/CouponCorner.jpg') }}" alt="Coupon Corner"> --}}
      {{-- Fourth Image : Coupons --}}
-     <img src="{{ asset('front-assets/images/coupons.jpg') }}" alt="Coupons">
+     {{-- <img src="{{ asset('front-assets/images/coupons.jpg') }}" alt="Coupons"> --}}
 
      <!-- Main Content (Featured Products) -->
      <section class="section-2">
@@ -32,6 +36,7 @@
                          @php
                              $productImage = $product->product_images->first();
                          @endphp
+                        
                          <div class="col-md-6 col-lg-3 col-sm-6 col-12"> <!-- Removed mb-3 -->
 
                              <div class="card product-card">
@@ -43,12 +48,23 @@
                                                  class="card-img-top cardImages"
                                                  style="height: 300px; object-fit: cover; padding: 5px;"
                                                  alt="Product Image {{ $product->id }}">
+                                                 
+                                         @else
+                                         <img src="{{ asset('uploads/Products/14-43.jpg') }}"
+                                         class="card-img-top cardImages"
+                                         style="height: 300px; object-fit: cover; padding: 5px;"
+                                         alt="Product Image {{ $product->id }}">
                                          @endif
                                      </a>
                                      <!-- Rating Box -->
                                      <div class="rating-box position-absolute bg-white p-2 rounded"
-                                         style="bottom: 10px; left: 10px;">
-                                         <span>4.0</span>
+                                        style="bottom: 10px; left: 10px;">
+                                         
+                                        {{$product->product_ratings->count('rating')}} COUNT
+
+                                        <span>
+                                             ({{$product->product_ratings->count('rating')  == 0 ? "0" : $product->product_ratings->avg('rating')}})
+                                        </span>
                                          <i class="fa fa-star"></i>
                                      </div>
 
@@ -105,10 +121,11 @@
 
 
      {{-- Fifth Image : Crazy Deals --}}
-     <img src="{{ asset('front-assets/images/CrazyDeals.jpg') }}" alt="Crazy Deals">
+     <img src="{{ getCrazyDeals() }}" alt="Crazy Deals" />
+     {{-- <img src="{{ asset('front-assets/images/CrazyDeals.jpg') }}" alt="Crazy Deals"> --}}
 
-     {{-- Section : Section > Categories Showcase --}}
-     <div id="sectionCategoriesCarousel" class="carousel slide" data-bs-ride="carousel">
+     {{-- HIDE - Section : Section > Categories Showcase --}}
+     <div id="sectionCategoriesCarousel" class="carousel slide d-none" data-bs-ride="carousel">
          <div class="carousel-indicators">
              @foreach (getSections() as $key => $section)
                  <button type="button" data-bs-target="#sectionCategoriesCarousel" data-bs-slide-to="{{ $key }}"
@@ -123,7 +140,7 @@
                      <section class="section-3">
                          <div class="container mt-5">
                              @if ($section->categories->isNotEmpty())
-                                 {{-- <h3>{{ $section->name }}</h3> --}}
+                                 <h3>{{ $section->name }}</h3>
                                  <div class="row pb-3">
                                      @foreach ($section->categories->sortByDesc('created_at')->take(4) as $category)
                                          <div class="col-lg-3">
@@ -162,15 +179,46 @@
              <span class="visually-hidden">Next</span>
          </button>
      </div>
+     <section class="section-3">
+        <div class="container">
+            <div class="section-title">
+                <h2 class="mt-4">Categories</h2>
+            </div>
+
+            @if (!empty(getCategories()))
+                <div class="row pb-3">
+                    @foreach (getCategories() as $subcategory)
+                        <div class="col-lg-3">
+                            <div class="cat-card">
+                                <div class="left">
+                                    @if ($subcategory->image != '')
+                                        <img src="{{ asset('uploads/category/' . $category->image) }}"
+                                            alt="" class="img-fluid category-images"
+                                            style="height: 100px; object-fit: cover; padding: 5px;">
+                                    @endif
+                                </div>
+                                <div class="right">
+                                    <div class="cat-data">
+                                        <h2>{{ $subcategory->name }}</h2>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+    </section>
 
      {{-- Sixth Image : Shop By Category Image --}}
-     <img src="{{ asset('front-assets/images/myntra-shop-by-category.jpg') }}" alt="Shop By Category">
+     <img src="{{ getShopByCategory() }}" alt="Shop By Category" />
+     {{-- <img src="{{ asset('front-assets/images/myntra-shop-by-category.jpg') }}" alt="Shop By Category"> --}}
 
      {{-- Section : Category Showcase --}}
      <section class="section-3">
          <div class="container">
              <div class="section-title">
-                 <h2>Categories</h2>
+                 <h2 class="mt-4">Sub Categories</h2>
              </div>
 
              @if (!empty(getSubCategories()))
@@ -197,5 +245,6 @@
              @endif
          </div>
      </section>
+   
 
  @endsection

@@ -237,3 +237,87 @@ function getBl_yellow (){
 }  
 
 // $bs_danger = "#dc3545";
+
+function getDiscountCoupon()
+{
+    // Query the 'themes' table to get the logo file name
+    $discountCoupon = DB::table('themes')->where('key', 'Discount Coupon')->value('value'); // Assuming 'Discount Coupon' is stored in 'value' column
+
+    // If logo exists, return the full URL using asset() function
+    if ($discountCoupon) {
+        return asset('uploads/Themes/' . $discountCoupon); // Assuming 'logo' is stored as 'image_name.ext'
+    }
+
+    // If logo doesn't exist, return a default image or null
+    return asset('front-assets/images/DiscountCoupon.jpg'); // Provide a fallback logo path
+}
+
+function getHeroImage()
+{
+    // Query the 'themes' table to get the logo file name
+    $heroImage = DB::table('themes')->where('key', 'Hero Image')->value('value'); // Assuming 'heroImage' is stored in 'value' column
+
+    // If logo exists, return the full URL using asset() function
+    if ($heroImage) {
+        return asset('uploads/Themes/' . $heroImage); // Assuming 'logo' is stored as 'image_name.ext'
+    }
+
+    // If logo doesn't exist, return a default image or null
+    return asset('front-assets/images/home.png'); // Provide a fallback logo path
+}
+
+function getCouponCorner()
+{
+    // Query the 'themes' table to get the logo file name
+    $couponCorner = DB::table('themes')->where('key', 'Coupon Corner')->value('value'); // Assuming 'Coupon Corner' is stored in 'value' column
+
+    // If logo exists, return the full URL using asset() function
+    if ($couponCorner) {
+        return asset('uploads/Themes/' . $couponCorner); // Assuming 'logo' is stored as 'image_name.ext'
+    }
+
+    // If logo doesn't exist, return a default image or null
+    return asset('front-assets/images/CouponCorner.jpg'); // Provide a fallback logo path
+}
+
+function getCoupons()
+{
+    // Query the 'themes' table to get the logo file name
+    $coupons = DB::table('themes')->where('key', 'Coupons')->value('value'); // Assuming 'Coupon s' is stored in 'value' column
+
+    // If logo exists, return the full URL using asset() function
+    if ($coupons) {
+        return asset('uploads/Themes/' . $coupons); // Assuming 'logo' is stored as 'image_name.ext'
+    }
+
+    // If logo doesn't exist, return a default image or null
+    return asset('front-assets/images/coupons.jpg'); // Provide a fallback logo path
+}
+
+function getCrazyDeals()
+{
+    // Query the 'themes' table to get the logo file name
+    $CrazyDeals = DB::table('themes')->where('key', 'Crazy Deals')->value('value'); // Assuming 'Coupon s' is stored in 'value' column
+
+    // If logo exists, return the full URL using asset() function
+    if ($CrazyDeals) {
+        return asset('uploads/Themes/' . $CrazyDeals); // Assuming 'logo' is stored as 'image_name.ext'
+    }
+
+    // If logo doesn't exist, return a default image or null
+    return asset('front-assets/images/CrazyDeals.jpg'); // Provide a fallback logo path
+}
+
+function getShopByCategory()
+{
+    // Query the 'themes' table to get the logo file name
+    $ShopByCategory = DB::table('themes')->where('key', 'Shop By Category')->value('value'); // Assuming 'Coupon s' is stored in 'value' column
+
+    // If logo exists, return the full URL using asset() function
+    if ($ShopByCategory) {
+        return asset('uploads/Themes/' . $ShopByCategory); // Assuming 'logo' is stored as 'image_name.ext'
+    }
+
+    // If logo doesn't exist, return a default image or null
+    return asset('front-assets/images/myntra-shop-by-category.jpg'); // Provide a fallback logo path
+}

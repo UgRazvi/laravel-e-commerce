@@ -17,16 +17,16 @@ class FrontController extends Controller
     public function index()
     {
 
-        $featured_products = Product::where("is_featured", "yes")
-            ->orderBy('id', 'Desc')
-            ->take(8)
+        $featured_products = Product::with('product_ratings')->where("is_featured", "yes")
+            ->orderBy('id', 'ASC')
+            // ->take(8)
             ->where('status', 1)
             ->get();
-        $latest_products = Product::orderBy('id', 'Desc')
+        $latest_products = Product::with('product_ratings')->orderBy('id', 'ASC')
             ->where('status', 1)
-            ->take(8)
+            // ->take(8)
             ->get();
-
+// dd($featured_products, $latest_products);
 
         return view("front.Ytb_home", compact("featured_products", "latest_products")); // To Follow 
     }

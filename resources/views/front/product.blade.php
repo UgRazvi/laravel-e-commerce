@@ -347,7 +347,7 @@
                             <div class="col-md-6 mt-5">
                                 <div class="overall-rating mb-3">
                                     <div class="d-flex">
-                                        <h1 class="h3 pe-3">{{ $product->product_ratings_avg_rating }}</h1>
+                                        <h1 class="h3 pe-3">{{ $product->product_ratings_avg_rating }} </h1>
                                         @php
                                             $avgPer = (($product->product_ratings_avg_rating*100)/5);
                                         @endphp

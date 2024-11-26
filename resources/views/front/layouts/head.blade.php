@@ -58,5 +58,4 @@
     {{-- <link rel="shortcut icon" type="image/x-icon" href="{{ asset('front-assets/images/Myntra_logo.webp') }}" /> --}}
     <link rel="shortcut icon" type="image/x-icon" href="{{ getFavicon() }}" />
     
-  
 </head>
