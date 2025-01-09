@@ -40,44 +40,44 @@ class PayUService
         // dd($customerAddress);
         if($customerAddress != ''){
 
-        $order = new Order;
-        $order->user_id = $user->id;
-        $order->subtotal = $subTotal;
-        $order->shipping = 0;
-        $order->coupon_code = $couponCode->code ?? null;
-        $order->coupon_code_id = $couponCode->id ?? null;
-        $order->discount = $discount;
-        $order->grand_total = $grandTotal;
-        $order->name = $customerAddress->name;
-        $order->mobile_no = $customerAddress->mobile_no;
-        $order->user_email = $user->email;
-        $order->address = $customerAddress->address;
-        $order->locality_town = $customerAddress->locality_town;
-        $order->city = $customerAddress->city;
-        $order->state = $customerAddress->state;
-        $order->pincode = $customerAddress->pincode;
-        $order->order_status = "pending";
-        $order->transaction_id = $transactionId;
-        $order->payment_status = "not_paid";
-        //  dd($order);
-        $order->save();
+            $order = new Order;
+            $order->user_id = $user->id;
+            $order->subtotal = $subTotal;
+            $order->shipping = 0;
+            $order->coupon_code = $couponCode->code ?? null;
+            $order->coupon_code_id = $couponCode->id ?? null;
+            $order->discount = $discount;
+            $order->grand_total = $grandTotal;
+            $order->name = $customerAddress->name;
+            $order->mobile_no = $customerAddress->mobile_no;
+            $order->user_email = $user->email;
+            $order->address = $customerAddress->address;
+            $order->locality_town = $customerAddress->locality_town;
+            $order->city = $customerAddress->city;
+            $order->state = $customerAddress->state;
+            $order->pincode = $customerAddress->pincode;
+            $order->order_status = "pending";
+            $order->transaction_id = $transactionId;
+            $order->payment_status = "not_paid";
+            //  dd($order);
+            $order->save();
 
-        foreach (Cart::content() as $item) {
-            $orderItem = new OrderItem;
-            $orderItem->order_id = $order->id;
-            $orderItem->product_id = $item->id;
-            $orderItem->name = $item->name;
-            $orderItem->qty = $item->qty;
-            $orderItem->price = $item->price;
-            $orderItem->total = (($item->price) * ($item->qty));
-            $orderItem->save();
-            
-            $productData = Product::find($item->id);
-            $currentQty = $productData->qty;
-            $updatedQty = $currentQty - $item->qty;
-            $productData->qty = $updatedQty;
-            $productData->save();
-        }
+            foreach (Cart::content() as $item) {
+                $orderItem = new OrderItem;
+                $orderItem->order_id = $order->id;
+                $orderItem->product_id = $item->id;
+                $orderItem->name = $item->name;
+                $orderItem->qty = $item->qty;
+                $orderItem->price = $item->price;
+                $orderItem->total = (($item->price) * ($item->qty));
+                $orderItem->save();
+                
+                $productData = Product::find($item->id);
+                $currentQty = $productData->qty;
+                $updatedQty = $currentQty - $item->qty;
+                $productData->qty = $updatedQty;
+                $productData->save();
+            }
 
         }
 

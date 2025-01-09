@@ -82,7 +82,7 @@
                 <div class="size-selection mb-3">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h6 class="mb-0">Select Size</h6>
-                        <a href="#" class="text-primary">SIZE CHART ></a>
+                        <a href="#" class="text-primary">SIZE CHART</a>
                     </div>
 
                     <div class="btn-group" role="group">
@@ -132,7 +132,7 @@
                 <div class="delivery-options mb-3">
                     <h6>DELIVERY OPTIONS</h6>
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Enter pincode">
+                        <input type="text" id="pincode" class="form-control" maxlength="6" placeholder="Enter pincode" oninput="validatePincode(this)" />
                         <button class="btn btn-outline-secondary" type="button">Check</button>
                     </div>
                     <p class="text-muted mt-2">Please enter PIN code to check delivery time & Pay on Delivery
@@ -501,7 +501,14 @@
 @endif
 @endsection
 
-@section('customJS')<script type="text/javascript">
+@section('customJS')
+
+    <script>
+        function validatePincode(input) {
+            input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+        }
+    </script>
+    <script type="text/javascript">
     $("#productratingForm").submit(function(event){
         event.preventDefault();
 

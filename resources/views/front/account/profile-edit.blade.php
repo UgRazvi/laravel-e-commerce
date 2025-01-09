@@ -29,7 +29,7 @@
                     <label for="mobile-number">Mobile Number</label>
                     <div class="input-group">
                         <input type="text" id="mobile-number" name="mobile_no" class="form-control"
-                            value="{{ $user->mobile_no }}" placeholder="Enter Mobile Number" required>
+                            value="{{ $user->mobile_no }}" placeholder="Enter Mobile Number" maxlength="" oninput="validatePincode(this)" required>
                         <div class="input-group-append">
                             <button class="btn btn-outline-danger" type="button">Change</button>
                         </div>
@@ -93,8 +93,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text">+91</span>
                         </div>
-                        <input type="tel" id="alt-mobile" name="alternate_mobile_no" class="form-control" maxlength="10"
-                            placeholder="Enter alternate mobile number" value="{{ $user->alternate_mobile_no }}">
+                        <input type="tel" id="alt-mobile" name="alternate_mobile_no" class="form-control" maxlength="" oninput="validatePincode(this)" placeholder="Enter alternate mobile number" value="{{ $user->alternate_mobile_no }}">
                     </div>
                 </div>
 
@@ -126,7 +125,11 @@
             font-size: 16px;
         }
     </style>
-    
+    <script>
+        function validatePincode(input) {
+            input.value = input.value.replace(/[^0-9]/g, ''); // Remove non-numeric characters
+        }
+    </script>
     <script>
         // Function to update gender selection
         function selectGender(gender) {
@@ -148,5 +151,6 @@
             selectGender(selectedGender);
         });
     </script>
+    
     
 @endsection

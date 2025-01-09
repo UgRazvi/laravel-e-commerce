@@ -37,7 +37,53 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ThemeController;
 use App\Http\Controllers\UserController;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Artisan;use App\Mail\FeedbackRequestMail;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\FlightConfirmationMail;
+
+    Route::get('/send-feedback-email', function () {
+        $name = "Anna";
+        $trustpilotLink = "https://trustpilot.com/your-business";
+        $googleLink = "https://google.com/your-business";
+
+        Mail::to('anna@example.com')->send(new FeedbackRequestMail($name, $trustpilotLink, $googleLink));
+        return 'Feedback email sent!';
+    });
+    
+    Route::get('/send-flight-confirmation-email', function () {
+        $data = [
+            'name' => 'John Doe',
+            'destination' => 'New York',
+            'reference' => 'ABC123XYZ',
+            'ticket_number' => '1234567890',
+            'flight_from' => 'Los Angeles',
+            'terminal_from' => 'T1',
+            'departure' => '2024-12-10 08:00 AM',
+            'status' => 'Confirmed',
+            'flight_to' => 'New York',
+            'terminal_to' => 'T4',
+            'arrive' => '2024-12-10 04:00 PM',
+            'stopovers' => 'Non-stop',
+            'valid_before' => '2024-12-10',
+            'valid_after' => '2024-12-20',
+            'baggage_allowance' => '2 pieces (23kg each)',
+            'adultPrice' => '$500',
+            'noOfAdults' => 2,
+            'childPrice' => '$350',
+            'noOfChildren' => 1,
+            'infantPrice' => '$150',
+            'noOfInfants' => 1,
+            'totalAmount' => '$1500',
+            'termsLink' => 'https://bigvaluetravels.com/terms',
+            'confirmLink' => 'https://bigvaluetravels.com/terms',
+        ];
+    
+        Mail::to('anna@example.com')->send(new FlightConfirmationMail($data));
+    
+        return 'Flight confirmation email sent!';
+    });
+    
+
 
 // For Testing Purposes Only - Starts
 

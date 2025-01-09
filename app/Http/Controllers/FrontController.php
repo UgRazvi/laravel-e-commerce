@@ -89,8 +89,9 @@ class FrontController extends Controller
             ]);
         }
         $existingWishlist = Wishlist::where('user_id', Auth::id())
-            ->where('product_id', $request->id)
-            ->first();
+            // ->where('product_id', $request->id)
+            // ->first();
+            ->firstWhere('product_id', $request->id);
     
         if ($existingWishlist) {
             return response()->json([

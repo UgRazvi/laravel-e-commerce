@@ -236,8 +236,8 @@ public function cashFreeNotification(Request $request)
                 session(['url.intended' => url()->current()]);
             }
 
-            return redirect()->route('account.login')
-                ->with("error", "You're not logged. Please Log In first to access this page.");
+            // return redirect()->route('account.login')
+            //     ->with("error", "You're not logged. Please Log In first to access this page.");
         }
 
         session()->forget("url.intended");
@@ -352,7 +352,7 @@ public function cashFreeNotification(Request $request)
 
         // Fetch user's saved address
         $customerAddress = CustomerAddress::where('user_id', $user->id)->first();
-// dd($customerAddress);
+        // dd($customerAddress);
         // Subtotal before discount
         $grandTotal = $subTotal = Cart::subtotal(2, '.', '');
 
@@ -459,14 +459,13 @@ public function cashFreeNotification(Request $request)
             $grandTotal = $subTotal - $discount; // After Discount calculation logic
 
 
-            $discountString = '<div id="cancelCouponBox"
-                                     class="d-flex flex-column flex-sm-row justify-content-between align-items-center mt-4">
-                                     <span class="mb-2 mb-sm-0">Cancel Coupon Code:</span>
-                                     <a href="" id="cancelCoupon" class="btn btn-sm btn-outline-danger">
-                                         <i class="fa fa-times"></i>
-                                     </a>
+            $discountString = '<div id="cancelCouponBox" class="d-flex flex-column flex-sm-row justify-content-between align-items-center mt-4">
+                <span class="mb-2 mb-sm-0">Cancel Coupon Code:</span>
+                <a href="" id="cancelCoupon" class="btn btn-sm btn-outline-danger">
+                    <i class="fa fa-times"></i>
+                </a>
                 
-                                </div>';
+            </div>';
         }
         return response()->json([
             'status' => true,

@@ -72,11 +72,14 @@ class OrderController extends Controller
         $message = "Email sent to : " . $request->userType . " With Order Id : " . $orderId . " successfully";
         Log::info("Email sent to : " . $request->userType . " With Order Id : " . $orderId . " successfully");
 
-        session()->flash('sucess', $message);
-        return response([
-            'status' => true,
-            'message' => $message,
-        ]);
+        // session()->flash('success', $message);
+        // return response([
+        //     'status' => true,
+        //     'message' => $message,
+        // ]);
+        // session()->flash('success', $message); // Corrected 'sucess' to 'success'
+        return redirect()->route('orders.index')->with('success', $message);
+
     }
 
     public function updatePaymentStatus(Request $request, $orderId) {
@@ -109,8 +112,9 @@ class OrderController extends Controller
                 orderEmail($orderId, "customer");
                 return response()->json(['message' => 'E-Mail Sent Successfully with Order ID : '. $orderId], 200);
             }
-            
-            return response()->json(['message' => 'Order status updated successfully'], 200);
+           
+            // return response()->json(['message' => 'Order status updated successfully'], 200);
+            return redirect()->route('orders.index')->with('message','Order status updated successfully');
 
         } catch (\Exception $e) {
             Log::error('Order Controller - Order Update Failed: ' . $e->getMessage());

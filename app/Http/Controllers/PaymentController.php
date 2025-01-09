@@ -27,10 +27,14 @@ class PaymentController extends Controller
     // Handle the front-end success redirect, only redirect to thank you page
     public function success(Request $request)
     {
-        Log::info('Payment success redirect received', $request->all());
-
+        Log::info('Payment success request received', $request->all());
         $txnId = $request->input('txnid');
-        return redirect()->route('front.thank', $txnId);
+
+        if (!$txnId) {
+            return redirect()->route('front.cart')->with('error', 'Transaction ID is missing.');
+        }
+
+        return redirect()->route('front.thank', ['txnId' => $txnId]);
     }
 
     public function fail(Request $request)

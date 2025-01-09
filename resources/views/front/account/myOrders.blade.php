@@ -53,6 +53,7 @@
                 <div class="order-card bg-light p-1" id="orderCards">
                     @foreach ($myOrders as $order)
                         @foreach ($order->orderItems as $item)
+                        {{-- @dd($order->transaction_id, $item) --}}
                             <div class="card bg-white m-2 p-4 ">
 
                                 <span class="text-capitalize">
@@ -66,6 +67,7 @@
                                     @endif
                                     <strong> {{ $order->order_status ?? 'UNPLACED' }} </strong>
                                     <strong class="px-5"> Payment :{{ $order->payment_status ?? 'UNPAID' }} </strong>
+                                    <span> {{$order->transaction_id}} </span>
                                 </span>
 
                                 <label><span>on</span> {{ \Carbon\Carbon::parse($item->created_at)->format('D, j M Y H:i:s') }}
